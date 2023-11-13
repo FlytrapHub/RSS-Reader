@@ -28,9 +28,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //sqllite
+    //sql-lite
     implementation 'org.xerial:sqlite-jdbc:3.43.2.2'
-    implementation("org.hibernate.orm:hibernate-community-dialects:6.1.6.Final")
+    implementation('org.hibernate.orm:hibernate-community-dialects:6.1.7.Final')
 }
 
 tasks.named('test') {
