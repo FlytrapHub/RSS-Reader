@@ -33,6 +33,11 @@ public class WebClientConfig {
         return buildWebClient(oauthProperties.github().userResourceUri());
     }
 
+    @Bean(name = "githubResourceEmailServer")
+    public WebClient githubResourceEmailServerWebClient() {
+        return buildWebClient(oauthProperties.github().userResourceEmailUri());
+    }
+
     /**
      * WebClient 요청시 log 출력합니다.
      * @return ExchangeFilterFunction

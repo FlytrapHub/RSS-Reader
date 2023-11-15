@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.domain.member;
 
 import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
+import java.io.Serializable;
 import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member implements Serializable {
 
     private Long id;
     private String name;
@@ -53,7 +54,7 @@ public class Member {
 
 @Getter
 @AllArgsConstructor
-class OauthInfo {
+class OauthInfo implements Serializable {
     private Long oauthPk;
     private OauthServer oauthServer;
 }
