@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 @Component
 public record AuthGithubProvider(WebClient githubAuthorizationServer,
                                  WebClient githubResourceServer,
+                                 WebClient githubResourceEmailServer,
                                  OauthProperties oauthProperties) implements AuthProvider {
 
     @Override
