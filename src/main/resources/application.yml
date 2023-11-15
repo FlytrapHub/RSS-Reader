@@ -2,4 +2,4 @@ spring:
   profiles:
     active: local
     group:
-        local: [ local ] # localhost
+        local: [ local, oauth ] # localhost
