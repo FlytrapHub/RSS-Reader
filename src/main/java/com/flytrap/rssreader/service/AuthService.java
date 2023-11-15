@@ -16,7 +16,7 @@ public class AuthService {
     private final AuthProvider authProvider;
     private final MemberService memberService;
 
-    public Member doAuthentication(Login.Request request) {
+    public Member doAuthentication(Login request) {
         return authProvider.requestAccessToken(request.code())
             .flatMap(authProvider::requestUserResource)
             .map(memberService::loginMember)
