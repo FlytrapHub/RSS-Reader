@@ -22,7 +22,7 @@ public class MemberService {
     @Transactional
     public Member loginMember(UserResource userResource) {
 
-        return memberEntityJpaRepository.findByOauthPk(userResource.id())
+        return memberEntityJpaRepository.findByOauthPk(userResource.getId())
             .orElseGet(() -> joinMember(userResource.toDomainForCreate()))
             .toDomain();
     }

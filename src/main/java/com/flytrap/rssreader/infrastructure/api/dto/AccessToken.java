@@ -6,6 +6,6 @@ public record AccessToken(@JsonProperty("access_token") String accessToken,
                           @JsonProperty("token_type") String tokenType) {
 
     public String getHeadValue() {
-        return String.format("%s %s", accessToken, tokenType);
+        return String.format("%s %s", tokenType, accessToken);
     }
 }
