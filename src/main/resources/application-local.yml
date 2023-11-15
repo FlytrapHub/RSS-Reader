@@ -10,11 +10,10 @@ server:
 
 spring:
   datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:sqlite-sample.db
-  redis:
-    host: localhost
-    port: 6379
+    url: jdbc:mysql://localhost:3306/rss_reader
+    username: root
+    password: qwer1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   session:
     store-type: redis
     redis:
@@ -25,4 +24,8 @@ spring:
         format_sql: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      # ddl-auto: create
+  data:
+    redis:
+      host: localhost
+      port: 6379
