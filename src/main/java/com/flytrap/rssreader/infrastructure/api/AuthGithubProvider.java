@@ -29,7 +29,6 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
         formData.add("code", code);
         formData.add("client_id", oauthProperties.github().clientId());
         formData.add("client_secret", oauthProperties.github().clientSecret());
-        formData.add("redirect_uri", oauthProperties.github().redirectUri());
 
         return githubAuthorizationServer
             .post()
