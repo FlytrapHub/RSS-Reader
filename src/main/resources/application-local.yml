@@ -6,7 +6,7 @@ server:
         path: /
         name: JSESSIONID
         http-only: true
-      timeout: 3600
+      timeout: 360000
 
 spring:
   datasource:
