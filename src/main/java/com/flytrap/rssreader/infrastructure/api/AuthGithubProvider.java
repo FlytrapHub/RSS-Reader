@@ -53,5 +53,20 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
                     clientResponse.bodyToMono(String.class)
                         .map(body -> new Exception("exception"))) // TODO 외부 API 오류시 처리
             .bodyToMono(UserResource.class);
+
+    private Mono<List<UserEmailResource>> getEmailResource(AccessToken accessToken) {
+        return githubResourceEmailServer
+            .get()
+            .header(HttpHeaders.AUTHORIZATION, accessToken.getHeadValue())
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(status -> status.is4xxClientError()
+                            || status.is5xxServerError()
+                    , clientResponse ->
+                            clientResponse.bodyToMono(String.class)
+                                    .map(body -> new Exception(
+                                            "exception"))) // TODO 외부 API 오류시 처리
+            .bodyToMono(new ParameterizedTypeReference<List<UserEmailResource>>() {});
     }
+
 }
