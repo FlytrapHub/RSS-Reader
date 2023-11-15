@@ -41,6 +41,18 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
+/* Submodule start */
+processResources.dependsOn('submodules')
+
+tasks.register('submodules', Copy) {
+    description = 'Copy submodules to project'
+
+    from('./submodules') {
+        include('*.yml')
+    }
+    into('src/main/resources')
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
