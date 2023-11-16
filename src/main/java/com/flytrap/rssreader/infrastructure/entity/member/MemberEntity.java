@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.infrastructure.entity.member;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -9,8 +10,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +51,10 @@ public class MemberEntity {
 
     @CreatedDate
     private Instant createdAt;
+
+    @OneToMany
+    @JoinColumn(name = "member_id")
+    private List<SubscribeEntity> post = new ArrayList<SubscribeEntity>();
 
     @Builder
     protected MemberEntity(Long id, String name, String email, String profile, Long oauthPk,
