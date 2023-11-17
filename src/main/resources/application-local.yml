@@ -14,6 +14,7 @@ spring:
     username: root
     password: qwer1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   session:
     store-type: redis
     redis:
@@ -24,8 +25,14 @@ spring:
         format_sql: true
     show-sql: true
     hibernate:
-      # ddl-auto: create
+     # ddl-auto: update
+    defer-datasource-initialization: true
   data:
     redis:
       host: localhost
       port: 6379
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:/db/data.sql
