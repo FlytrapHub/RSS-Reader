@@ -5,6 +5,7 @@ import com.flytrap.rssreader.infrastructure.api.AuthProvider;
 import com.flytrap.rssreader.presentation.dto.Login;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,15 +16,17 @@ public class AuthService {
 
     private final AuthProvider authProvider;
     private final MemberService memberService;
+    private final RedisTemplate<String, Object> sessionRedisTemplate;
 
     public Member doAuthentication(Login request) {
         return authProvider.requestAccessToken(request.code())
-            .flatMap(authProvider::requestUserResource)
-            .map(memberService::loginMember)
-            .block();
+                .flatMap(authProvider::requestUserResource)
+                .map(memberService::loginMember)
+                .block();
     }
 
     public void login(Member member, HttpSession session) {
+        sessionRedisTemplate.
         session.setAttribute(SESSION_KEY, member);
     }
 

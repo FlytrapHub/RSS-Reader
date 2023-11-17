@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Domain(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends DefaultDomain implements Serializable {
+public class Member implements DefaultDomain {
 
     private Long id;
     private String name;
@@ -24,8 +24,9 @@ public class Member extends DefaultDomain implements Serializable {
     private Instant createdAt;
 
     @Builder
-    private Member(Long id, String name, String email, String profile, long oauthPk, OauthServer oauthServer,
-        Instant createdAt) {
+    private Member(Long id, String name, String email, String profile, long oauthPk,
+            OauthServer oauthServer,
+            Instant createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -34,16 +35,17 @@ public class Member extends DefaultDomain implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public static Member of(Long id, String name, String email, String profile, Long oauthPk, OauthServer oauthServer, Instant createdAt) {
+    public static Member of(Long id, String name, String email, String profile, Long oauthPk,
+            OauthServer oauthServer, Instant createdAt) {
         return Member.builder()
-            .id(id)
-            .name(name)
-            .email(email)
-            .profile(profile)
-            .oauthPk(oauthPk)
-            .oauthServer(oauthServer)
-            .createdAt(createdAt)
-            .build();
+                .id(id)
+                .name(name)
+                .email(email)
+                .profile(profile)
+                .oauthPk(oauthPk)
+                .oauthServer(oauthServer)
+                .createdAt(createdAt)
+                .build();
     }
 
     public Long getOauthPk() {
@@ -58,6 +60,7 @@ public class Member extends DefaultDomain implements Serializable {
 @Getter
 @AllArgsConstructor
 class OauthInfo implements Serializable {
+
     private Long oauthPk;
     private OauthServer oauthServer;
 }
