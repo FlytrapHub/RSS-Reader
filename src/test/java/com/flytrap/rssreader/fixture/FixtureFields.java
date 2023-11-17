@@ -3,6 +3,7 @@ package com.flytrap.rssreader.fixture;
 import com.flytrap.rssreader.domain.member.OauthServer;
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
+import java.time.Instant;
 
 public class FixtureFields {
 
@@ -13,7 +14,7 @@ public class FixtureFields {
     private static final String AVATAR_URL = "https://avatarUrl.jpg";
     private static final String RSS_URL = "https://avatarUrl.jpg";
     private static final String GUID = "guid";
-    private static final String DATETIME_20231115 = "2023-11-15 00:00:00";
+    private static final Instant INSTANT_20231115 = Instant.parse("2023-11-15T00:00:00Z");
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
 
@@ -46,7 +47,7 @@ public class FixtureFields {
         public static String guid = GUID;
         public static String title = TITLE;
         public static String description = DESCRIPTION;
-        public static String pubDate = DATETIME_20231115;
+        public static Instant pubDate = INSTANT_20231115;
     }
 
     public static class SubscribeEntityFields {

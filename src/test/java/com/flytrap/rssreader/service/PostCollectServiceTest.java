@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.service;
 
 import static com.flytrap.rssreader.fixture.FixtureFactory.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generate50RssItemResourceList;
 import static org.mockito.BDDMockito.*;
 
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
@@ -35,39 +36,25 @@ class PostCollectServiceTest {
 
     @BeforeEach
     void init() {
-        List<RssItemResource> itemResources = generateSingleItemResourceList();
         List<SubscribeEntity> subscribes = generateSingleSubscribeEntityList();
-
-        when(postParser.parseRssDocument(anyString())).thenReturn(itemResources);
         when(subscribeEntityJpaRepository.findAll()).thenReturn(subscribes);
+        when(postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(any()))
+            .thenReturn(generate100PostEntityList());
     }
 
-    @DisplayName("RSS 문서에서 파싱된 게시글이 DB에 없을 경우 저장한다.")
+    @DisplayName("RSS 문서에서 파싱된 게시글 목록을 모두 DB에 저장할 수 있다.")
     @Test
-    void collectNotExistPosts() {
+    void collectPosts() {
         // given
-        when(postEntityJpaRepository.existsBySubscribeAndGuid(any(), anyString()))
-            .thenReturn(false);
+        List<RssItemResource> itemResources = generate50RssItemResourceList();
+        when(postParser.parseRssDocuments(anyString()))
+            .thenReturn(itemResources);
 
         // when
         postCollectService.collectPosts();
 
         // then
-        verify(postEntityJpaRepository, times(1)).save(any());
-    }
-
-    @DisplayName("RSS 문서에서 파싱된 게시글이 DB에 이미 존재하는 경우 저장하지 않는다.")
-    @Test
-    void collectExistPosts() {
-        // given
-        when(postEntityJpaRepository.existsBySubscribeAndGuid(any(), anyString()))
-            .thenReturn(true);
-
-        // when
-        postCollectService.collectPosts();
-
-        // then
-        verify(postEntityJpaRepository, times(0)).save(any());
+        verify(postEntityJpaRepository, times(itemResources.size())).save(any());
     }
 
 }

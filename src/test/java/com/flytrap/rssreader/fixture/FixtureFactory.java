@@ -12,6 +12,7 @@ import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FixtureFactory {
@@ -58,6 +59,33 @@ public class FixtureFactory {
         );
     }
 
+    public static List<RssItemResource> generate50RssItemResourceList() {
+        List<RssItemResource> rssItemResources = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            rssItemResources.add(generateRssItemResource());
+        }
+        return rssItemResources;
+    }
+
+    public static PostEntity generatePostEntity(Long id) {
+        return PostEntity.builder()
+            .id(id)
+            .guid(PostEntityFields.guid)
+            .title(PostEntityFields.title)
+            .description(PostEntityFields.description)
+            .subscribe(PostEntityFields.subscribe)
+            .build();
+    }
+
+    public static List<PostEntity> generate100PostEntityList() {
+        List<PostEntity> postEntities = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            postEntities.add(generatePostEntity((long) i));
+        }
+
+        return postEntities;
+    }
+
     // Subscribe
     public static SubscribeEntity generateSubscribeEntity() {
         return SubscribeEntity.builder()
@@ -66,19 +94,6 @@ public class FixtureFactory {
             .description(SubscribeEntityFields.description)
             .platform(SubscribeEntityFields.platform)
             .build();
-    }
-
-    public static PostEntity generatePostEntity() {
-        return PostEntity.builder()
-            .guid(PostEntityFields.guid)
-            .title(PostEntityFields.title)
-            .description(PostEntityFields.description)
-            .subscribe(PostEntityFields.subscribe)
-            .build();
-    }
-
-    public static List<RssItemResource> generateSingleItemResourceList() {
-        return List.of(generateRssItemResource());
     }
 
     public static List<SubscribeEntity> generateSingleSubscribeEntityList() {
