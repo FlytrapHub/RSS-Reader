@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
+import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,6 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

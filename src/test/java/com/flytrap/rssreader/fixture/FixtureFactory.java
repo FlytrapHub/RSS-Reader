@@ -10,7 +10,6 @@ import com.flytrap.rssreader.fixture.FixtureFields.UserResourceFields;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
-import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import java.util.List;

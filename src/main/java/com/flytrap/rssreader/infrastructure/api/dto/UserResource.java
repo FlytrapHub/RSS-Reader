@@ -2,7 +2,7 @@ package com.flytrap.rssreader.infrastructure.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
+import com.flytrap.rssreader.domain.member.OauthServer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
