@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        path: /
+        name: JSESSIONID
+        http-only: true
+      timeout: 360000
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/rss_reader
+    username: root
+    password: qwer1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+     # ddl-auto: update
+    defer-datasource-initialization: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:/db/data.sql
