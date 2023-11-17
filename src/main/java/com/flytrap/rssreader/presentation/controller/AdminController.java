@@ -25,7 +25,7 @@ public class AdminController {
     public void getAdminProperties(@RequestBody Login request, HttpSession session){
 
         if (request.code().equals(properties.code())) {
-            session.setAttribute("admin", properties.getMember());
+            session.setAttribute(authProperties.sessionId(), SessionMember.from(properties.getMember()));
         }
     }
 
