@@ -11,6 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,14 +43,19 @@ public class PostEntity {
     @JoinColumn(name = "subscribe_id")
     private SubscribeEntity subscribe;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant pubDate;
+
     // TODO: Bookmark, Open, React 추가하기
 
     @Builder
-    protected PostEntity(String guid, String title, String description, SubscribeEntity subscribe) {
+    protected PostEntity(Long id, String guid, String title, String description, SubscribeEntity subscribe, Instant pubDate) {
+        this.id = id;
         this.guid = guid;
         this.title = title;
         this.description = description;
         this.subscribe = subscribe;
+        this.pubDate = pubDate;
     }
 
     public static PostEntity from(RssItemResource rssItemResource, SubscribeEntity subscribe) {
@@ -55,8 +63,14 @@ public class PostEntity {
             .guid(rssItemResource.guid())
             .title(rssItemResource.title())
             .description(rssItemResource.description())
+            .pubDate(rssItemResource.pubDate())
             .subscribe(subscribe)
             .build();
+    }
+
+    public void updateBy(RssItemResource itemResource) {
+        this.title = itemResource.title();
+        this.description = itemResource.description();
     }
 
 }
