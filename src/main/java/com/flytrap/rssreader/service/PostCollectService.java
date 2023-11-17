@@ -18,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PostCollectService {
 
-    //private static final int TEN_MINUTE = 600_000;
-    private static final int TEN_MINUTE = 10_000;
+    private static final int TEN_MINUTE = 600_000;
 
     private final RssPostParser postParser;
     private final SubscribeEntityJpaRepository subscribeEntityJpaRepository;
