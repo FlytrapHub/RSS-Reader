@@ -2,6 +2,7 @@ package com.flytrap.rssreader.infrastructure.entity.member;
 
 import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.domain.member.OauthServer;
+import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -54,7 +55,7 @@ public class MemberEntity {
 
     @OneToMany
     @JoinColumn(name = "member_id")
-    private List<SubscribeEntity> post = new ArrayList<SubscribeEntity>();
+    private List<SubscribeEntity> post = new ArrayList<>();
 
     @Builder
     protected MemberEntity(Long id, String name, String email, String profile, Long oauthPk,

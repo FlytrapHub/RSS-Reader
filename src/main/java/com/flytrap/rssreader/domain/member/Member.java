@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Domain(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends DefaultDomain implements Serializable {
+public class Member implements DefaultDomain {
 
     private Long id;
     private String name;
@@ -43,6 +43,14 @@ public class Member extends DefaultDomain implements Serializable {
                 .oauthPk(oauthPk)
                 .oauthServer(oauthServer)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    public static Member adminOf(long userId, String userName, String userEmail) {
+        return Member.builder()
+                .id(userId)
+                .name(userName)
+                .email(userEmail)
                 .build();
     }
 
