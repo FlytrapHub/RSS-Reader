@@ -26,7 +26,6 @@ public class AuthService {
     }
 
     public void login(Member member, HttpSession session) {
-        sessionRedisTemplate.
         session.setAttribute(SESSION_KEY, member);
     }
 
