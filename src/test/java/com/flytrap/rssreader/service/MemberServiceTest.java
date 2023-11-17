@@ -1,11 +1,14 @@
 package com.flytrap.rssreader.service;
 
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.domain.member.OauthServer;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
-import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
 import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
@@ -31,26 +34,26 @@ class MemberServiceTest {
     void loginMemberWithExistMember() {
         // given
         when(memberEntityJpaRepository.findByOauthPk(1L))
-            .thenReturn(Optional.of(
-                MemberEntity.builder()
-                    .id(1L)
-                    .email("test@gmail.com")
-                    .name("name")
-                    .profile("avatarUrl.jpg")
-                    .oauthPk(1L)
-                    .oauthServer(OauthServer.GITHUB)
-                    .build()
-            ));
+                .thenReturn(Optional.of(
+                        MemberEntity.builder()
+                                .id(1L)
+                                .email("test@gmail.com")
+                                .name("name")
+                                .profile("avatarUrl.jpg")
+                                .oauthPk(1L)
+                                .oauthServer(OauthServer.GITHUB)
+                                .build()
+                ));
 
         // when
         Member existMember
-            = memberService.loginMember(
-            UserResource.builder()
-                .id(1L)
-                .email("test@gmail.com")
-                .login("login")
-                .avatarUrl("avatarUrl.jpg")
-                .build());
+                = memberService.loginMember(
+                UserResource.builder()
+                        .id(1L)
+                        .email("test@gmail.com")
+                        .login("login")
+                        .avatarUrl("avatarUrl.jpg")
+                        .build());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -66,29 +69,29 @@ class MemberServiceTest {
     void loginMemberWithNotExistMember() {
         //given
         when(memberEntityJpaRepository.findByOauthPk(1L))
-            .thenReturn(Optional.empty());
+                .thenReturn(Optional.empty());
 
         when(memberEntityJpaRepository.save(any()))
-            .thenReturn(
-                MemberEntity.builder()
-                    .id(1L)
-                    .email("test@gmail.com")
-                    .name("name")
-                    .profile("avatarUrl.jpg")
-                    .oauthPk(1L)
-                    .oauthServer(OauthServer.GITHUB)
-                    .build()
-            );
+                .thenReturn(
+                        MemberEntity.builder()
+                                .id(1L)
+                                .email("test@gmail.com")
+                                .name("name")
+                                .profile("avatarUrl.jpg")
+                                .oauthPk(1L)
+                                .oauthServer(OauthServer.GITHUB)
+                                .build()
+                );
 
         // when
         Member newMember
-            = memberService.loginMember(
-            UserResource.builder()
-                .id(1L)
-                .email("test@gmail.com")
-                .login("login")
-                .avatarUrl("avatarUrl.jpg")
-                .build());
+                = memberService.loginMember(
+                UserResource.builder()
+                        .id(1L)
+                        .email("test@gmail.com")
+                        .login("login")
+                        .avatarUrl("avatarUrl.jpg")
+                        .build());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

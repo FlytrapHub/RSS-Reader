@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.infrastructure.entity.member;
 
 import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
+import com.flytrap.rssreader.domain.member.OauthServer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
