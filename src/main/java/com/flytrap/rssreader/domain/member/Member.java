@@ -1,5 +1,7 @@
 package com.flytrap.rssreader.domain.member;
 
+import com.flytrap.rssreader.global.model.DefaultDomain;
+import com.flytrap.rssreader.global.model.Domain;
 import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
 import java.io.Serializable;
 import java.time.Instant;
@@ -10,8 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Domain(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member implements Serializable {
+public class Member extends DefaultDomain implements Serializable {
 
     private Long id;
     private String name;
