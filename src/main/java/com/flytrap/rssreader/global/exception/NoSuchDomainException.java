@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.exception;
+package com.flytrap.rssreader.global.exception;
 
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import java.util.NoSuchElementException;

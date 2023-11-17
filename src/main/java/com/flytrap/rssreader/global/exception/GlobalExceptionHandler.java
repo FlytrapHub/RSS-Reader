@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.exception;
+package com.flytrap.rssreader.global.exception;
 
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
