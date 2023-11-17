@@ -6,6 +6,6 @@ import java.util.NoSuchElementException;
 public class NoSuchDomainException extends NoSuchElementException {
 
     public NoSuchDomainException(DefaultDomain domain) {
-        super("No such domain: " + domain.getDomainCode());
+        super(String.format("No such domain = " + domain.getDomainCodeWithId()));
     }
 }
