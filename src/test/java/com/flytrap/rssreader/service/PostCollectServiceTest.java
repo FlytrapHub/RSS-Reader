@@ -1,11 +1,10 @@
 package com.flytrap.rssreader.service;
 
+import static com.flytrap.rssreader.fixture.FixtureFactory.*;
 import static org.mockito.BDDMockito.*;
 
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
-import com.flytrap.rssreader.infrastructure.entity.subscribe.BlogPlatform;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
@@ -36,18 +35,8 @@ class PostCollectServiceTest {
 
     @BeforeEach
     void init() {
-        RssItemResource itemResource = new RssItemResource("guid", "title", "description",
-            "pubDate");
-        SubscribeEntity subscribe = SubscribeEntity.builder().id(1L).url("https://url.com")
-            .description("description")
-            .platform(
-                BlogPlatform.VELOG).build();
-        PostEntity post = PostEntity.builder().id(1L).guid("guid").title("title")
-            .description("description")
-            .subscribe(subscribe).build();
-
-        List<RssItemResource> itemResources = List.of(itemResource);
-        List<SubscribeEntity> subscribes = List.of(subscribe);
+        List<RssItemResource> itemResources = generateSingleItemResourceList();
+        List<SubscribeEntity> subscribes = generateSingleSubscribeEntityList();
 
         when(postParser.parseRssDocument(anyString())).thenReturn(itemResources);
         when(subscribeEntityJpaRepository.findAll()).thenReturn(subscribes);

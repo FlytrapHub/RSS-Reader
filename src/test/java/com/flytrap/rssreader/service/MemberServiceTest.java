@@ -1,16 +1,17 @@
 package com.flytrap.rssreader.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateMemberEntity;
+import static com.flytrap.rssreader.fixture.FixtureFields.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
-import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
-import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
 import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,27 +34,17 @@ class MemberServiceTest {
     void loginMemberWithExistMember() {
         // given
         when(memberEntityJpaRepository.findByOauthPk(1L))
-            .thenReturn(Optional.of(
-                MemberEntity.builder()
-                    .id(1L)
-                    .email("test@gmail.com")
-                    .name("name")
-                    .profile("avatarUrl.jpg")
-                    .oauthPk(1L)
-                    .oauthServer(OauthServer.GITHUB)
-                    .build()
-            ));
+            .thenReturn(Optional.of(generateMemberEntity()));
 
         // when
         Member existMember
-            = memberService.loginMember(
-                new UserResource(1L, "test@gmail.com", "login", "avatarUrl.jpg"));
+            = memberService.loginMember(generateUserResource());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(existMember.getId()).isEqualTo(1);
-            softAssertions.assertThat(existMember.getEmail()).isEqualTo("test@gmail.com");
-            softAssertions.assertThat(existMember.getProfile()).isEqualTo("avatarUrl.jpg");
+            softAssertions.assertThat(existMember.getId()).isEqualTo(MemberFields.id);
+            softAssertions.assertThat(existMember.getEmail()).isEqualTo(MemberFields.email);
+            softAssertions.assertThat(existMember.getProfile()).isEqualTo(MemberFields.profile);
             verify(memberEntityJpaRepository, times(0)).save(any());
         });
     }
@@ -66,27 +57,17 @@ class MemberServiceTest {
             .thenReturn(Optional.empty());
 
         when(memberEntityJpaRepository.save(any()))
-            .thenReturn(
-                MemberEntity.builder()
-                    .id(1L)
-                    .email("test@gmail.com")
-                    .name("name")
-                    .profile("avatarUrl.jpg")
-                    .oauthPk(1L)
-                    .oauthServer(OauthServer.GITHUB)
-                    .build()
-            );
+            .thenReturn(generateMemberEntity());
 
         // when
         Member newMember
-            = memberService.loginMember(
-            new UserResource(1L, "test@gmail.com", "login", "avatarUrl.jpg"));
+            = memberService.loginMember(generateUserResource());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(newMember.getId()).isEqualTo(1);
-            softAssertions.assertThat(newMember.getEmail()).isEqualTo("test@gmail.com");
-            softAssertions.assertThat(newMember.getProfile()).isEqualTo("avatarUrl.jpg");
+            softAssertions.assertThat(newMember.getId()).isEqualTo(MemberFields.id);
+            softAssertions.assertThat(newMember.getEmail()).isEqualTo(MemberFields.email);
+            softAssertions.assertThat(newMember.getProfile()).isEqualTo(MemberFields.profile);
             verify(memberEntityJpaRepository, times(1)).save(any());
         });
     }

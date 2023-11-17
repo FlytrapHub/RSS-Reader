@@ -1,13 +1,18 @@
 package com.flytrap.rssreader.service;
 
-import static org.mockito.BDDMockito.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateMember;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateUserResource;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.fixture.FixtureFields.MemberFields;
 import com.flytrap.rssreader.infrastructure.api.AuthProvider;
 import com.flytrap.rssreader.infrastructure.api.dto.AccessToken;
-import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
-import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
-import com.flytrap.rssreader.presentation.dto.Login.Request;
+import com.flytrap.rssreader.presentation.dto.Login;
 import jakarta.servlet.http.HttpSession;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,31 +45,22 @@ class AuthServiceTest {
         when(authProvider.requestAccessToken(anyString()))
             .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
         when(authProvider.requestUserResource(any()))
-            .thenReturn(Mono.just(new UserResource(1L, "test@gmail.com", "login", "img.jpg")));
+            .thenReturn(Mono.just(generateUserResource()));
         when(memberService.loginMember(any()))
-            .thenReturn(
-                Member.builder()
-                    .id(1L)
-                    .name("테스트")
-                    .email("test@gmail.com")
-                    .profile("img.jpg")
-                    .oauthPk(11L)
-                    .oauthServer(OauthServer.GITHUB)
-                    .build()
-            );
+            .thenReturn(generateMember());
     }
 
     @Test
     @DisplayName("클라이언트가 oauth 인증 서버로부터 받은 코드를 통해 회원가입하거나 로그인할 수 있다.")
     void doAuthentication() {
         // when
-        Member member = authService.doAuthentication(new Request("code"));
+        Member member = authService.doAuthentication(new Login("code"));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(member.getId()).isEqualTo(1);
-            softAssertions.assertThat(member.getEmail()).isEqualTo("test@gmail.com");
-            softAssertions.assertThat(member.getProfile()).isEqualTo("img.jpg");
+            softAssertions.assertThat(member.getId()).isEqualTo(MemberFields.id);
+            softAssertions.assertThat(member.getEmail()).isEqualTo(MemberFields.email);
+            softAssertions.assertThat(member.getProfile()).isEqualTo(MemberFields.profile);
         });
     }
 
@@ -72,7 +68,7 @@ class AuthServiceTest {
     @DisplayName("클라이언트가 oauth 인증 서버로부터 받은 코드를 통해 세션에 member를 저장된다.")
     void login() {
         //given
-        Member member = authService.doAuthentication(new Request("code"));
+        Member member = authService.doAuthentication(new Login("code"));
 
         //when
         authService.login(member, session);
@@ -85,7 +81,7 @@ class AuthServiceTest {
     @DisplayName("클라이언트가 oauth 인증 서버로부터 받은 코드를 통해 세션에 member를 삭제된다.")
     void logout() {
         //given
-        Member member = authService.doAuthentication(new Request("code"));
+        Member member = authService.doAuthentication(new Login("code"));
 
         //when
         authService.logout(session);
