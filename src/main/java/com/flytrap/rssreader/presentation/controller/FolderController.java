@@ -21,5 +21,14 @@ public class FolderController {
 
     private final FolderService folderService;
 
+    @PostMapping
+    public ApplicationResponse<FolderCreate.Response> createFolder(
+            @Valid @RequestBody FolderCreate request,
+            @Login SessionMember member) {
+
+        Folder newFolder = folderService.createNewFolder(request, member.id());
+
+        return new ApplicationResponse<>(FolderCreate.Response.from(newFolder));
+    }
 
 }
