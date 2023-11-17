@@ -10,11 +10,5 @@ import java.lang.annotation.Target;
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 public @interface Domain {
 
-    enum Type {
-        DOMAIN,
-        SUBDOMAIN
-    }
-
-    Type type() default Type.DOMAIN;
     String name();
 }
