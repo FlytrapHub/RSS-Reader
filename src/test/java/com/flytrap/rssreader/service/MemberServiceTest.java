@@ -1,6 +1,5 @@
 package com.flytrap.rssreader.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import com.flytrap.rssreader.domain.member.Member;
@@ -10,7 +9,6 @@ import com.flytrap.rssreader.infrastructure.entity.member.OauthServer;
 import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +45,12 @@ class MemberServiceTest {
         // when
         Member existMember
             = memberService.loginMember(
-                new UserResource(1L, "test@gmail.com", "login", "avatarUrl.jpg"));
+            UserResource.builder()
+                .id(1L)
+                .email("test@gmail.com")
+                .login("login")
+                .avatarUrl("avatarUrl.jpg")
+                .build());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -80,7 +83,12 @@ class MemberServiceTest {
         // when
         Member newMember
             = memberService.loginMember(
-            new UserResource(1L, "test@gmail.com", "login", "avatarUrl.jpg"));
+            UserResource.builder()
+                .id(1L)
+                .email("test@gmail.com")
+                .login("login")
+                .avatarUrl("avatarUrl.jpg")
+                .build());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
