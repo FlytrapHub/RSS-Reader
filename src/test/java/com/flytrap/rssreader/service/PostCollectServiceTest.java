@@ -57,7 +57,7 @@ class PostCollectServiceTest {
     @Test
     void collectNotExistPosts() {
         // given
-        when(postEntityJpaRepository.existsByGuidAndSubscribe(anyString(), any()))
+        when(postEntityJpaRepository.existsBySubscribeAndGuid(any(), anyString()))
             .thenReturn(false);
 
         // when
@@ -71,7 +71,7 @@ class PostCollectServiceTest {
     @Test
     void collectExistPosts() {
         // given
-        when(postEntityJpaRepository.existsByGuidAndSubscribe(anyString(), any()))
+        when(postEntityJpaRepository.existsBySubscribeAndGuid(any(), anyString()))
             .thenReturn(true);
 
         // when

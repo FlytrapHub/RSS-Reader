@@ -39,7 +39,7 @@ public class PostCollectService {
         for (RssItemResource itemResource : itemResources) {
             PostEntity post = PostEntity.from(itemResource, subscribe);
 
-            if (!postEntityJpaRepository.existsByGuidAndSubscribe(post.getGuid(), subscribe)) {
+            if (!postEntityJpaRepository.existsBySubscribeAndGuid(subscribe, post.getGuid())) {
                 postEntityJpaRepository.save(post);
             }
         }
