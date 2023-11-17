@@ -19,9 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "rss_subscribe")
@@ -44,4 +42,13 @@ public class SubscribeEntity {
     @Enumerated(EnumType.STRING)
     private BlogPlatform platform;
 
+    @Builder
+    protected SubscribeEntity(Long id, String description, String url, List<PostEntity> post,
+        BlogPlatform platform) {
+        this.id = id;
+        this.description = description;
+        this.url = url;
+        this.post = post;
+        this.platform = platform;
+    }
 }

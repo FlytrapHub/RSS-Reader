@@ -12,14 +12,11 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "rss_post")
@@ -44,6 +41,14 @@ public class PostEntity {
     private SubscribeEntity subscribe;
 
     // TODO: Bookmark, Open, React 추가하기
+
+    @Builder
+    protected PostEntity(String guid, String title, String description, SubscribeEntity subscribe) {
+        this.guid = guid;
+        this.title = title;
+        this.description = description;
+        this.subscribe = subscribe;
+    }
 
     public static PostEntity from(RssItemResource rssItemResource, SubscribeEntity subscribe) {
         return PostEntity.builder()
