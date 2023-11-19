@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.config;
+package com.flytrap.rssreader.global.config;
 
 import com.flytrap.rssreader.infrastructure.properties.OauthProperties;
 import io.netty.channel.ChannelOption;

@@ -54,7 +54,7 @@ class MemberServiceTest {
     void loginMemberWithNotExistMember() {
         //given
         when(memberEntityJpaRepository.findByOauthPk(1L))
-            .thenReturn(Optional.empty());
+                .thenReturn(Optional.empty());
 
         when(memberEntityJpaRepository.save(any()))
             .thenReturn(generateMemberEntity());

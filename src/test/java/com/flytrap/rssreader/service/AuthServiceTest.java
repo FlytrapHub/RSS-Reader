@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateMember;
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateUserResource;
 import static org.mockito.BDDMockito.any;
@@ -43,7 +44,7 @@ class AuthServiceTest {
     @BeforeEach
     void init() {
         when(authProvider.requestAccessToken(anyString()))
-            .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
+                .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
         when(authProvider.requestUserResource(any()))
             .thenReturn(Mono.just(generateUserResource()));
         when(memberService.loginMember(any()))
