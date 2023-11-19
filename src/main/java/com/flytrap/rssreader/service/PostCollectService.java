@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @AllArgsConstructor
@@ -26,15 +26,27 @@ public class PostCollectService {
     private final SubscribeEntityJpaRepository subscribeEntityJpaRepository;
     private final PostEntityJpaRepository postEntityJpaRepository;
 
-    @Transactional
+    private final TaskExecutor taskExecutor;
+
     @Scheduled(fixedDelay = TEN_MINUTE)
     public void collectPosts() {
         List<SubscribeEntity> subscribes = subscribeEntityJpaRepository.findAll();
 
         for (SubscribeEntity subscribe : subscribes) {
+            processPostCollectionAsync(subscribe);
+        }
+    }
+
+    /**
+     * 구독한 블로그의 RSS에서 게시글들을 읽어서 DB에 저장한다.<br>
+     * 비동기 처리되어 있으며 블로그 하나당 하나의 스레드에서 동작한다.
+     * @param subscribe 구독한 블로그
+     */
+    private void processPostCollectionAsync(SubscribeEntity subscribe) {
+        taskExecutor.execute(() -> {
             List<RssItemResource> itemResources = postParser.parseRssDocuments(subscribe.getUrl());
             savePosts(itemResources, subscribe);
-        }
+        });
     }
 
     private void savePosts(List<RssItemResource> itemResources, SubscribeEntity subscribe) {
