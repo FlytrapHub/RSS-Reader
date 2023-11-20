@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
+import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,14 +15,11 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "rss_subscribe")
@@ -44,4 +42,13 @@ public class SubscribeEntity {
     @Enumerated(EnumType.STRING)
     private BlogPlatform platform;
 
+    @Builder
+    protected SubscribeEntity(Long id, String description, String url, List<PostEntity> post,
+        BlogPlatform platform) {
+        this.id = id;
+        this.description = description;
+        this.url = url;
+        this.post = post;
+        this.platform = platform;
+    }
 }

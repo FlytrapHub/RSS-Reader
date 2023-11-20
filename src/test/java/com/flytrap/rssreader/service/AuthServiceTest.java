@@ -1,5 +1,8 @@
 package com.flytrap.rssreader.service;
 
+
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateMember;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateUserResource;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.times;
@@ -7,10 +10,9 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.domain.member.OauthServer;
+import com.flytrap.rssreader.fixture.FixtureFields.MemberFields;
 import com.flytrap.rssreader.infrastructure.api.AuthProvider;
 import com.flytrap.rssreader.infrastructure.api.dto.AccessToken;
-import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.presentation.dto.Login;
 import jakarta.servlet.http.HttpSession;
 import org.assertj.core.api.SoftAssertions;
@@ -44,20 +46,9 @@ class AuthServiceTest {
         when(authProvider.requestAccessToken(anyString()))
                 .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
         when(authProvider.requestUserResource(any()))
-                .thenReturn(Mono.just(
-                        UserResource.builder().id(1L).email("test@gmail.com").login("login")
-                                .avatarUrl("img.jpg").build()));
+            .thenReturn(Mono.just(generateUserResource()));
         when(memberService.loginMember(any()))
-                .thenReturn(
-                        Member.builder()
-                                .id(1L)
-                                .name("테스트")
-                                .email("test@gmail.com")
-                                .profile("img.jpg")
-                                .oauthPk(11L)
-                                .oauthServer(OauthServer.GITHUB)
-                                .build()
-                );
+            .thenReturn(generateMember());
     }
 
     @Test
@@ -68,9 +59,9 @@ class AuthServiceTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(member.getId()).isEqualTo(1);
-            softAssertions.assertThat(member.getEmail()).isEqualTo("test@gmail.com");
-            softAssertions.assertThat(member.getProfile()).isEqualTo("img.jpg");
+            softAssertions.assertThat(member.getId()).isEqualTo(MemberFields.id);
+            softAssertions.assertThat(member.getEmail()).isEqualTo(MemberFields.email);
+            softAssertions.assertThat(member.getProfile()).isEqualTo(MemberFields.profile);
         });
     }
 
