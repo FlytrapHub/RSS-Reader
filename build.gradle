@@ -14,8 +14,6 @@ java {
 
 jacoco {
     toolVersion = "0.8.9"
-    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
-
 }
 
 configurations {
@@ -52,13 +50,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport // report is always generated after tests run
-    jacoco {
-        destinationFile = layout.buildDirectory.file('jacoco/jacocoTest.exec').get().asFile
-        classDumpDir = layout.buildDirectory.dir('jacoco/classpathdumps').get().asFile
-    }
+    finalizedBy jacocoTestReport
 }
-
 
 /* Submodule start */
 processResources.dependsOn('submodules')
@@ -78,11 +71,10 @@ tasks.named('test') {
 
 /* Jacoco */
 jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
+    dependsOn test
     reports {
-        xml.required = false
+        xml.required = true
         csv.required = false
-        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 }
 
