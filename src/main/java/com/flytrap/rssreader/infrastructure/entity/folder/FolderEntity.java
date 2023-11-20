@@ -27,13 +27,16 @@ public class FolderEntity {
     private Long memberId;
     @Column(nullable = false)
     private Boolean isShared;
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
 
     @Builder
-    protected FolderEntity(Long id, String name, Long memberId, Boolean isShared) {
+    public FolderEntity(Long id, String name, Long memberId, Boolean isShared, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.memberId = memberId;
         this.isShared = isShared;
+        this.isDeleted = isDeleted;
     }
 
     public static FolderEntity from(Folder folder) {
@@ -41,12 +44,13 @@ public class FolderEntity {
                 .id(folder.getId())
                 .name(folder.getName())
                 .memberId(folder.getMemberId())
-                .isShared(folder.getIsShared())
+                .isShared(folder.isShared())
+                .isDeleted(folder.getIsDeleted())
                 .build();
     }
 
     public Folder toDomain() {
-        return Folder.of(id, name, memberId, isShared);
+        return Folder.of(id, name, memberId, isShared, isDeleted);
     }
 
 }
