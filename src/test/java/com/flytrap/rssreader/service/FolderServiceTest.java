@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.service;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flytrap.rssreader.domain.folder.Folder;
@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("Folder 서비스 로직 -Folder")
@@ -33,12 +34,14 @@ class FolderServiceTest {
     FolderService folderService;
 
     Member member = FixtureFactory.generateMember();
+
     Folder folder = FolderFixtureFactory.generateFolder();
+
     String newFolderName = "newFolderName";
 
     @BeforeEach
     void setUp() {
-        when(repository.findById(1L)).thenReturn(
+        when(repository.findByIdAndIsDeletedFalse(1L)).thenReturn(
                 Optional.ofNullable(FolderFixtureFactory.generateFolderEntity()));
     }
 
@@ -49,11 +52,15 @@ class FolderServiceTest {
         @Test
         @DisplayName("folder 이름이 성공적으로 변경된다.")
         void modifyFolderName_success() {
+            when(repository.save(Mockito.any(FolderEntity.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
             // given
             FolderRequest.CreateRequest request = new FolderRequest.CreateRequest(newFolderName);
 
             // when
-            Folder updatedFolder = folderService.updateFolder(request, folder.getId(), member.getId());
+            Folder updatedFolder = folderService.updateFolder(request, folder.getId(),
+                    member.getId());
 
             // then
             // exception 없이 정상적으로 종료
@@ -71,9 +78,11 @@ class FolderServiceTest {
             FolderRequest.CreateRequest request = new FolderRequest.CreateRequest(newFolderName);
 
             SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> folderService.updateFolder(request, folder.getId(), 2L))
+                softAssertions.assertThatThrownBy(
+                                () -> folderService.updateFolder(request, folder.getId(), 2L))
                         .isInstanceOf(NotBelongToMemberException.class);
-                softAssertions.assertThat(folder.getName()).isEqualTo(FolderFixtureFactory.FolderFields.name);
+                softAssertions.assertThat(folder.getName())
+                        .isEqualTo(FolderFixtureFactory.FolderFields.name);
             });
         }
     }
