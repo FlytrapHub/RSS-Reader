@@ -22,12 +22,12 @@ CREATE TABLE IF NOT EXISTS `rss_subscribe`
 
 CREATE TABLE IF NOT EXISTS `rss_post`
 (
-    `id`        bigint      NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `guid` varchar(2500) NULL,
-    `subscribe_id` bigint NOT NULL,
-    `title` varchar(2500) NULL,
-    `description` longtext NULL,
-    `pub_date` timestamp NULL
+    `id`           bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `guid`         varchar(2500) NOT NULL,
+    `subscribe_id` bigint        NOT NULL,
+    `title`        varchar(2500) NOT NULL,
+    `description`  longtext      NOT NULL,
+    `pub_date`     timestamp     NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `folder`
