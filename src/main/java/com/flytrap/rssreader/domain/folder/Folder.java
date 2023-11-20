@@ -1,6 +1,5 @@
 package com.flytrap.rssreader.domain.folder;
 
-import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
 import lombok.AccessLevel;
@@ -16,22 +15,26 @@ public class Folder implements DefaultDomain {
     private Long id;
     private String name;
     private Long memberId;
-    private Boolean isShared;
+    private SharedStatus sharedStatus;
+    private Boolean isDeleted;
 
     @Builder
-    public Folder(Long id, String name, Long memberId, Boolean isShared) {
+    protected Folder(Long id, String name, Long memberId, Boolean isShared, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.memberId = memberId;
-        this.isShared = isShared;
+        this.sharedStatus = SharedStatus.from(isShared);
+        this.isDeleted = isDeleted;
     }
 
-    public static Folder of(Long id, String name, Long memberId, Boolean isShared) {
+    public static Folder of(Long id, String name, Long memberId, Boolean isShared,
+            Boolean isDeleted) {
         return Folder.builder()
                 .id(id)
                 .name(name)
                 .memberId(memberId)
                 .isShared(isShared)
+                .isDeleted(isDeleted)
                 .build();
     }
 
@@ -40,10 +43,23 @@ public class Folder implements DefaultDomain {
                 .name(name)
                 .memberId(member)
                 .isShared(false)
+                .isDeleted(false)
                 .build();
     }
 
     public void updateName(String name) {
         this.name = name;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isShared() {
+        return sharedStatus==SharedStatus.SHARED;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 }
