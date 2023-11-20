@@ -4,6 +4,7 @@ import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.infrastructure.api.AuthProvider;
 import com.flytrap.rssreader.infrastructure.properties.AuthProperties;
 import com.flytrap.rssreader.presentation.dto.Login;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class AuthService {
     }
 
     public void login(Member member, HttpSession session) {
-        session.setAttribute(authProperties.sessionId(), member);
+        session.setAttribute(authProperties.sessionId(), SessionMember.from(member));
     }
 
     public void logout(HttpSession session) {
