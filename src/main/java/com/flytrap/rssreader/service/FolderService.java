@@ -18,4 +18,9 @@ public class FolderService {
         Folder folder = Folder.create(request.name(), member);
         return repository.save(FolderEntity.from(folder)).toDomain();
     }
+    private void verifyBelongTo(long memberId, FolderEntity folderEntity) {
+        if (folderEntity.getMemberId() != memberId) {
+            throw new NotBelongToMemberException(folderEntity.toDomain());
+        }
+    }
 }
