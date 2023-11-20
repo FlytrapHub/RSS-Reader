@@ -32,8 +32,8 @@ public class AuthenticationFilter extends OncePerRequestFilter { //TODO 통합�
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
-        Object attribute = session.getAttribute(authProperties.sessionId());
-        context.setLoginMember((SessionMember) attribute);
+        SessionMember attribute = (SessionMember) session.getAttribute(authProperties.sessionId());
+        context.setLoginMember(attribute);
 
         chain.doFilter(request, response);
     }
