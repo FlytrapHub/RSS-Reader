@@ -32,4 +32,14 @@ public class FolderController {
         return new ApplicationResponse<>(FolderRequest.Response.from(newFolder));
     }
 
+    @PatchMapping("/{folderId}")
+    public ApplicationResponse<FolderRequest.Response> updateFolder(
+            @Valid @RequestBody FolderRequest.CreateRequest request,
+            @PathVariable Long folderId,
+            @Login SessionMember member) {
+
+        Folder updatedFolder = folderService.updateFolder(request, folderId, member.id());
+
+        return new ApplicationResponse<>(FolderRequest.Response.from(updatedFolder));
+    }
 }
