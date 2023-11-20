@@ -3,8 +3,11 @@ package com.flytrap.rssreader.infrastructure.api;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemTagName;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.NoArgsConstructor;
@@ -26,7 +29,7 @@ public class RssPostParser {
 
     private static final String RSS_PARSING_ERROR_MESSAGE = "RSS문서를 파싱할 수 없습니다.";
 
-    public List<RssItemResource> parseRssDocument(String url) {
+    public List<RssItemResource> parseRssDocuments(String url) {
 
         List<RssItemResource> itemResources = new ArrayList<>();
 
@@ -42,7 +45,7 @@ public class RssPostParser {
                         getTagValue(node, RssItemTagName.GUID),
                         getTagValue(node, RssItemTagName.TITLE),
                         getTagValue(node, RssItemTagName.DESCRIPTION),
-                        getTagValue(node, RssItemTagName.PUB_DATE)
+                        convertToInstant(getTagValue(node, RssItemTagName.PUB_DATE))
                     )
                 );
             }
@@ -58,4 +61,11 @@ public class RssPostParser {
 
         return element.getElementsByTagName(tagName.getTagName()).item(0).getTextContent();
     }
+
+    private Instant convertToInstant(String parsingDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+
+        return Instant.from(formatter.parse(parsingDate));
+    }
+
 }

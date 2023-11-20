@@ -3,6 +3,7 @@ package com.flytrap.rssreader.presentation.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.infrastructure.properties.AuthProperties;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.AuthorizationContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -28,10 +30,10 @@ public class AuthenticationFilter extends OncePerRequestFilter { //TODO 통합�
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
 
-        Object attribute = session.getAttribute(authProperties.sessionId());
-        context.setLoginMember((Member) attribute);
+        SessionMember attribute = (SessionMember) session.getAttribute(authProperties.sessionId());
+        context.setLoginMember(attribute);
 
         chain.doFilter(request, response);
     }

@@ -3,6 +3,7 @@ package com.flytrap.rssreader.presentation.controller;
 import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.Login;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ApplicationResponse<Member> login(@RequestBody Login request, HttpSession session) {
+    public ApplicationResponse<SessionMember> login(@RequestBody Login request, HttpSession session) {
 
         Member member = authService.doAuthentication(request);
         authService.login(member, session);
 
-        return new ApplicationResponse<>(member); // TODO DTO만들어서 반환
+        return new ApplicationResponse<>(SessionMember.from(member));
     }
 
     @PostMapping("/logout")
