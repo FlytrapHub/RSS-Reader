@@ -5,12 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "admin")
 public record AdminProperties(String code,
-                              Member user) {
+                              int memberId,
+                              String memberName,
+                              String memberEmail) {
 
     public Member getMember() {
-        return Member.adminOf(user.getId(), user.getName(), user.getEmail());
-    }
-
-    public static record User(int id, String name, String email) {
+        return Member.adminOf(memberId, memberName, memberEmail);
     }
 }
