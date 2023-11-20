@@ -17,7 +17,8 @@ public class ApplicationException extends RuntimeException {
     }
 
     public ApplicationException(Class<? extends DefaultDomain> domain) {
-        super(String.format(message, domain.getName()));
+        super(String.format(message, domain.getSimpleName()));
+        this.defaultCode = domain.getSimpleName();
     }
 
     public String getDefaultCode() {
