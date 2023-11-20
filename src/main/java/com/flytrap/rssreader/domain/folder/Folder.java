@@ -42,4 +42,8 @@ public class Folder implements DefaultDomain {
                 .isShared(false)
                 .build();
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 }
