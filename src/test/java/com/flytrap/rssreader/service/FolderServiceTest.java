@@ -87,4 +87,37 @@ class FolderServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("folder 삭제 시")
+    class DeleteFolder {
+
+        @Test
+        @DisplayName("folder가 삭제된다.")
+        void deleteFolder_success() {
+            when(repository.save(Mockito.any(FolderEntity.class)))
+                    .thenAnswer(i -> i.getArguments()[0]);
+
+            // when
+            Folder deletedFolder = folderService.deleteFolder(folder.getId(), member.getId());
+            // then
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThat(deletedFolder.isDeleted()).isTrue();
+                softAssertions.assertThat(deletedFolder.getId()).isEqualTo(folder.getId());
+                softAssertions.assertThat(deletedFolder.getMemberId()).isEqualTo(member.getId());
+            });
+        }
+
+        @Test
+        @DisplayName("작성자가 아닐 시 예외가 발생한다.")
+        void deleteFolder_authException() {
+            // when
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(
+                                () -> folderService.deleteFolder(folder.getId(), 20L))
+                        .isInstanceOf(NotBelongToMemberException.class);
+                softAssertions.assertThat(folder.isDeleted()).isFalse();
+                verify(repository, Mockito.times(0)).save(Mockito.any(FolderEntity.class));
+            });
+        }
+    }
 }
