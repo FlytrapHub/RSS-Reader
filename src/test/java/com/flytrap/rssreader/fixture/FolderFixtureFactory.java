@@ -17,6 +17,8 @@ public class FolderFixtureFactory {
                 .id(FolderFields.id)
                 .name(FolderFields.name)
                 .memberId(FolderFields.member.getId())
+                .isShared(false)
+                .isDeleted(false)
                 .build();
     }
 
@@ -25,6 +27,8 @@ public class FolderFixtureFactory {
                 .id(FolderFields.id)
                 .name(FolderFields.name)
                 .memberId(FolderFields.member.getId())
+                .isShared(false)
+                .isDeleted(false)
                 .build();
     }
 
