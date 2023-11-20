@@ -20,13 +20,14 @@ public class AuthService {
 
     public Member doAuthentication(Login request) {
         return authProvider.requestAccessToken(request.code())
-            .flatMap(authProvider::requestUserResource)
-            .map(memberService::loginMember)
-            .block();
+                .flatMap(authProvider::requestUserResource)
+                .map(memberService::loginMember)
+                .block();
     }
 
-    public void login(Member member, HttpSession session) {
+    public SessionMember login(Member member, HttpSession session) {
         session.setAttribute(authProperties.sessionId(), SessionMember.from(member));
+        return SessionMember.from(member);
     }
 
     public void logout(HttpSession session) {

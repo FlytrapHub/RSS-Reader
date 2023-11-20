@@ -23,12 +23,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ApplicationResponse<SessionMember> login(@RequestBody Login request, HttpSession session) {
+    public ApplicationResponse<SessionMember> login(@RequestBody Login request,
+            HttpSession session) {
 
         Member member = authService.doAuthentication(request);
-        authService.login(member, session);
 
-        return new ApplicationResponse<>(SessionMember.from(member));
+        return new ApplicationResponse<>(authService.login(member, session));
     }
 
     @PostMapping("/logout")
