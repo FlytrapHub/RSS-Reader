@@ -1,8 +1,8 @@
 package com.flytrap.rssreader.service;
 
-import static com.flytrap.rssreader.fixture.FixtureFactory.*;
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateMemberEntity;
-import static com.flytrap.rssreader.fixture.FixtureFields.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateUserResource;
+import static com.flytrap.rssreader.fixture.FixtureFields.MemberFields;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
@@ -34,11 +34,11 @@ class MemberServiceTest {
     void loginMemberWithExistMember() {
         // given
         when(memberEntityJpaRepository.findByOauthPk(1L))
-            .thenReturn(Optional.of(generateMemberEntity()));
+                .thenReturn(Optional.of(generateMemberEntity()));
 
         // when
         Member existMember
-            = memberService.loginMember(generateUserResource());
+                = memberService.loginMember(generateUserResource());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -57,11 +57,11 @@ class MemberServiceTest {
                 .thenReturn(Optional.empty());
 
         when(memberEntityJpaRepository.save(any()))
-            .thenReturn(generateMemberEntity());
+                .thenReturn(generateMemberEntity());
 
         // when
         Member newMember
-            = memberService.loginMember(generateUserResource());
+                = memberService.loginMember(generateUserResource());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
