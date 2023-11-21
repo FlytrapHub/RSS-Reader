@@ -37,3 +37,10 @@ CREATE TABLE IF NOT EXISTS `folder`
     `member_id` bigint      NOT NULL,
     `is_shared` tinyint(1)  NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS `folder_subscribe`
+(
+    `id`                 bigint     NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `subscribe_id`      bigint      NOT NULL,
+    `folder_id`         bigint      NOT NULL
+ );
