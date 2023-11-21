@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FolderUpdateService {
 
     private final FolderEntityJpaRepository repository;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     public Folder createNewFolder(@Valid CreateRequest request, long member) {
         Folder folder = Folder.create(request.name(), member);
@@ -55,4 +56,12 @@ public class FolderUpdateService {
         return repository.save(FolderEntity.from(folder)).toDomain();
     }
 
+    public void shareFolder(Folder folder) {
+
+        if (!folder.isShared()) {
+            folder.toShare();
+            repository.save(FolderEntity.from(folder));
+        }
+
+    }
 }
