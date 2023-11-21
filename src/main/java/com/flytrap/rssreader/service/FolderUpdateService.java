@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class FolderService {
+public class FolderUpdateService {
 
     private final FolderEntityJpaRepository repository;
 
@@ -53,13 +53,6 @@ public class FolderService {
         folder.delete();
 
         return repository.save(FolderEntity.from(folder)).toDomain();
-    }
-
-    @Transactional(readOnly = true)
-    public Map<SharedStatus, Folder> findAllByMemberIdGroupByShared(long memberId) {
-        return repository.findAllByMemberIdAndIsDeletedFalse(memberId).stream()
-                .map(FolderEntity::toDomain)
-                .collect(Collectors.toMap(Folder::getSharedStatus, folder -> folder));
     }
 
 }
