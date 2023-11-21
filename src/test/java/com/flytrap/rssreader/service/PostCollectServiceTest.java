@@ -73,41 +73,4 @@ class PostCollectServiceTest {
         verify(postEntityJpaRepository, times(itemResources.size())).save(any());
     }
 
-    @DisplayName("RSS 문서에서 파싱된 게시글 목록을 모두 DB에 저장할 수 있다.")
-    @Test
-    void collectPosts_async() throws InterruptedException {
-        // given
-        List<RssItemResource> itemResources = generate50RssItemResourceList();
-        when(postParser.parseRssDocuments(anyString()))
-                .thenReturn(itemResources);
-
-        // when
-        postCollectService.collectPosts();
-        taskExecutor.getThreadPoolExecutor().awaitTermination(10, TimeUnit.SECONDS);
-
-        // then
-        verify(postEntityJpaRepository, times(itemResources.size())).save(any());
-    }
-
-    @DisplayName("RSS 문서에서 파싱된 게시글 목록을 모두 DB에 저장할 수 있다.")
-    @Test
-    void shouldCollectPostsAsyncAndSaveToDB() throws InterruptedException {
-        // given
-        List<RssItemResource> itemResources = generate50RssItemResourceList();
-        when(postParser.parseRssDocuments(anyString())).thenReturn(itemResources);
-
-        // when
-        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-            postCollectService.collectPosts();
-        });
-
-        // then
-        future.join(); // 비동기 작업이 완료될 때까지 기다림
-
-        verify(postEntityJpaRepository, times(itemResources.size())).save(any());
-        verify(postEntityJpaRepository, times(itemResources.size()))
-                .save(argThat(itemResources::contains));
-    }
-
-
 }
