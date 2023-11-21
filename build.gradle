@@ -46,6 +46,9 @@ dependencies {
     implementation("it.ozimov:embedded-redis:0.7.2")
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+    //ROME
+    implementation 'rome:rome:1.0'
+    implementation 'rome:rome-fetcher:1.0'
 }
 
 test {
