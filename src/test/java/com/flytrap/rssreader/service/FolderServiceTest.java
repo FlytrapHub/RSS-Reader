@@ -31,7 +31,7 @@ class FolderServiceTest {
     FolderEntityJpaRepository repository;
 
     @InjectMocks
-    FolderService folderService;
+    FolderUpdateService folderService;
 
     Member member = FixtureFactory.generateMember();
 

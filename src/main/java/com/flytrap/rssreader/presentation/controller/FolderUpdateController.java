@@ -5,7 +5,7 @@ import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
-import com.flytrap.rssreader.service.FolderService;
+import com.flytrap.rssreader.service.FolderUpdateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
-public class ReadFolderController {
+public class FolderUpdateController {
 
-
-    private final FolderService folderService;
+    private final FolderUpdateService folderService;
 
     @PostMapping
     public ApplicationResponse<FolderRequest.Response> createFolder(
