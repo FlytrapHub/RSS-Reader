@@ -76,6 +76,7 @@ jacocoTestReport {
         xml.required = true
         csv.required = false
     }
+    finalizedBy 'jacocoTestCoverageVerification'
 }
 
 jacocoTestCoverageVerification {
