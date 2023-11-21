@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.global.exception;
 
 import com.flytrap.rssreader.global.model.ErrorResponse;
+import java.util.Objects;
 import javax.security.sasl.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(NotBelongToMemberException.class)
+    public ErrorResponse handleException(NotBelongToMemberException e) {
+        e.printStackTrace();
+        log.error(e.getMessage());
+        return ErrorResponse.occur(e);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
     public ErrorResponse handleException(BindException e) {
         e.printStackTrace();
         log.error(e.getMessage());
-        return ErrorResponse.occur(e.getFieldError());
+        return ErrorResponse.occur(Objects.requireNonNull(e.getFieldError()));
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
