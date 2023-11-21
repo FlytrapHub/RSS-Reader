@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateMember;
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateUserResource;
 import static org.mockito.BDDMockito.any;
@@ -12,7 +13,9 @@ import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.fixture.FixtureFields.MemberFields;
 import com.flytrap.rssreader.infrastructure.api.AuthProvider;
 import com.flytrap.rssreader.infrastructure.api.dto.AccessToken;
+import com.flytrap.rssreader.infrastructure.properties.AuthProperties;
 import com.flytrap.rssreader.presentation.dto.Login;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
 import jakarta.servlet.http.HttpSession;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,13 +40,16 @@ class AuthServiceTest {
     @Mock
     HttpSession session;
 
+    @Mock
+    AuthProperties authProperties;
+
     @InjectMocks
     AuthService authService;
 
     @BeforeEach
     void init() {
         when(authProvider.requestAccessToken(anyString()))
-            .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
+                .thenReturn(Mono.just(new AccessToken("test_access_token", "Bearer")));
         when(authProvider.requestUserResource(any()))
             .thenReturn(Mono.just(generateUserResource()));
         when(memberService.loginMember(any()))
@@ -67,14 +73,16 @@ class AuthServiceTest {
     @Test
     @DisplayName("클라이언트가 oauth 인증 서버로부터 받은 코드를 통해 세션에 member를 저장된다.")
     void login() {
+        when(authProperties.sessionId()).thenReturn("test_session::");
         //given
         Member member = authService.doAuthentication(new Login("code"));
+        SessionMember sessionMember = SessionMember.from(member);
 
         //when
         authService.login(member, session);
 
         //then
-        verify(session, times(1)).setAttribute("login_session::", member);
+        verify(session, times(1)).setAttribute("test_session::", sessionMember);
     }
 
     @Test
@@ -87,6 +95,6 @@ class AuthServiceTest {
         authService.logout(session);
 
         //then
-        verify(session, times(1)).removeAttribute("login_session::");
+        verify(session, times(1)).invalidate();
     }
 }
