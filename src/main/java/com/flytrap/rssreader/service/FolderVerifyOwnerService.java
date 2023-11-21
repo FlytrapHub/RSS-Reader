@@ -5,7 +5,6 @@ import com.flytrap.rssreader.global.exception.NoSuchDomainException;
 import com.flytrap.rssreader.global.exception.NotBelongToMemberException;
 import com.flytrap.rssreader.infrastructure.entity.folder.FolderEntity;
 import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
