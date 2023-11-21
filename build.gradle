@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // webflux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -37,6 +38,7 @@ dependencies {
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
+    implementation("it.ozimov:embedded-redis:0.7.2")
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
 }
