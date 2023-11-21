@@ -47,3 +47,10 @@ CREATE TABLE IF NOT EXISTS `folder_subscribe`
     `subscribe_id`      bigint      NOT NULL,
     `folder_id`         bigint      NOT NULL
  );
+
+CREATE TABLE IF NOT EXISTS `folder_member`
+(
+    `id`                 bigint     NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `folder_id`         bigint      NOT NULL,
+    `member_id`         bigint      NOT NULL
+ );
