@@ -26,7 +26,7 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse occur(FieldError fieldError) {
-        return new ErrorResponse(fieldError.getField(), fieldError.getDefaultMessage());
+        return new ErrorResponse(String.format("Input_FieldError_%s", fieldError.getField()), fieldError.getDefaultMessage());
     }
 
     public static ErrorResponse occur(Exception ex) {
