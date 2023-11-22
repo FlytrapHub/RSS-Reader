@@ -48,12 +48,12 @@ public class FolderUpdateController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{folderId}")
-    public ApplicationResponse<Void> deleteFolder(
+    public ApplicationResponse<String> deleteFolder(
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
         folderService.deleteFolder(folderId, member.id());
 
-        return new ApplicationResponse<>(null);
+        return new ApplicationResponse<>("폴더가 삭제되었습니다 : "+folder.getName());
     }
 }
