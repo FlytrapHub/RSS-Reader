@@ -26,15 +26,15 @@ public class SubscribeService {
     private final SubscribeEntityJpaRepository subscribeRepository;
     private final RssChecker rssChecker;
 
-    public Long subscribe(CreateRequest request, long id) {
+    public Subscribe subscribe(CreateRequest request, long id) {
         RssFeedData rssFeedData = rssChecker.checker(request);
 
-        if (subscribeRepository.existsByUrl(rssFeedData.url())) {
-            //TODO: 도메인을 DB에 넣을거면 꺼내 써는 방향?, 일단은 도메인을 만들어 리턴한다.
-            return Subscribe.builder().build().getId();
+        if (!subscribeRepository.existsByUrl(rssFeedData.url())) {
+            //TODO: 없으면 새로 저장한다.
+            subscribeRepository.save(SubscribeEntity.from(rssFeedData));
         }
-        //TODO: 없으면 새로 저장한다.
-        return subscribeRepository.save(SubscribeEntity.from(rssFeedData)).getId();
+        //TODO: 도메인을 DB에 넣을거면 꺼내 써는 방향?, 일단은 도메인을 만들어 리턴한다.
+        return Subscribe.create(rssFeedData);
     }
 
     public void unsubscribe(Long folderId, Long subscribeId, SessionMember member) {
