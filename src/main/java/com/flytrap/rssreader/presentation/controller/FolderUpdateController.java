@@ -6,6 +6,7 @@ import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.service.FolderUpdateService;
+import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FolderUpdateController {
 
     private final FolderUpdateService folderService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     @PostMapping
     public ApplicationResponse<FolderRequest.Response> createFolder(
@@ -41,7 +43,8 @@ public class FolderUpdateController {
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        Folder updatedFolder = folderService.updateFolder(request, folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder updatedFolder = folderService.updateFolder(request, verifiedFolder, member.id());
 
         return new ApplicationResponse<>(FolderRequest.Response.from(updatedFolder));
     }
@@ -52,7 +55,8 @@ public class FolderUpdateController {
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        folderService.deleteFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
 
         return new ApplicationResponse<>("폴더가 삭제되었습니다 : "+folder.getName());
     }

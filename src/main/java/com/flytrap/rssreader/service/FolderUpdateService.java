@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FolderUpdateService {
 
     private final FolderEntityJpaRepository repository;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     public Folder createNewFolder(@Valid CreateRequest request, long member) {
         Folder folder = Folder.create(request.name(), member);
@@ -27,33 +26,23 @@ public class FolderUpdateService {
     }
 
     @Transactional
-    public Folder updateFolder(CreateRequest request, long folderId, long memberId) {
-        Folder folder = folderVerifyOwnerService.getVerifiedFolder(folderId, memberId);
+    public Folder updateFolder(CreateRequest request, Folder folder, long memberId) {
         folder.updateName(request.name());
 
         return repository.save(FolderEntity.from(folder)).toDomain();
     }
 
-    private void verifyBelongTo(long memberId, FolderEntity folderEntity) {
-        if (folderEntity.getMemberId() != memberId) {
-            throw new NotBelongToMemberException(folderEntity.toDomain());
-        }
-    }
-
     @Transactional
-    public Folder deleteFolder(Long folderId, long id) {
-        Folder folder = folderVerifyOwnerService.getVerifiedFolder(folderId, id);
+    public Folder deleteFolder(Folder folder, long id) {
         folder.delete();
 
         return repository.save(FolderEntity.from(folder)).toDomain();
     }
 
     public void shareFolder(Folder folder) {
-
         if (!folder.isShared()) {
             folder.toShare();
             repository.save(FolderEntity.from(folder));
         }
-
     }
 }
