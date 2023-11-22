@@ -7,7 +7,9 @@ import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
+import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
+import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.SubscribeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class FolderUpdateController {
 
     private final FolderUpdateService folderService;
     private final SubscribeService subscribeService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderSubscribeService folderSubscribeService;
 
     @PostMapping
     public ApplicationResponse<FolderRequest.Response> createFolder(
@@ -67,9 +71,13 @@ public class FolderUpdateController {
             @PathVariable Long folderId,
             @Valid @RequestBody SubscribeRequest.CreateRequest request,
             @Login SessionMember member) {
-
-        Subscribe subscribe = subscribeService.subscribe(request, folderId, member.id());
-
+        //TODO: 존재하는 폴더인지 검증하는 로직 , 공유폴더초대받은 인지 검증
+        //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
+        //지금 부분은 검증된 개인 폴더입니다.
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Long subscribeId = subscribeService.subscribe(request, member.id());
+        Subscribe subscribe = folderSubscribeService.folderSubscribe(subscribeId,
+                verifiedFolder.getId());
         return new ApplicationResponse<>(SubscribeRequest.Response.from(subscribe));
     }
 
