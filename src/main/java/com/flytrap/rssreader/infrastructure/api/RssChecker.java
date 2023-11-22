@@ -28,10 +28,11 @@ public class RssChecker {
         try {
             SyndFeed feed = feedFetcher.retrieveFeed(new URL(request.blogUrl()));
             BlogPlatform blogPlatform = BlogPlatform.parseLink(feed.getLink());
-            return new RssFeedData(feed.getTitle(), feed.getUri(), blogPlatform);
+            return new RssFeedData(feed.getTitle(), feed.getLink(), blogPlatform);
         } catch (IllegalArgumentException | IOException | FeedException | FetcherException e) {
             e.printStackTrace();
         }
+        //TODO: null일경우 예외
         return null;
     }
 }
