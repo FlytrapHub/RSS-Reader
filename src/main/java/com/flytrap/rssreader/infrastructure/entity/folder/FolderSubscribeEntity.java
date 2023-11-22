@@ -25,4 +25,7 @@ public class FolderSubscribeEntity {
 
     @Column(name = "subscribe_id", nullable = false)
     private Long subscribeId;
+
+    @Column(length = 2500, nullable = false)
+    private String description;
 }
