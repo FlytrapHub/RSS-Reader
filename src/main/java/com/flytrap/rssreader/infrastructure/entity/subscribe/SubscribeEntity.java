@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
+import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.presentation.dto.RssFeedData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,5 +50,9 @@ public class SubscribeEntity {
                 .url(rssFeedData.url())
                 .platform(rssFeedData.platform())
                 .build();
+    }
+
+    public Subscribe toDomain(RssFeedData rssFeedData) {
+        return Subscribe.of(this.id, rssFeedData.description());
     }
 }

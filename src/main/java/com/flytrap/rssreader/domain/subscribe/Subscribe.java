@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.domain.subscribe;
 
+import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
 import com.flytrap.rssreader.presentation.dto.RssFeedData;
 import lombok.AccessLevel;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Domain(name = "subscribe")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Subscribe {
+public class Subscribe implements DefaultDomain {
 
     private Long id;
     private String description;
@@ -24,6 +25,13 @@ public class Subscribe {
     public static Subscribe create(RssFeedData rssFeedData) {
         return Subscribe.builder()
                 .description(rssFeedData.description())
+                .build();
+    }
+
+    public static Subscribe of(Long id, String description) {
+        return Subscribe.builder()
+                .id(id)
+                .description(description)
                 .build();
     }
 }
