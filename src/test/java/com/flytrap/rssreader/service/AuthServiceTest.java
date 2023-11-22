@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 
-@DisplayName("Auth 서비스 로직 -Auth")
+@DisplayName("Auth 서비스 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 

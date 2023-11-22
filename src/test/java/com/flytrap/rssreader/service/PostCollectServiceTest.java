@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.task.TaskExecutor;
 
-@DisplayName("Post 서비스 로직 - PostCollector")
+@DisplayName("PostCollect 서비스 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class PostCollectServiceTest {
 
