@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FolderUpdateService {
 
     private final FolderEntityJpaRepository repository;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     public Folder createNewFolder(@Valid CreateRequest request, long member) {
         Folder folder = Folder.create(request.name(), member);
@@ -27,11 +28,7 @@ public class FolderUpdateService {
 
     @Transactional
     public Folder updateFolder(CreateRequest request, long folderId, long memberId) {
-        FolderEntity folderEntity = repository.findByIdAndIsDeletedFalse(folderId)
-                .orElseThrow(() -> new NoSuchDomainException(Folder.class));
-        verifyBelongTo(memberId, folderEntity);
-
-        Folder folder = folderEntity.toDomain();
+        Folder folder = folderVerifyOwnerService.getVerifiedFolder(folderId, memberId);
         folder.updateName(request.name());
 
         return repository.save(FolderEntity.from(folder)).toDomain();
@@ -45,14 +42,18 @@ public class FolderUpdateService {
 
     @Transactional
     public Folder deleteFolder(Long folderId, long id) {
-        FolderEntity folderEntity = repository.findByIdAndIsDeletedFalse(folderId)
-                .orElseThrow(() -> new NoSuchDomainException(Folder.class));
-        verifyBelongTo(id, folderEntity);
-
-        Folder folder = folderEntity.toDomain();
+        Folder folder = folderVerifyOwnerService.getVerifiedFolder(folderId, id);
         folder.delete();
 
         return repository.save(FolderEntity.from(folder)).toDomain();
     }
 
+    public void shareFolder(Folder folder) {
+
+        if (!folder.isShared()) {
+            folder.toShare();
+            repository.save(FolderEntity.from(folder));
+        }
+
+    }
 }

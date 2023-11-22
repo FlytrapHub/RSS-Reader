@@ -56,10 +56,18 @@ public class Folder implements DefaultDomain {
     }
 
     public boolean isShared() {
-        return sharedStatus==SharedStatus.SHARED;
+        return sharedStatus == SharedStatus.SHARED;
     }
 
     public boolean isDeleted() {
         return isDeleted;
+    }
+
+    public void toShare() {
+        this.sharedStatus = SharedStatus.SHARED;
+    }
+
+    public boolean isOwner(long id) {
+        return this.memberId == id;
     }
 }

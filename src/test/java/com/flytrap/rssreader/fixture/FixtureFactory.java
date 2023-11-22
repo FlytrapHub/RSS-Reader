@@ -49,6 +49,17 @@ public class FixtureFactory {
             .build();
     }
 
+    public static Member generateAnotherMember() {
+        return Member.builder()
+            .id(MemberFields.anotherId)
+            .name(MemberFields.anotherName)
+            .email(MemberFields.anotherEmail)
+            .profile(MemberFields.anotherProfile)
+            .oauthPk(MemberFields.anotherOauthPk)
+            .oauthServer(MemberFields.anotherOauthServer)
+            .build();
+    }
+
     // Post
     public static RssItemResource generateRssItemResource() {
         return new RssItemResource(

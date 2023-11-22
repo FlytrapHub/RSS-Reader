@@ -41,6 +41,12 @@ public class FixtureFields {
         public static String profile = AVATAR_URL;
         public static Long oauthPk = LONG_1L;
         public static OauthServer oauthServer = OauthServer.GITHUB;
+        public static Long anotherId = 2L;
+        public static String anotherName = "anotherName";
+        public static String anotherEmail = "anotherEmail";
+        public static String anotherProfile = "anotherProfile";
+        public static long anotherOauthPk = 2L;
+        public static OauthServer anotherOauthServer = OauthServer.GITHUB;
     }
 
     public static class RssItemResourceFields {

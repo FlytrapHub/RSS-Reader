@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,9 +12,7 @@ import com.flytrap.rssreader.global.exception.NotBelongToMemberException;
 import com.flytrap.rssreader.infrastructure.entity.folder.FolderEntity;
 import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,6 +27,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class FolderServiceTest {
 
     @Mock
+    FolderVerifyOwnerService folderVerifyOwnerService;
+
+    @Mock
     FolderEntityJpaRepository repository;
 
     @InjectMocks
@@ -39,12 +41,6 @@ class FolderServiceTest {
 
     String newFolderName = "newFolderName";
 
-    @BeforeEach
-    void setUp() {
-        when(repository.findByIdAndIsDeletedFalse(1L)).thenReturn(
-                Optional.ofNullable(FolderFixtureFactory.generateFolderEntity()));
-    }
-
     @Nested
     @DisplayName("folder 이름 수정 시")
     class ModifyFolderName {
@@ -54,6 +50,8 @@ class FolderServiceTest {
         void modifyFolderName_success() {
             when(repository.save(Mockito.any(FolderEntity.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
+            when(folderVerifyOwnerService.getVerifiedFolder(any(Long.class), any(Long.class)))
+                    .thenReturn(folder);
 
             // given
             FolderRequest.CreateRequest request = new FolderRequest.CreateRequest(newFolderName);
@@ -72,10 +70,12 @@ class FolderServiceTest {
         }
 
         @Test
-        @DisplayName("작성자가 아닐 시 예외가 발생한다.")
+        @DisplayName("작성자가 아닐 시 이름이 수정되지 않는다.")
         void modifyFolderName_fail() {
             // given
             FolderRequest.CreateRequest request = new FolderRequest.CreateRequest(newFolderName);
+            when(folderVerifyOwnerService.getVerifiedFolder(any(Long.class), any(Long.class)))
+                    .thenThrow(new NotBelongToMemberException(folder));
 
             SoftAssertions.assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(
@@ -96,6 +96,8 @@ class FolderServiceTest {
         void deleteFolder_success() {
             when(repository.save(Mockito.any(FolderEntity.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
+            when(folderVerifyOwnerService.getVerifiedFolder(any(Long.class), any(Long.class)))
+                    .thenReturn(folder);
 
             // when
             Folder deletedFolder = folderService.deleteFolder(folder.getId(), member.getId());
@@ -108,16 +110,21 @@ class FolderServiceTest {
         }
 
         @Test
-        @DisplayName("작성자가 아닐 시 예외가 발생한다.")
+        @DisplayName("작성자가 아닐 시 삭제되지 않는다.")
         void deleteFolder_authException() {
+            when(folderVerifyOwnerService.getVerifiedFolder(any(Long.class), any(Long.class)))
+                    .thenThrow(new NotBelongToMemberException(folder));
+
             // when
             SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(
-                                () -> folderService.deleteFolder(folder.getId(), 20L))
-                        .isInstanceOf(NotBelongToMemberException.class);
+                softAssertions.assertThatThrownBy(() -> {
+                    folderService.deleteFolder(folder.getId(), member.getId());
+                }).isInstanceOf(NotBelongToMemberException.class);
+
                 softAssertions.assertThat(folder.isDeleted()).isFalse();
                 verify(repository, Mockito.times(0)).save(Mockito.any(FolderEntity.class));
             });
         }
     }
+
 }
