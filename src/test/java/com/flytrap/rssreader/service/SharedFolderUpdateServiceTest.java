@@ -1,6 +1,5 @@
 package com.flytrap.rssreader.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,8 +8,9 @@ import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.fixture.FixtureFactory;
 import com.flytrap.rssreader.fixture.FolderFixtureFactory;
-import com.flytrap.rssreader.infrastructure.entity.shared.SharedFolderMembers;
+import com.flytrap.rssreader.infrastructure.entity.shared.SharedFolderEntity;
 import com.flytrap.rssreader.infrastructure.repository.SharedFolderJpaRepository;
+import javax.security.sasl.AuthenticationException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,15 +22,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
 
-@DisplayName("SharedFolder 서비스 로직 - SharedFolderService")
+@DisplayName("SharedFolder 서비스 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
-class SharedFolderServiceTest {
+class SharedFolderUpdateServiceTest {
 
     @Mock
     SharedFolderJpaRepository sharedFolderJpaRepository;
 
     @InjectMocks
-    SharedFolderService sharedFolderService;
+    SharedFolderUpdateService sharedFolderService;
 
     Member member;
     Member anotherMember;
@@ -50,7 +50,7 @@ class SharedFolderServiceTest {
 
             @Test
             @DisplayName("공유 폴더에 사람을 초대할 수 있다.")
-            void invite_success() {
+            void invite_success() throws AuthenticationException {
                 sharedFolderService.invite(folder, anotherMember.getId());
                 verify(sharedFolderJpaRepository).save(any());
             }
@@ -72,7 +72,7 @@ class SharedFolderServiceTest {
             void inviteWithAlreadyJoinedMember() {
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThatThrownBy(() -> sharedFolderService.invite(folder, member.getId()))
-                        .isInstanceOf(IllegalArgumentException.class);
+                        .isInstanceOf(AuthenticationException.class);
                 });
             }
     }
@@ -88,7 +88,7 @@ class SharedFolderServiceTest {
                 .thenReturn(true);
 
             sharedFolderService.leave(folder, anotherMember.getId());
-            verify(sharedFolderJpaRepository).delete(any(SharedFolderMembers.class));
+            verify(sharedFolderJpaRepository).delete(any(SharedFolderEntity.class));
         }
 
         @Test
@@ -117,19 +117,20 @@ class SharedFolderServiceTest {
 
         @Test
         @DisplayName("공유 폴더에서 내보낼 수 있다.")
-        void makeOut_success() {
-            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(folder.getId(), anotherMember.getId()))
-                .thenReturn(true);
+        void makeOut_success() throws AuthenticationException {
+            when(sharedFolderJpaRepository.findByFolderIdAndMemberId(folder.getId(), anotherMember.getId()))
+                .thenReturn(java.util.Optional.of(
+                        SharedFolderEntity.of(folder.getId(), anotherMember.getId())));
 
-            sharedFolderService.makeOut(folder, anotherMember.getId(), member.getId());
-            verify(sharedFolderJpaRepository).delete(any(SharedFolderMembers.class));
+            sharedFolderService.removeFolderMember(folder, anotherMember.getId(), member.getId());
+            verify(sharedFolderJpaRepository).delete(any(SharedFolderEntity.class));
         }
 
         @Test
         @DisplayName("공유 폴더에서 내보낼 수 없다.")
         void makeOutWithNotExistMember() {
             SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> sharedFolderService.makeOut(folder, 100L, member.getId()))
+                softAssertions.assertThatThrownBy(() -> sharedFolderService.removeFolderMember(folder, 100L, member.getId()))
                     .isInstanceOf(IllegalArgumentException.class);
             });
         }
