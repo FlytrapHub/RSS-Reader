@@ -5,6 +5,7 @@ import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,13 @@ public class PostListReadService {
 
     public List<Post> getPostsByFolder(Folder folder, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllByFolder(folder.getId(), postFilter, pageable)
+            .stream()
+            .map(PostEntity::toDomain)
+            .toList();
+    }
+
+    public List<Post> getPostsByMember(SessionMember member, PostFilter postFilter, Pageable pageable) {
+        return postListReadRepository.findAllByMember(1L, postFilter, pageable)
             .stream()
             .map(PostEntity::toDomain)
             .toList();

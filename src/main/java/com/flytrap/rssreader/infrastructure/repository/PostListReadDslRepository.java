@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
+import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderEntity.folderEntity;
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QOpenEntity.openEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QPostEntity.postEntity;
@@ -54,6 +55,26 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
             .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
+            .where(builder)
+            .orderBy(postEntity.pubDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    public List<PostEntity> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder
+            .and(folderEntity.memberId.eq(memberId));
+
+        addFilterCondition(builder, postFilter);
+
+        return queryFactory.selectFrom(postEntity)
+            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
+            .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
+            .join(folderEntity).on(folderSubscribeEntity.folderId.eq(folderEntity.id))
             .where(builder)
             .orderBy(postEntity.pubDate.desc())
             .offset(pageable.getOffset())

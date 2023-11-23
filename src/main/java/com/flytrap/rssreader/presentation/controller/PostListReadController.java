@@ -60,4 +60,18 @@ public class PostListReadController {
             new PostListResponse(posts));
     }
 
+    @GetMapping("/posts")
+    public ApplicationResponse<PostListResponse> getPostsByMember(
+        PostFilter postFilter,
+        @PageableDefault(page = 0, size = 15) Pageable pageable,
+        @Login SessionMember member) {
+
+        List<PostResponse> posts = postListReadService.getPostsByMember(member, postFilter, pageable)
+            .stream()
+            .map(PostResponse::from)
+            .toList();
+
+        return new ApplicationResponse<>(
+            new PostListResponse(posts));
+    }
 }

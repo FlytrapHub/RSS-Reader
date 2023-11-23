@@ -9,7 +9,11 @@ VALUES ('조금씩, 꾸준히, 자주', '공부는 마라톤이다. 한꺼번에
        ('louie.log', '백엔드 개발자를 준비하고 있는 Louie입니다.', 'https://v2.velog.io/rss/louie', 'VELOG');
 
 INSERT INTO `folder`(name, member_id, is_shared, is_deleted)
-VALUES ('나의 폴더 1', 1, false, false);
+VALUES ('나의 폴더 1', 1, false, false),
+       ('나의 폴더 2', 1, false, false),
+       ('나의 폴더 3', 1, false, false);
 
 INSERT INTO `folder_subscribe`(folder_id, subscribe_id)
-VALUES (1, 1), (1, 2);
+VALUES (1, 1), (1, 2),
+       (2, 1), (2, 3),
+       (3, 4);
