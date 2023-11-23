@@ -1,11 +1,13 @@
 package com.flytrap.rssreader.presentation.controller;
 
+import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.PostResponse.PostListResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.PostListReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostListReadController {
 
     private final PostListReadService postListReadService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     @GetMapping("/subscribes/{subscribeId}/posts")
     public ApplicationResponse<PostListResponse> getPostsBySubscribe(
@@ -46,7 +49,9 @@ public class PostListReadController {
         @PageableDefault(page = 0, size = 15) Pageable pageable,
         @Login SessionMember member) {
 
-        List<PostResponse> posts = postListReadService.getPostsByFolder(folderId, postFilter, pageable)
+        Folder verifyFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+
+        List<PostResponse> posts = postListReadService.getPostsByFolder(verifyFolder, postFilter, pageable)
             .stream()
             .map(PostResponse::from)
             .toList();

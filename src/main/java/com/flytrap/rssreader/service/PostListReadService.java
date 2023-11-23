@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
@@ -22,8 +23,8 @@ public class PostListReadService {
             .toList();
     }
 
-    public List<Post> getPostsByFolder(Long folderId, PostFilter postFilter, Pageable pageable) {
-        return postListReadRepository.findAllByFolder(folderId, postFilter, pageable)
+    public List<Post> getPostsByFolder(Folder folder, PostFilter postFilter, Pageable pageable) {
+        return postListReadRepository.findAllByFolder(folder.getId(), postFilter, pageable)
             .stream()
             .map(PostEntity::toDomain)
             .toList();
