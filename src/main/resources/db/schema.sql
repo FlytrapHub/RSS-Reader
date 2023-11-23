@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS `member`
 CREATE TABLE IF NOT EXISTS `rss_subscribe`
 (
     `id`          bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `title` varchar(2500) NOT NULL,
     `description` varchar(2500) NOT NULL,
     `url`         varchar(2500) NOT NULL,
-    `member_id`   bigint        NOT NULL,
     `platform`    varchar(25)   NOT NULL
 );
 

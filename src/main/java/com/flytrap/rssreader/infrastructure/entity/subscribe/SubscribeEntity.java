@@ -30,6 +30,9 @@ public class SubscribeEntity {
     private Long id;
 
     @Column(length = 2500, nullable = false)
+    private String title;
+
+    @Column(length = 2500, nullable = false)
     private String description;
 
     @Column(length = 2500, nullable = false)
