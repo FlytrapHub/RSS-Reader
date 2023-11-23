@@ -1,7 +1,9 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
+import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QOpenEntity.openEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QPostEntity.postEntity;
+import static com.flytrap.rssreader.infrastructure.entity.subscribe.QSubscribeEntity.subscribeEntity;
 
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
@@ -29,6 +31,37 @@ public class PostListReadDslRepository implements PostListReadRepository {
         builder
             .and(postEntity.subscribe.id.eq(subscribeId));
 
+        addFilterCondition(builder, postFilter);
+
+        return queryFactory.selectFrom(postEntity)
+            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .where(builder)
+            .orderBy(postEntity.pubDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    public List<PostEntity> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder
+            .and(folderSubscribeEntity.folderId.eq(folderId));
+
+        addFilterCondition(builder, postFilter);
+
+        return queryFactory.selectFrom(postEntity)
+            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
+            .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
+            .where(builder)
+            .orderBy(postEntity.pubDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter) {
         if (StringUtils.hasText(postFilter.keyword())) {
             builder
                 .and(postEntity.title.contains(postFilter.keyword()))
@@ -48,13 +81,5 @@ public class PostListReadDslRepository implements PostListReadRepository {
         } else if (postFilter.read() != null) {
             builder.and(openEntity.isNull());
         }
-
-        return queryFactory.selectFrom(postEntity)
-            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
-            .where(builder)
-            .orderBy(postEntity.pubDate.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
     }
 }

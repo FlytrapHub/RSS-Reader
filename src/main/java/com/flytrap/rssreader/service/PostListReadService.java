@@ -15,8 +15,15 @@ public class PostListReadService {
 
     private final PostListReadRepository postListReadRepository;
 
-    public List<Post> getPosts(Long subscribeId, PostFilter postFilter, Pageable pageable) {
+    public List<Post> getPostsBySubscribe(Long subscribeId, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllBySubscribe(subscribeId, postFilter, pageable)
+            .stream()
+            .map(PostEntity::toDomain)
+            .toList();
+    }
+
+    public List<Post> getPostsByFolder(Long folderId, PostFilter postFilter, Pageable pageable) {
+        return postListReadRepository.findAllByFolder(folderId, postFilter, pageable)
             .stream()
             .map(PostEntity::toDomain)
             .toList();
