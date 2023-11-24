@@ -19,7 +19,6 @@ import jakarta.persistence.TemporalType;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -90,7 +89,7 @@ public class PostEntity {
         this.description = itemResource.description();
     }
 
-    public Post toDomain() {
+    public Post toDomain(Long memberId) {
         return Post.builder()
             .id(id)
             .subscribeId(subscribe.getId())
@@ -99,6 +98,8 @@ public class PostEntity {
             .description(description)
             .pubDate(pubDate)
             .subscribeTitle(subscribe.getTitle())
+            .open(isOpen(memberId))
+            .bookmark(isBookmark(memberId))
             .build();
     }
 
