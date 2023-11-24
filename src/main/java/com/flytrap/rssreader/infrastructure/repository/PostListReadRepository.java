@@ -11,4 +11,6 @@ public interface PostListReadRepository {
     List<PostEntity> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable);
 
     List<PostEntity> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable);
+
+    List<PostEntity> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable);
 }
