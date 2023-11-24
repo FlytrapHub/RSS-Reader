@@ -41,9 +41,9 @@ public class FolderSubscribeEntity {
 
     public static FolderSubscribeEntity from(Subscribe subscribe, Long folderId) {
         return FolderSubscribeEntity.builder()
-                .subscribeId(subscribe.getId())
-                .folderId(folderId)
-                .description(subscribe.getDescription())
-                .build();
+            .subscribeId(subscribe.getId())
+            .folderId(folderId)
+            .description(subscribe.getDescription())
+            .build();
     }
 }
