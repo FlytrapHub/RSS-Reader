@@ -43,3 +43,5 @@ submodules
 ### CustomYml ###
 src/main/resources/application-*.yml
 
+### QClass ###
+src/main/generated

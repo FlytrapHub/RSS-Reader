@@ -46,6 +46,11 @@ dependencies {
     implementation("it.ozimov:embedded-redis:0.7.2")
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // QueryDSL
+    implementation 'com.querydsl:querydsl-core:5.0.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
 }
 
 test {
@@ -99,4 +104,13 @@ jacocoTestCoverageVerification { // TODO test coverage check
             ] + Qdomains
         }
     }
+}
+
+// QueryDSL
+def querydslSrcDir = 'src/main/generated'
+clean {
+    delete file(querydslSrcDir)
+}
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
