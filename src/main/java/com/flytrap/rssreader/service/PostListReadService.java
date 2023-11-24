@@ -39,5 +39,4 @@ public class PostListReadService {
             .map(p -> p.toDomain(member.id()))
             .toList();
     }
-
 }

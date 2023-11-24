@@ -7,7 +7,6 @@ public record PostFilter(Boolean read,
                          Long end,
                          String keyword
 ) {
-
     public boolean hasKeyword() {
         return StringUtils.hasText(keyword);
     }
@@ -23,5 +22,4 @@ public record PostFilter(Boolean read,
     public boolean hasUnReadCondition() {
         return read != null && !read;
     }
-
 }
