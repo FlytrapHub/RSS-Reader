@@ -1,12 +1,14 @@
 package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.domain.folder.Folder;
+import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.InviteMemberRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.FolderUpdateService;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.MemberService;
 import com.flytrap.rssreader.service.SharedFolderUpdateService;
 import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
@@ -27,17 +29,21 @@ public class SharedFolderUpdateController {
     private final SharedFolderUpdateService sharedFolderService;
     private final FolderUpdateService folderUpdateService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final MemberService memberService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{folderId}/members")
     public ApplicationResponse inviteMember(
             @PathVariable Long folderId,
-            @Login SessionMember member,
+            @Login SessionMember loginMember,
             @RequestBody InviteMemberRequest request
     ) throws AuthenticationException {
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, loginMember.id());
         folderUpdateService.shareFolder(verifiedFolder);
-        sharedFolderService.invite(verifiedFolder, request.inviteeId());
+        Member member = memberService.findById(request.inviteeId());
+        sharedFolderService.invite(verifiedFolder, member.getId());
+
         return ApplicationResponse.success("멤버가 초대되었습니다 : " + request.inviteeId());
     }
 
