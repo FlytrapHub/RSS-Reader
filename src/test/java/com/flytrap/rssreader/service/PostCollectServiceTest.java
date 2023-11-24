@@ -1,7 +1,14 @@
 package com.flytrap.rssreader.service;
 
-import static com.flytrap.rssreader.fixture.FixtureFactory.*;
-import static org.mockito.BDDMockito.*;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generate100PostEntityList;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generate50RssItemResourceList;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generateSingleSubscribeEntityList;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.doAnswer;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
@@ -42,7 +49,7 @@ class PostCollectServiceTest {
         List<SubscribeEntity> subscribes = generateSingleSubscribeEntityList();
         when(subscribeEntityJpaRepository.findAll()).thenReturn(subscribes);
         when(postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(any()))
-            .thenReturn(generate100PostEntityList());
+                .thenReturn(generate100PostEntityList());
         doAnswer(invocation -> {
             Runnable runnable = invocation.getArgument(0);
             runnable.run();
@@ -57,7 +64,7 @@ class PostCollectServiceTest {
         // given
         List<RssItemResource> itemResources = generate50RssItemResourceList();
         when(postParser.parseRssDocuments(anyString()))
-            .thenReturn(itemResources);
+                .thenReturn(itemResources);
 
         // when
         postCollectService.collectPosts();

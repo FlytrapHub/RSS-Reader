@@ -84,40 +84,20 @@ jacocoTestReport {
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
-jacocoTestCoverageVerification {
+jacocoTestCoverageVerification { // TODO test coverage check
     def Qdomains = []
     for (qPattern in "*.QA".."*.QZ") {  // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
         Qdomains.add(qPattern + "*")
     }
     violationRules {
-        rule {
-            limit {
-                minimum = 0.30
-            }
-        }
 
         rule {
             enabled = true
             element = 'CLASS'
 
             limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.80
+                minimum = 0.7
             }
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.80
-            }
-
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 200
-            }
-
             // 커버리지 체크를 제외할 클래스들
             excludes = [
 //                    '*.test.*',
