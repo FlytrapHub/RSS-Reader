@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS `rss_subscribe`
 (
     `id`          bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `title` varchar(2500) NOT NULL,
-    `description` varchar(2500) NOT NULL,
     `url`         varchar(2500) NOT NULL,
     `platform`    varchar(25)   NOT NULL
 );
@@ -45,7 +44,8 @@ CREATE TABLE IF NOT EXISTS `folder_subscribe`
 (
     `id`                 bigint     NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `subscribe_id`      bigint      NOT NULL,
-    `folder_id`         bigint      NOT NULL
+    `folder_id`         bigint      NOT NULL,
+    `description`       varchar(255)      NOT NULL
  );
 
 CREATE TABLE IF NOT EXISTS `folder_member`
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `folder_member`
  );
 
 CREATE TABLE `bookmark` (
-    `id`	VARCHAR(255)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `member_id`	bigint	NOT NULL,
     `post_id`	bigint	NOT NULL
 );
