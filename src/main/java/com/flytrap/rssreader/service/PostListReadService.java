@@ -32,9 +32,10 @@ public class PostListReadService {
     }
 
     public List<Post> getPostsByMember(SessionMember member, PostFilter postFilter, Pageable pageable) {
-        return postListReadRepository.findAllByMember(1L, postFilter, pageable)
+        return postListReadRepository.findAllByMember(member.id(), postFilter, pageable)
             .stream()
             .map(PostEntity::toDomain)
             .toList();
     }
+
 }
