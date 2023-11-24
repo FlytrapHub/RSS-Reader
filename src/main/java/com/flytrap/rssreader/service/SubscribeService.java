@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
+import com.flytrap.rssreader.global.exception.ApplicationException;
 import com.flytrap.rssreader.infrastructure.api.RssChecker;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
@@ -27,7 +28,7 @@ public class SubscribeService {
     private final RssChecker rssChecker;
 
     public Subscribe subscribe(CreateRequest request) {
-        RssFeedData rssFeedData = rssChecker.checker(request).orElseThrow();
+        RssFeedData rssFeedData = rssChecker.parseRssDocuments(request).orElseThrow();
 
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {
             //TODO: 없으면 새로 저장한다.
