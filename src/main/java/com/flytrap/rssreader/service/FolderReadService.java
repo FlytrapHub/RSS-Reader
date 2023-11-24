@@ -30,4 +30,10 @@ public class FolderReadService {
                 .collect(Collectors.groupingBy(Folder::getSharedStatus));
     }
 
+    @Transactional(readOnly = true)
+    public List<Folder> findAllByIds(Collection<Long> ids) {
+        return repository.findAllById(ids).stream()
+                .map(FolderEntity::toDomain)
+                .toList();
+    }
 }
