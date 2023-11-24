@@ -102,13 +102,13 @@ public class PostListReadDslRepository implements PostListReadRepository {
     }
 
     private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter) {
-        if (StringUtils.hasText(postFilter.keyword())) {
+        if (postFilter.hasKeyword()) {
             builder
                 .and(postEntity.title.contains(postFilter.keyword()))
                 .and(postEntity.description.contains(postFilter.keyword()));
         }
 
-        if (postFilter.start() != null && postFilter.end() != null) {
+        if (postFilter.hasDataRange()) {
             builder
                 .and(postEntity.pubDate.between(
                     Instant.ofEpochMilli(postFilter.start()),
@@ -116,9 +116,9 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 );
         }
 
-        if (postFilter.read() != null && postFilter.read()) {
+        if (postFilter.hasReadCondition()) {
             builder.and(openEntity.isNotNull());
-        } else if (postFilter.read() != null) {
+        } else if (postFilter.hasUnReadCondition()) {
             builder.and(openEntity.isNull());
         }
     }
