@@ -22,21 +22,21 @@ public class PostListReadService {
     public List<Post> getPostsBySubscribe(SessionMember member, Long subscribeId, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllBySubscribe(subscribeId, postFilter, pageable)
             .stream()
-             .map(p -> p.toDomain(member.id()))
+            .map(p -> p.toDomain(member.id()))
             .toList();
     }
 
     public List<Post> getPostsByFolder(SessionMember member, Folder folder, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllByFolder(folder.getId(), postFilter, pageable)
             .stream()
-             .map(p -> p.toDomain(member.id()))
+            .map(p -> p.toDomain(member.id()))
             .toList();
     }
 
     public List<Post> getPostsByMember(SessionMember member, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllByMember(member.id(), postFilter, pageable)
             .stream()
-             .map(p -> p.toDomain(member.id()))
+            .map(p -> p.toDomain(member.id()))
             .toList();
     }
 
