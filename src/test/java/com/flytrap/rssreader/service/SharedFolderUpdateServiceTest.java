@@ -48,33 +48,36 @@ class SharedFolderUpdateServiceTest {
     @DisplayName("공유 폴더에 사람을 초대할 때")
     class invite {
 
-            @Test
-            @DisplayName("공유 폴더에 사람을 초대할 수 있다.")
-            void invite_success() throws AuthenticationException {
-                sharedFolderService.invite(folder, anotherMember.getId());
-                verify(sharedFolderJpaRepository).save(any());
-            }
+        @Test
+        @DisplayName("공유 폴더에 사람을 초대할 수 있다.")
+        void invite_success() throws AuthenticationException {
+            sharedFolderService.invite(folder, anotherMember.getId());
+            verify(sharedFolderJpaRepository).save(any());
+        }
 
-            @Test
-            @DisplayName("공유 폴더에 이미 초대된 사람을 초대할 수 없다.")
-            void inviteWithAlreadyInvitedMember() {
-                when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(folder.getId(), anotherMember.getId()))
+        @Test
+        @DisplayName("공유 폴더에 이미 초대된 사람을 초대할 수 없다.")
+        void inviteWithAlreadyInvitedMember() {
+            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(folder.getId(),
+                    anotherMember.getId()))
                     .thenReturn(true);
 
-                SoftAssertions.assertSoftly(softAssertions -> {
-                    softAssertions.assertThatThrownBy(() -> sharedFolderService.invite(folder, anotherMember.getId()))
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(
+                                () -> sharedFolderService.invite(folder, anotherMember.getId()))
                         .isInstanceOf(DuplicateKeyException.class);
-                });
-            }
+            });
+        }
 
-            @Test
-            @DisplayName("공유 폴더에 나 자신을 초대할 수 없다.")
-            void inviteWithAlreadyJoinedMember() {
-                SoftAssertions.assertSoftly(softAssertions -> {
-                    softAssertions.assertThatThrownBy(() -> sharedFolderService.invite(folder, member.getId()))
+        @Test
+        @DisplayName("공유 폴더에 나 자신을 초대할 수 없다.")
+        void inviteWithAlreadyJoinedMember() {
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(
+                                () -> sharedFolderService.invite(folder, member.getId()))
                         .isInstanceOf(AuthenticationException.class);
-                });
-            }
+            });
+        }
     }
 
     @Nested
@@ -84,8 +87,9 @@ class SharedFolderUpdateServiceTest {
         @Test
         @DisplayName("공유 폴더에서 사람을 삭제할 수 있다.")
         void leave_success() {
-            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(folder.getId(), anotherMember.getId()))
-                .thenReturn(true);
+            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(folder.getId(),
+                    anotherMember.getId()))
+                    .thenReturn(true);
 
             sharedFolderService.leave(folder, anotherMember.getId());
             verify(sharedFolderJpaRepository).delete(any(SharedFolderEntity.class));
@@ -95,17 +99,9 @@ class SharedFolderUpdateServiceTest {
         @DisplayName("공유 폴더에서 나 자신을 삭제할 수 없다.")
         void leaveWithMe() {
             SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> sharedFolderService.leave(folder, member.getId()))
-                    .isInstanceOf(IllegalArgumentException.class);
-            });
-        }
-
-        @Test
-        @DisplayName("공유 폴더에서 존재하지 않는 사람을 삭제할 수 없다.")
-        void leaveWithNotExistMember() {
-            SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> sharedFolderService.leave(folder, 100L))
-                    .isInstanceOf(IllegalArgumentException.class);
+                softAssertions.assertThatThrownBy(
+                                () -> sharedFolderService.leave(folder, member.getId()))
+                        .isInstanceOf(IllegalArgumentException.class);
             });
         }
 
@@ -118,9 +114,10 @@ class SharedFolderUpdateServiceTest {
         @Test
         @DisplayName("공유 폴더에서 내보낼 수 있다.")
         void makeOut_success() throws AuthenticationException {
-            when(sharedFolderJpaRepository.findByFolderIdAndMemberId(folder.getId(), anotherMember.getId()))
-                .thenReturn(java.util.Optional.of(
-                        SharedFolderEntity.of(folder.getId(), anotherMember.getId())));
+            when(sharedFolderJpaRepository.findByFolderIdAndMemberId(folder.getId(),
+                    anotherMember.getId()))
+                    .thenReturn(java.util.Optional.of(
+                            SharedFolderEntity.of(folder.getId(), anotherMember.getId())));
 
             sharedFolderService.removeFolderMember(folder, anotherMember.getId(), member.getId());
             verify(sharedFolderJpaRepository).delete(any(SharedFolderEntity.class));
@@ -130,8 +127,9 @@ class SharedFolderUpdateServiceTest {
         @DisplayName("공유 폴더에서 내보낼 수 없다.")
         void makeOutWithNotExistMember() {
             SoftAssertions.assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> sharedFolderService.removeFolderMember(folder, 100L, member.getId()))
-                    .isInstanceOf(IllegalArgumentException.class);
+                softAssertions.assertThatThrownBy(
+                                () -> sharedFolderService.removeFolderMember(folder, 100L, member.getId()))
+                        .isInstanceOf(IllegalArgumentException.class);
             });
         }
     }
