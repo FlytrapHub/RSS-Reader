@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.global.exception.NoSuchDomainException;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
@@ -47,5 +48,17 @@ public class MemberService {
         return memberEntityJpaRepository.findAllByName(name).stream()
                 .map(MemberEntity::toDomain)
                 .toList();
+    }
+
+    /**
+     * id로 회원을 검색합니다.
+     * @param inviteeId
+     * @return Member domain
+     * @throws NoSuchDomainException
+     */
+    public Member findById(long inviteeId) {
+        return memberEntityJpaRepository.findById(inviteeId)
+                .orElseThrow(() -> new NoSuchDomainException(Member.class))
+                .toDomain();
     }
 }
