@@ -26,7 +26,7 @@ public class SubscribeService {
     private final SubscribeEntityJpaRepository subscribeRepository;
     private final RssChecker rssChecker;
 
-    public Subscribe subscribe(CreateRequest request, long id) {
+    public Subscribe subscribe(CreateRequest request) {
         RssFeedData rssFeedData = rssChecker.checker(request);
 
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {

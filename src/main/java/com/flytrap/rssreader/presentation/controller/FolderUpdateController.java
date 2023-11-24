@@ -75,7 +75,7 @@ public class FolderUpdateController {
         //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
         //지금 부분은 검증된 개인 폴더입니다.
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        Subscribe subscribe = subscribeService.subscribe(request, member.id());
+        Subscribe subscribe = subscribeService.subscribe(request);
         folderSubscribeService.folderSubscribe(subscribe,
                 verifiedFolder.getId());
         return new ApplicationResponse<>(SubscribeRequest.Response.from(subscribe));

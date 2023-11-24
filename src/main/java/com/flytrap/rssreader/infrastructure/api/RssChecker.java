@@ -26,8 +26,8 @@ public class RssChecker {
     public RssFeedData checker(CreateRequest request) {
         HttpClientFeedFetcher feedFetcher = new HttpClientFeedFetcher();
         try {
+            BlogPlatform blogPlatform = BlogPlatform.parseLink(request.blogUrl());
             SyndFeed feed = feedFetcher.retrieveFeed(new URL(request.blogUrl()));
-            BlogPlatform blogPlatform = BlogPlatform.parseLink(feed.getLink());
             return new RssFeedData(feed.getTitle(), request.blogUrl(), blogPlatform,
                     feed.getDescription());
         } catch (IllegalArgumentException | IOException | FeedException | FetcherException e) {
