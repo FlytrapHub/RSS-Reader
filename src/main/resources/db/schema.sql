@@ -54,3 +54,9 @@ CREATE TABLE IF NOT EXISTS `folder_member`
     `folder_id`         bigint      NOT NULL,
     `member_id`         bigint      NOT NULL
  );
+
+CREATE TABLE `bookmark` (
+    `id`	VARCHAR(255)	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `member_id`	bigint	NOT NULL,
+    `post_id`	bigint	NOT NULL
+);

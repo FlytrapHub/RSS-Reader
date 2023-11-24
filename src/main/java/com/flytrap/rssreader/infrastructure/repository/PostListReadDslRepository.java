@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
+import static com.flytrap.rssreader.infrastructure.entity.bookmark.QBookmarkEntity.bookmarkEntity;
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderEntity.folderEntity;
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QOpenEntity.openEntity;
@@ -82,14 +83,32 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .fetch();
     }
 
+    public List<PostEntity> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder
+            .and(bookmarkEntity.memberId.eq(memberId));
+
+        addFilterCondition(builder, postFilter);
+
+        return queryFactory.selectFrom(postEntity)
+            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
+            .where(builder)
+            .orderBy(postEntity.pubDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
     private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter) {
-        if (StringUtils.hasText(postFilter.keyword())) {
+        if (postFilter.hasKeyword()) {
             builder
                 .and(postEntity.title.contains(postFilter.keyword()))
                 .and(postEntity.description.contains(postFilter.keyword()));
         }
 
-        if (postFilter.start() != null && postFilter.end() != null) {
+        if (postFilter.hasDataRange()) {
             builder
                 .and(postEntity.pubDate.between(
                     Instant.ofEpochMilli(postFilter.start()),
@@ -97,9 +116,9 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 );
         }
 
-        if (postFilter.read() != null && postFilter.read()) {
+        if (postFilter.hasReadCondition()) {
             builder.and(openEntity.isNotNull());
-        } else if (postFilter.read() != null) {
+        } else if (postFilter.hasUnReadCondition()) {
             builder.and(openEntity.isNull());
         }
     }

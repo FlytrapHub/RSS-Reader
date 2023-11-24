@@ -33,7 +33,7 @@ public class PostListReadController {
             @PageableDefault(page = 0, size = 15) Pageable pageable,
             @Login SessionMember member) {
 
-        List<PostResponse> posts = postListReadService.getPostsBySubscribe(subscribeId, postFilter, pageable)
+        List<PostResponse> posts = postListReadService.getPostsBySubscribe(member, subscribeId, postFilter, pageable)
             .stream()
             .map(PostResponse::from)
             .toList();
@@ -51,7 +51,7 @@ public class PostListReadController {
 
         Folder verifyFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
 
-        List<PostResponse> posts = postListReadService.getPostsByFolder(verifyFolder, postFilter, pageable)
+        List<PostResponse> posts = postListReadService.getPostsByFolder(member, verifyFolder, postFilter, pageable)
             .stream()
             .map(PostResponse::from)
             .toList();
