@@ -10,6 +10,7 @@ import java.util.Map;
 
 public record Folders(Map<SharedStatus, List<FolderListSummary>> folders) {
 
+    //TODO DTO조립할 것!!!
     public static Folders from(Map<SharedStatus, List<Folder>> folders,
             List<SharedFolder> sharedFolders,
             Map<Long, List<SubscribeEntity>> blogMaps,

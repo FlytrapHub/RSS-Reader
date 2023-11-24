@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
 
-@DisplayName("SharedFolder 서비스 로직 단위 테스트")
+@DisplayName("SharedFolder 서비스 Update 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class SharedFolderUpdateServiceTest {
 
