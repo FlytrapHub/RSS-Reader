@@ -12,7 +12,7 @@ public class ApplicationResponse<T> {
         return new ApplicationResponse<>("success");
     }
 
-    public static ApplicationResponse<Object> success(Object data) {
+    public static ApplicationResponse success(Object data) {
         return new ApplicationResponse<>(data);
     }
 }

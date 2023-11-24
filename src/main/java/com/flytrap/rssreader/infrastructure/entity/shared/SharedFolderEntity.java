@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "folder_member")
-public class SharedFolderMembers {
+public class SharedFolderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +23,14 @@ public class SharedFolderMembers {
     private Long memberId;
 
     @Builder
-    protected SharedFolderMembers(Long id, Long folderId, Long memberId) {
+    protected SharedFolderEntity(Long id, Long folderId, Long memberId) {
         this.id = id;
         this.folderId = folderId;
         this.memberId = memberId;
     }
 
-    public static SharedFolderMembers of(Long id, long inviteeId) {
-        return SharedFolderMembers.builder()
+    public static SharedFolderEntity of(Long id, long inviteeId) {
+        return SharedFolderEntity.builder()
                 .folderId(id)
                 .memberId(inviteeId)
                 .build();

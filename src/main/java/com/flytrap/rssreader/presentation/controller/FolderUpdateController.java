@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FolderUpdateController {
 
     private final FolderUpdateService folderService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final SubscribeService subscribeService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final FolderSubscribeService folderSubscribeService;
@@ -49,20 +50,22 @@ public class FolderUpdateController {
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        Folder updatedFolder = folderService.updateFolder(request, folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder updatedFolder = folderService.updateFolder(request, verifiedFolder, member.id());
 
         return new ApplicationResponse<>(FolderRequest.Response.from(updatedFolder));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{folderId}")
-    public ApplicationResponse<Void> deleteFolder(
+    public ApplicationResponse<String> deleteFolder(
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        folderService.deleteFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
 
-        return new ApplicationResponse<>(null);
+        return new ApplicationResponse<>("폴더가 삭제되었습니다 : "+folder.getName());
     }
 
     @ResponseStatus(HttpStatus.CREATED)

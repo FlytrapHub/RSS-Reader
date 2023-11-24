@@ -1,11 +1,14 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.global.exception.NoSuchDomainException;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
 import jakarta.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +48,29 @@ public class MemberService {
      */
     public List<Member> findByName(String name) {
         return memberEntityJpaRepository.findAllByName(name).stream()
+                .map(MemberEntity::toDomain)
+                .toList();
+    }
+
+    /**
+     * id로 회원을 검색합니다.
+     * @param inviteeId
+     * @return Member domain
+     * @throws NoSuchDomainException
+     */
+    public Member findById(long inviteeId) {
+        return memberEntityJpaRepository.findById(inviteeId)
+                .orElseThrow(() -> new NoSuchDomainException(Member.class))
+                .toDomain();
+    }
+
+    /**
+     * id 목록으로 회원을 검색합니다.
+     * @param memberIds
+     * @return Member domain list
+     */
+    public List<Member> findAllByIds(Collection<Long> memberIds) {
+        return memberEntityJpaRepository.findAllById(memberIds).stream()
                 .map(MemberEntity::toDomain)
                 .toList();
     }
