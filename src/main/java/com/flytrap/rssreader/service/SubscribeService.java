@@ -27,7 +27,7 @@ public class SubscribeService {
     private final RssChecker rssChecker;
 
     public Subscribe subscribe(CreateRequest request) {
-        RssFeedData rssFeedData = rssChecker.checker(request);
+        RssFeedData rssFeedData = rssChecker.checker(request).orElseThrow();
 
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {
             //TODO: 없으면 새로 저장한다.

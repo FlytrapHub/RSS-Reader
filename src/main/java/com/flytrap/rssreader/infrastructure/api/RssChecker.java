@@ -9,6 +9,7 @@ import com.sun.syndication.fetcher.impl.HttpClientFeedFetcher;
 import com.sun.syndication.io.FeedException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -23,17 +24,15 @@ public class RssChecker {
      * @param request
      * @return
      */
-    public RssFeedData checker(CreateRequest request) {
+    public Optional<RssFeedData> checker(CreateRequest request) {
         HttpClientFeedFetcher feedFetcher = new HttpClientFeedFetcher();
         try {
             BlogPlatform blogPlatform = BlogPlatform.parseLink(request.blogUrl());
             SyndFeed feed = feedFetcher.retrieveFeed(new URL(request.blogUrl()));
-            return new RssFeedData(feed.getTitle(), request.blogUrl(), blogPlatform,
-                    feed.getDescription());
+            return Optional.of(new RssFeedData(feed.getTitle(), request.blogUrl(), blogPlatform, feed.getDescription()));
         } catch (IllegalArgumentException | IOException | FeedException | FetcherException e) {
             e.printStackTrace();
+            return Optional.empty();
         }
-        //TODO: null일경우 예외
-        return null;
     }
 }
