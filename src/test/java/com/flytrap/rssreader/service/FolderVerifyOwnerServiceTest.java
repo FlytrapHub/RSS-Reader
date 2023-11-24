@@ -21,7 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("Folder 생성 멤버 검증 로직 - FolderVerifyOwnerService")
+@DisplayName("Folder 생성 멤버 검증 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class FolderVerifyOwnerServiceTest {
 

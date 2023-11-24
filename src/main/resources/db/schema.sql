@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `folder_subscribe`
     `id`                 bigint     NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `subscribe_id`      bigint      NOT NULL,
     `folder_id`         bigint      NOT NULL,
-    `description`       varchar(255)      NOT NULL
+    `description`       varchar(2500) NOT NULL
  );
 
 CREATE TABLE IF NOT EXISTS `folder_member`

@@ -24,13 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter { //TODO 통합테스트 해보면 좋겠습니다.
 
-    private final ObjectMapper objectMapper;
     private final AuthProperties authProperties;
     private final AuthorizationContext context;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(true);
 
         SessionMember attribute = (SessionMember) session.getAttribute(authProperties.sessionId());
         context.setLoginMember(attribute);

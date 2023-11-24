@@ -37,7 +37,7 @@ public class SubscribeEntity {
 
     @Builder
     protected SubscribeEntity(Long id, String title, String url,
-        BlogPlatform platform) {
+            BlogPlatform platform) {
         this.id = id;
         this.title = title;
         this.url = url;
@@ -55,4 +55,5 @@ public class SubscribeEntity {
     public Subscribe toDomain(RssFeedData rssFeedData) {
         return Subscribe.of(this.id, rssFeedData.description());
     }
+
 }

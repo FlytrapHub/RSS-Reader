@@ -102,7 +102,6 @@ public class FixtureFactory {
         return SubscribeEntity.builder()
             .id(SubscribeEntityFields.id)
             .url(SubscribeEntityFields.url)
-            .description(SubscribeEntityFields.description)
             .platform(SubscribeEntityFields.platform)
             .build();
     }

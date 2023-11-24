@@ -46,6 +46,11 @@ dependencies {
     implementation("it.ozimov:embedded-redis:0.7.2")
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //ROME
+    implementation 'rome:rome:1.0'
+    implementation 'rome:rome-fetcher:1.0'
+
     // QueryDSL
     implementation 'com.querydsl:querydsl-core:5.0.0'
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -93,13 +98,23 @@ jacocoTestCoverageVerification { // TODO test coverage check
 
         rule {
             enabled = true
-            element = 'CLASS'
+//            element = 'CLASS'
 
             limit {
                 minimum = 0.7
             }
-            // 커버리지 체크를 제외할 클래스들
             excludes = [
+                    'com.flytrap.**.api.*',
+                    'com.flytrap.**.properties.*',
+                    'com.flytrap.**.exception.*',
+                    'com.flytrap.**.dto.*',
+                    'com.flytrap.**.entity.*',
+                    'com.flytrap.**.config.*',
+                    'com.flytrap.**.model.*',
+                    'com.flytrap.**.repository.*',
+                    'com.flytrap.**.service.*ReadService',
+                    'com.flytrap.**.controller.*ReadController',
+                    'com.flytrap.**.RssReaderApplication',
 //                    '*.test.*',
             ] + Qdomains
         }

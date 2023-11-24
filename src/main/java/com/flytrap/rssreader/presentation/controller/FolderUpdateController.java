@@ -1,11 +1,16 @@
 package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.domain.folder.Folder;
+import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
+import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
+import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
+import com.flytrap.rssreader.service.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.SubscribeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class FolderUpdateController {
 
     private final FolderUpdateService folderService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final SubscribeService subscribeService;
+    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderSubscribeService folderSubscribeService;
 
     @PostMapping
     public ApplicationResponse<FolderRequest.Response> createFolder(
@@ -41,18 +50,48 @@ public class FolderUpdateController {
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        Folder updatedFolder = folderService.updateFolder(request, folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder updatedFolder = folderService.updateFolder(request, verifiedFolder, member.id());
 
         return new ApplicationResponse<>(FolderRequest.Response.from(updatedFolder));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{folderId}")
-    public ApplicationResponse<Void> deleteFolder(
+    public ApplicationResponse<String> deleteFolder(
             @PathVariable Long folderId,
             @Login SessionMember member) {
 
-        folderService.deleteFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
+
+        return new ApplicationResponse<>("폴더가 삭제되었습니다 : "+folder.getName());
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{folderId}/rss")
+    public ApplicationResponse<SubscribeRequest.Response> subscribe(
+            @PathVariable Long folderId,
+            @Valid @RequestBody SubscribeRequest.CreateRequest request,
+            @Login SessionMember member) {
+        //TODO: 존재하는 폴더인지 검증하는 로직 , 공유폴더초대받은 인지 검증
+        //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
+        //지금 부분은 검증된 개인 폴더입니다.
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Subscribe subscribe = subscribeService.subscribe(request, member.id());
+        folderSubscribeService.folderSubscribe(subscribe,
+                verifiedFolder.getId());
+        return new ApplicationResponse<>(SubscribeRequest.Response.from(subscribe));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{folderId}/rss/{subscribeId}")
+    public ApplicationResponse<Void> unsubscribe(
+            @PathVariable Long folderId,
+            @PathVariable Long subscribeId,
+            @Login SessionMember member) {
+
+        subscribeService.unsubscribe(folderId, subscribeId, member);
 
         return new ApplicationResponse<>(null);
     }
