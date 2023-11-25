@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,14 +67,14 @@ public class BookmarkController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping
+    @DeleteMapping("/{bookmarkId}")
     public ApplicationResponse<String> removeBookmark(
-        @RequestBody BookmarkRequest.DeleteRequest request,
+        @PathVariable Long bookmarkId,
         @Login SessionMember member
     ) {
 
         Bookmark bookmark = bookmarkVerifyOwnerService
-            .getVerifiedBookmark(member, request.bookmarkId());
+            .getVerifiedBookmark(member, bookmarkId);
         bookmarkService.removeBookmark(bookmark);
 
         return new ApplicationResponse<>(DELETE_BOOKMARK_MESSAGE + bookmark.getId());
