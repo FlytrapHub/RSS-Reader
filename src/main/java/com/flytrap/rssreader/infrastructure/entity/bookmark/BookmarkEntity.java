@@ -36,6 +36,14 @@ public class BookmarkEntity {
         this.postId = postId;
     }
 
+    public static BookmarkEntity from(Bookmark bookmark) {
+        return BookmarkEntity.builder()
+            .id(bookmark.getId())
+            .memberId(bookmark.getMemberId())
+            .postId(bookmark.getPostId())
+            .build();
+    }
+
     public static BookmarkEntity create(Long memberId, Long postId) {
         return BookmarkEntity.builder()
             .memberId(memberId)
