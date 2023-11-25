@@ -89,6 +89,17 @@ public class PostEntity {
         this.description = itemResource.description();
     }
 
+    public Post toDomain() {
+        return Post.builder()
+            .id(id)
+            .subscribeId(subscribe.getId())
+            .guid(guid)
+            .title(title)
+            .description(description)
+            .pubDate(pubDate)
+            .build();
+    }
+
     public Post toDomain(Long memberId) {
         return Post.builder()
             .id(id)

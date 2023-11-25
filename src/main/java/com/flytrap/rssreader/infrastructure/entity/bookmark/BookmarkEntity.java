@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.entity.bookmark;
 
+import com.flytrap.rssreader.domain.bookmark.Bookmark;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,6 +34,21 @@ public class BookmarkEntity {
         this.id = id;
         this.memberId = memberId;
         this.postId = postId;
+    }
+
+    public static BookmarkEntity create(Long memberId, Long postId) {
+        return BookmarkEntity.builder()
+            .memberId(memberId)
+            .postId(postId)
+            .build();
+    }
+
+    public Bookmark toDomain() {
+        return Bookmark.builder()
+            .id(id)
+            .memberId(memberId)
+            .postId(postId)
+            .build();
     }
 
     public boolean isSameMember(Long memberId) {
