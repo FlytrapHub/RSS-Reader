@@ -88,8 +88,10 @@ public class FolderUpdateController {
             @PathVariable Long subscribeId,
             @Login SessionMember member) {
 
-        subscribeService.unsubscribe(folderId, subscribeId, member);
-
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        subscribeService.unsubscribe(subscribeId);
+        folderSubscribeService.folderUnsubscribe(subscribeId,
+                verifiedFolder.getId());
         return new ApplicationResponse<>(null);
     }
 }
