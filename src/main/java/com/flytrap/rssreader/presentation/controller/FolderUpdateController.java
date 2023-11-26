@@ -3,18 +3,20 @@ package com.flytrap.rssreader.presentation.controller;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.SubscribeService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,5 +95,17 @@ public class FolderUpdateController {
         folderSubscribeService.folderUnsubscribe(subscribeId,
                 verifiedFolder.getId());
         return new ApplicationResponse<>(null);
+    }
+
+    @GetMapping("/{folderId}/rss")
+    public ApplicationResponse<SubscribeRequest.ResponseList> read(
+            @PathVariable Long folderId,
+            @Login SessionMember member) {
+
+        //TODO 폴더에 추가된 블로그 리스트 보기 즉 folderId 가 일치하는 구독된 정보를 다가져오기
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        List<Long> list = folderSubscribeService.getFolderSubscribeId(verifiedFolder.getId());
+        List<Subscribe> subscribeList = subscribeService.read(list);
+        return new ApplicationResponse<>(SubscribeRequest.ResponseList.from(subscribeList));
     }
 }
