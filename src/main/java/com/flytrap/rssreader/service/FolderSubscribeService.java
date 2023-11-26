@@ -3,6 +3,8 @@ package com.flytrap.rssreader.service;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.infrastructure.entity.folder.FolderSubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.FolderSubscribeEntityJpaRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +23,12 @@ public class FolderSubscribeService {
     @Transactional
     public void folderUnsubscribe(Long subscribeId, Long folderId) {
         folderSubscribeRepository.deleteBySubscribeIdAndFolderId(subscribeId, folderId);
+    }
+
+    public List<Long> getFolderSubscribeId(Long folderId) {
+        return folderSubscribeRepository.findAllByFolderId(folderId)
+                .stream()
+                .map(FolderSubscribeEntity::getId)
+                .collect(Collectors.toList());
     }
 }
