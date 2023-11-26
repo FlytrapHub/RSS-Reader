@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.fixture.FixtureFactory;
 import com.flytrap.rssreader.infrastructure.api.RssChecker;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
@@ -71,7 +72,8 @@ public class SubscribeServiceTest {
             Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
             when(rssChecker.parseRssDocuments(request)).thenReturn(rssFeedData);
             when(subscribeRepository.existsByUrl(request.blogUrl())).thenReturn(true);
-            when(subscribeRepository.findByUrl(request.blogUrl())).thenReturn(Optional.of(generateSubscribeEntity()));
+            when(subscribeRepository.findByUrl(request.blogUrl())).thenReturn(
+                    Optional.of(generateSubscribeEntity()));
 
             // when
             subscribeService.subscribe(request);
@@ -81,5 +83,25 @@ public class SubscribeServiceTest {
                 verify(subscribeRepository, times(1)).findByUrl(request.blogUrl());
             });
         }
+    }
+
+    @Test
+    @DisplayName("URL폴더 구독을 취소한다.")
+    void unsubscribe() {
+        // given
+        Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
+        SubscribeEntity subscribeEntity = generateSubscribeEntity();
+        Subscribe subscribe = subscribeEntity.toDomain(rssFeedData.orElseThrow());
+        when(subscribeRepository.findById(subscribe.getId())).thenReturn(
+                Optional.of(subscribeEntity));
+
+        // when
+        subscribeService.unsubscribe(subscribe.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            verify(subscribeRepository, times(1)).delete(subscribeEntity);
+            verify(subscribeRepository, times(1)).findById(subscribe.getId());
+        });
     }
 }
