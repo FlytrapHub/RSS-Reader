@@ -12,13 +12,12 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 
-@Component
 @Aspect
-@RequiredArgsConstructor
+@Component
 public class PublishEventAspect implements ApplicationEventPublisherAware {
 
-    private ExpressionParser expressionParser = new SpelExpressionParser();
-    String spelRegex = "\\#\\{(.*)\\}";
+    private final ExpressionParser expressionParser = new SpelExpressionParser();
+    private final String spelRegex = "\\#\\{(.*)\\}";
 
     private ApplicationEventPublisher eventPublisher;
 
@@ -46,6 +45,7 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
         } else if (isSpel(publishEvent.params())) {
             String spel = publishEvent.params().replaceAll(spelRegex, "$1");
             Object constructArg = expressionParser.parseExpression(spel).getValue(returnValue);
+            assert constructArg != null;
             event = publishEvent.eventType()
                     .getDeclaredConstructor(constructArg.getClass())
                     .newInstance(constructArg);
@@ -60,7 +60,7 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
     }
 
     private boolean isSpel(String params) {
-        Pattern spelPattern = Pattern.compile("^#\\{.*\\}$");
+        Pattern spelPattern = Pattern.compile(spelRegex);
         return spelPattern.matcher(params).matches();
     }
 
