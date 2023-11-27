@@ -2,7 +2,6 @@ package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.post.Post;
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.SessionMember;

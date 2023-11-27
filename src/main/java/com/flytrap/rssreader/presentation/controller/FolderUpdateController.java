@@ -31,7 +31,6 @@ public class FolderUpdateController {
     private final FolderUpdateService folderService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final SubscribeService subscribeService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final FolderSubscribeService folderSubscribeService;
 
     @PostMapping
