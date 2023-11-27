@@ -25,4 +25,13 @@ public class ReactionService {
         MemberEntity member = memberRepository.findById(memberId).orElseThrow();
         return reactionRepository.save(ReactionEntity.create(post, member, emoji)).getId();
     }
+
+    @Transactional
+    public void deleteReaction(Long postId, Long memberId) {
+        PostEntity post = postRepository.findById(postId).orElseThrow();
+        MemberEntity member = memberRepository.findById(memberId).orElseThrow();
+        ReactionEntity reaction = reactionRepository.findByMemberAndPost(member, post)
+                .orElseThrow();
+        reactionRepository.delete(reaction);
+    }
 }

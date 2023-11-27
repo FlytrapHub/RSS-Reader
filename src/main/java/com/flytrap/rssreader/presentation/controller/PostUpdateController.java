@@ -9,6 +9,7 @@ import com.flytrap.rssreader.service.ReactionService;
 import com.flytrap.rssreader.service.SharedFolderReadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,5 +43,17 @@ public class PostUpdateController {
         Long reaction = reactionService.addReaction(postId, member.id(), request.emoji());
 
         return new ApplicationResponse<>(reaction);
+    }
+
+    @DeleteMapping("/posts/{postId}/reactions")
+    public ApplicationResponse<Void> deleteReaction(
+            @PathVariable Long postId,
+            @Login SessionMember member) {
+
+        //TODO: 1.공유된 폴더인가?, 유효한 폴더 인가?
+        // 2.공유폴더에 구독된 POST를 알아야한다
+        reactionService.deleteReaction(postId, member.id());
+
+        return new ApplicationResponse<>(null);
     }
 }
