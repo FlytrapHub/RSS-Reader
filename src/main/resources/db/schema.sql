@@ -31,6 +31,13 @@ CREATE TABLE IF NOT EXISTS `rss_post`
     `pub_date`     timestamp     NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `open`
+(
+    `id`           bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `post_id`      bigint        NOT NULL,
+    `member_id`    bigint        NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `folder`
 (
     `id`        bigint      NOT NULL PRIMARY KEY AUTO_INCREMENT,
