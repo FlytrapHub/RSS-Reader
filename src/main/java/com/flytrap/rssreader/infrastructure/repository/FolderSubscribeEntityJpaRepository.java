@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
 import com.flytrap.rssreader.infrastructure.entity.folder.FolderSubscribeEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,5 @@ public interface FolderSubscribeEntityJpaRepository extends
     void deleteBySubscribeIdAndFolderId(@Param("subscribeId") Long subscribeId,
             @Param("folderId") Long folderId);
 
+    List<FolderSubscribeEntity> findAllByFolderId(Long folderId);
 }

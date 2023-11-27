@@ -53,7 +53,11 @@ public class SubscribeEntity {
     }
 
     public Subscribe toDomain(RssFeedData rssFeedData) {
-        return Subscribe.of(this.id, rssFeedData.description());
+        return Subscribe.of(this.id, url, rssFeedData.description());
+    }
+
+    public Subscribe toDomain() {
+        return Subscribe.of(this.id, this.url);
     }
 
 }
