@@ -43,48 +43,6 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
      * return값 없으면 new eventType() params값 없으면 new eventType(returnValue) params값이 문자열이면 new
      * eventType(params) params값이 SpEL이면 parse 후에 eventType(params)
      */
-    @AfterReturning(pointcut = "publishEventPointcut(publishEvent)",
-            returning = "returnValue", argNames = "publishEvent,returnValue")
-    public void afterReturning(PublishEvent publishEvent, Object returnValue)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-
-        if(!publishEvent.after()) return;
-
-        Object event;
-
-        if (returnValue == null) {
-            event = publishEvent.eventType()
-                    .getDeclaredConstructor()
-                    .newInstance();
-
-        } else if (StringUtils.isEmpty(publishEvent.params())) {
-            event = publishEvent.eventType()
-                    .getConstructor(returnValue.getClass())
-                    .newInstance(returnValue);
-
-        } else if (isSpel(publishEvent.params())) {
-            String spel = publishEvent.params().replaceAll(spelRegex, "$1");
-            if (publishEvent.after()) {
-                Object constructArg = expressionParser.parseExpression(spel).getValue(returnValue);
-                event = publishEvent.eventType()
-                        .getDeclaredConstructor(constructArg.getClass())
-                        .newInstance(constructArg);
-            } else {
-                Object constructArg = expressionParser.parseExpression(spel).getValue();
-                event = publishEvent.eventType()
-                        .getDeclaredConstructor()
-                        .newInstance();
-            }
-
-        } else {
-            event = publishEvent.eventType()
-                    .getConstructor(String.class)
-                    .newInstance(publishEvent.params());
-        }
-
-        eventPublisher.publishEvent(event);
-    }
-
     @Before(value = "publishEventPointcut(publishEvent)", argNames = "joinPoint,publishEvent")
     public void before(JoinPoint joinPoint, PublishEvent publishEvent)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
