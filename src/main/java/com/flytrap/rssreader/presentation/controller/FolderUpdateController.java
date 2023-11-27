@@ -3,18 +3,20 @@ package com.flytrap.rssreader.presentation.controller;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.SubscribeService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,7 +79,7 @@ public class FolderUpdateController {
         //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
         //지금 부분은 검증된 개인 폴더입니다.
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        Subscribe subscribe = subscribeService.subscribe(request, member.id());
+        Subscribe subscribe = subscribeService.subscribe(request);
         folderSubscribeService.folderSubscribe(subscribe,
                 verifiedFolder.getId());
         return new ApplicationResponse<>(SubscribeRequest.Response.from(subscribe));
@@ -90,8 +92,22 @@ public class FolderUpdateController {
             @PathVariable Long subscribeId,
             @Login SessionMember member) {
 
-        subscribeService.unsubscribe(folderId, subscribeId, member);
-
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        subscribeService.unsubscribe(subscribeId);
+        folderSubscribeService.folderUnsubscribe(subscribeId,
+                verifiedFolder.getId());
         return new ApplicationResponse<>(null);
+    }
+
+    @GetMapping("/{folderId}/rss")
+    public ApplicationResponse<SubscribeRequest.ResponseList> read(
+            @PathVariable Long folderId,
+            @Login SessionMember member) {
+
+        //TODO 폴더에 추가된 블로그 리스트 보기 즉 folderId 가 일치하는 구독된 정보를 다가져오기
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        List<Long> list = folderSubscribeService.getFolderSubscribeId(verifiedFolder.getId());
+        List<Subscribe> subscribeList = subscribeService.read(list);
+        return new ApplicationResponse<>(SubscribeRequest.ResponseList.from(subscribeList));
     }
 }

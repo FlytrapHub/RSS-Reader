@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.fixture;
 
 import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.fixture.FixtureFields.MemberEntityFields;
 import com.flytrap.rssreader.fixture.FixtureFields.MemberFields;
 import com.flytrap.rssreader.fixture.FixtureFields.PostEntityFields;
@@ -12,61 +13,63 @@ import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
+import com.flytrap.rssreader.presentation.dto.RssFeedData;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FixtureFactory {
 
     // Member
     public static UserResource generateUserResource() {
         return UserResource.builder()
-            .id(UserResourceFields.id)
-            .email(UserResourceFields.email)
-            .login(UserResourceFields.login)
-            .avatarUrl(UserResourceFields.avatarUrl)
-            .build();
+                .id(UserResourceFields.id)
+                .email(UserResourceFields.email)
+                .login(UserResourceFields.login)
+                .avatarUrl(UserResourceFields.avatarUrl)
+                .build();
     }
 
     public static MemberEntity generateMemberEntity() {
         return MemberEntity.builder()
-            .id(MemberEntityFields.id)
-            .email(MemberEntityFields.email)
-            .name(MemberEntityFields.name)
-            .profile(MemberEntityFields.profile)
-            .oauthPk(MemberEntityFields.oauthPk)
-            .oauthServer(MemberEntityFields.oauthServer)
-            .build();
+                .id(MemberEntityFields.id)
+                .email(MemberEntityFields.email)
+                .name(MemberEntityFields.name)
+                .profile(MemberEntityFields.profile)
+                .oauthPk(MemberEntityFields.oauthPk)
+                .oauthServer(MemberEntityFields.oauthServer)
+                .build();
     }
 
     public static Member generateMember() {
         return Member.builder()
-            .id(MemberFields.id)
-            .name(MemberFields.name)
-            .email(MemberFields.email)
-            .profile(MemberFields.profile)
-            .oauthPk(MemberFields.oauthPk)
-            .oauthServer(MemberFields.oauthServer)
-            .build();
+                .id(MemberFields.id)
+                .name(MemberFields.name)
+                .email(MemberFields.email)
+                .profile(MemberFields.profile)
+                .oauthPk(MemberFields.oauthPk)
+                .oauthServer(MemberFields.oauthServer)
+                .build();
     }
 
     public static Member generateAnotherMember() {
         return Member.builder()
-            .id(MemberFields.anotherId)
-            .name(MemberFields.anotherName)
-            .email(MemberFields.anotherEmail)
-            .profile(MemberFields.anotherProfile)
-            .oauthPk(MemberFields.anotherOauthPk)
-            .oauthServer(MemberFields.anotherOauthServer)
-            .build();
+                .id(MemberFields.anotherId)
+                .name(MemberFields.anotherName)
+                .email(MemberFields.anotherEmail)
+                .profile(MemberFields.anotherProfile)
+                .oauthPk(MemberFields.anotherOauthPk)
+                .oauthServer(MemberFields.anotherOauthServer)
+                .build();
     }
 
     // Post
     public static RssItemResource generateRssItemResource() {
         return new RssItemResource(
-            RssItemResourceFields.guid,
-            RssItemResourceFields.title,
-            RssItemResourceFields.description,
-            RssItemResourceFields.pubDate
+                RssItemResourceFields.guid,
+                RssItemResourceFields.title,
+                RssItemResourceFields.description,
+                RssItemResourceFields.pubDate
         );
     }
 
@@ -80,12 +83,12 @@ public class FixtureFactory {
 
     public static PostEntity generatePostEntity(Long id) {
         return PostEntity.builder()
-            .id(id)
-            .guid(PostEntityFields.guid)
-            .title(PostEntityFields.title)
-            .description(PostEntityFields.description)
-            .subscribe(PostEntityFields.subscribe)
-            .build();
+                .id(id)
+                .guid(PostEntityFields.guid)
+                .title(PostEntityFields.title)
+                .description(PostEntityFields.description)
+                .subscribe(PostEntityFields.subscribe)
+                .build();
     }
 
     public static List<PostEntity> generate100PostEntityList() {
@@ -100,15 +103,23 @@ public class FixtureFactory {
     // Subscribe
     public static SubscribeEntity generateSubscribeEntity() {
         return SubscribeEntity.builder()
-            .id(SubscribeEntityFields.id)
-            .url(SubscribeEntityFields.url)
-            .platform(SubscribeEntityFields.platform)
-            .build();
+                .id(SubscribeEntityFields.id)
+                .url(SubscribeEntityFields.url)
+                .platform(SubscribeEntityFields.platform)
+                .build();
     }
 
     public static List<SubscribeEntity> generateSingleSubscribeEntityList() {
         return List.of(generateSubscribeEntity());
     }
 
-
+    public static Optional<RssFeedData> generateRssData() {
+        return Optional.of(new RssFeedData(
+                RssItemResourceFields.title,
+                //TODO: 깃허브, 티스토리도 추가하려면 테스트 코드를 바꿔야 할 듯 합니다.
+                "https://v2.velog.io/rss/jinny-l",
+                BlogPlatform.VELOG,
+                RssItemResourceFields.description
+        ));
+    }
 }

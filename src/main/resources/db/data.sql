@@ -1,6 +1,7 @@
 -- INSERT DATA
 INSERT INTO `member`(name, email, profile, oauth_pk, oauth_server, created_at)
-VALUES ('admin', 'admin@gmail.com', 'https://avatars.githubusercontent.com/u/86359180?v=4', '11111', 'GITHUB', '2023-11-16');
+VALUES ('admin', 'admin@gmail.com', 'https://avatars.githubusercontent.com/u/86359180?v=4', '11111', 'GITHUB', '2023-11-16'),
+       ('test01', 'test01@gmail.com', 'https://avatars.githubusercontent.com/u/86359180?v=4', '22222', 'GITHUB', '2023-11-16');
 
 INSERT INTO `folder`(name, member_id, is_shared, is_deleted)
 VALUES ('나의 폴더 1', 1, false, false),
@@ -24,4 +25,4 @@ VALUES ('https://velog.io/@ape/test-l4lqt827', 2, 'test', '<p>test</p>\n', '2023
        ('https://velog.io/@ape/test', 2, 'test test test test test test test', '<p>test</p>\n', '2023-11-08 10:36:46.000000');
 
 INSERT INTO `bookmark`(member_id, post_id)
-VALUES (1, 1), (1, 2), (1, 3);
+VALUES (1, 1), (1, 2), (1, 3), (2, 1);
