@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.expression.ExpressionParser;
@@ -21,13 +22,17 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher eventPublisher;
 
+    @Pointcut("@annotation(publishEvent)")
+    public void publishEventPointcut(PublishEvent publishEvent) {
+    }
+
     /**
      * return값 없으면 new eventType()
      * params값 없으면 new eventType(returnValue)
      * params값이 문자열이면 new eventType(params)
      * params값이 SpEL이면 parse 후에 eventType(params)
      */
-    @AfterReturning(pointcut = "pointcut(publishEvent)", returning = "returnValue", argNames = "publishEvent,returnValue")
+    @AfterReturning(pointcut = "publishEventPointcut(publishEvent)",returning = "returnValue", argNames = "publishEvent,returnValue")
     public void afterReturning(PublishEvent publishEvent, Object returnValue) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Object event;
