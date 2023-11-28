@@ -31,6 +31,13 @@ CREATE TABLE IF NOT EXISTS `rss_post`
     `pub_date`     timestamp     NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `open`
+(
+    `id`           bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `post_id`      bigint        NOT NULL,
+    `member_id`    bigint        NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `folder`
 (
     `id`        bigint      NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -45,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `folder_subscribe`
     `id`                 bigint     NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `subscribe_id`      bigint      NOT NULL,
     `folder_id`         bigint      NOT NULL,
-    `description`       varchar(2500) NOT NULL
+    `description`       varchar(2500) NOT NULL default 'empty'
  );
 
 CREATE TABLE IF NOT EXISTS `folder_member`
@@ -55,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `folder_member`
     `member_id`         bigint      NOT NULL
  );
 
-CREATE TABLE `bookmark` (
+CREATE TABLE IF NOT EXISTS `bookmark` (
     `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `member_id`	bigint	NOT NULL,
     `post_id`	bigint	NOT NULL
