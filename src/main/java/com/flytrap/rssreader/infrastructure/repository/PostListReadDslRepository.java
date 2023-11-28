@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
+
 import static com.flytrap.rssreader.infrastructure.entity.bookmark.QBookmarkEntity.bookmarkEntity;
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderEntity.folderEntity;
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
@@ -16,7 +17,6 @@ import java.time.Instant;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 @Repository
 public class PostListReadDslRepository implements PostListReadRepository {
