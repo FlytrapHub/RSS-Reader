@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SharedFolderReadService {
 
-    private SharedFolderJpaRepository sharedFolderJpaRepository;
+    private final SharedFolderJpaRepository sharedFolderJpaRepository;
 
     /**
      * 멤버Id로 초대된 폴더Id 목록을 반환합니다.
