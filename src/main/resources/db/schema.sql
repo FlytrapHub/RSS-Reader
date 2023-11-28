@@ -67,3 +67,14 @@ CREATE TABLE IF NOT EXISTS `bookmark` (
     `member_id`	bigint	NOT NULL,
     `post_id`	bigint	NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS `post_react` (
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `member_id`	bigint	NOT NULL,
+    `post_id`	bigint	NOT NULL,
+    `emoji`     bigint	NOT NULL,
+    FOREIGN KEY (`member_id`) REFERENCES `member`(`id`),
+    FOREIGN KEY (`post_id`) REFERENCES `rss_post`(`id`)
+);
+
