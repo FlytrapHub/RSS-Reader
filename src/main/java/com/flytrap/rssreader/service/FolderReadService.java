@@ -24,10 +24,10 @@ public class FolderReadService {
     }
 
     @Transactional(readOnly = true)
-    public Map<SharedStatus, List<Folder>> findAllByMemberIdGroupByShared(long memberId) {
+    public List<Folder> findAllByMemberId(long memberId) {
         return repository.findAllByMemberIdAndIsDeletedFalse(memberId).stream()
                 .map(FolderEntity::toDomain)
-                .collect(Collectors.groupingBy(Folder::getSharedStatus));
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
