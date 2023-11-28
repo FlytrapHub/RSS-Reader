@@ -1,7 +1,8 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
+import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
@@ -44,16 +45,24 @@ public class PostCollectService {
      */
     private void processPostCollectionAsync(SubscribeEntity subscribe) {
         taskExecutor.execute(() -> {
-            List<RssItemResource> itemResources = postParser.parseRssDocuments(subscribe.getUrl());
-            savePosts(itemResources, subscribe);
+            postParser.parseRssDocuments(subscribe.getUrl())
+                .ifPresent(resource -> {
+                    updateSubscribeTitle(resource, subscribe);
+                    savePosts(resource, subscribe);
+                });
         });
     }
 
-    private void savePosts(List<RssItemResource> itemResources, SubscribeEntity subscribe) {
+    private void updateSubscribeTitle(RssSubscribeResource subscribeResource, SubscribeEntity subscribe) {
+        subscribe.updateTitle(subscribeResource.subscribeTitle());
+        subscribeEntityJpaRepository.save(subscribe);
+    }
+
+    private void savePosts(RssSubscribeResource subscribeResource, SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(subscribe);
         Map<String, PostEntity> postMap = convertListToHashSet(posts);
 
-        for (RssItemResource itemResource : itemResources) {
+        for (RssItemResource itemResource : subscribeResource.itemResources()) {
             PostEntity post;
 
             if (postMap.containsKey(itemResource.guid())) {
