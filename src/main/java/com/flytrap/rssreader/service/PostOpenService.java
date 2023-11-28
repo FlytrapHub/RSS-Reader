@@ -1,8 +1,9 @@
 package com.flytrap.rssreader.service;
 
-import com.flytrap.rssreader.infrastructure.entity.post.OpenEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostOpenRepository;
 import com.flytrap.rssreader.service.dto.PostOpenParam;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,5 +22,10 @@ public class PostOpenService {
         }
 
         postOpenRepository.save(value.toEntity());
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, Integer> countOpens(long id, List<Long> subscribes) {
+        return postOpenRepository.countsGroupBySubscribeId(id, subscribes);
     }
 }
