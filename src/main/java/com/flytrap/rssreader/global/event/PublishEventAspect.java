@@ -1,25 +1,16 @@
 package com.flytrap.rssreader.global.event;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-
-import io.micrometer.common.util.StringUtils;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.SpelParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -80,7 +71,8 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
         return evaluationContext;
     }
 
-    private void setVariables(StandardEvaluationContext evaluationContext, JoinPoint joinPoint, String SpEL)
+    private void setVariables(StandardEvaluationContext evaluationContext, JoinPoint joinPoint,
+            String SpEL)
             throws SpelParseException {
         int variableCount = SpEL.length() - SpEL.replace("#", "").length();
         String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
