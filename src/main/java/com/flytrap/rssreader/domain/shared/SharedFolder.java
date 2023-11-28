@@ -9,7 +9,7 @@ public class SharedFolder extends Folder {
 
     private List<Member> invitedMembers = new ArrayList<>();
 
-    public SharedFolder(Long id, String name, Long memberId, Boolean isDeleted, List<Member> invitedMembers) {
+    protected SharedFolder(Long id, String name, Long memberId, Boolean isDeleted, List<Member> invitedMembers) {
         super(id, name, memberId, true, isDeleted);
         this.invitedMembers = invitedMembers;
     }
@@ -20,6 +20,10 @@ public class SharedFolder extends Folder {
 
     public List<Member> getInvitedMembers() {
         return List.of(invitedMembers.toArray(new Member[0]));
+    }
+
+    public static SharedFolder of (Folder folder, List<Member> invitedMembers) {
+        return new SharedFolder(folder.getId(), folder.getName(), folder.getMemberId(), folder.getIsDeleted(), invitedMembers);
     }
 
 }
