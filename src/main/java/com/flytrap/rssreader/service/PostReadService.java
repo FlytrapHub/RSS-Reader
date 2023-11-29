@@ -8,6 +8,8 @@ import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.service.dto.PostOpenParam;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +31,8 @@ public class PostReadService {
         return post.toDomain(sessionMember.id());
     }
 
-
+    @Transactional(readOnly = true)
+    public Map<Long, Integer> countPosts(List<Long> subscribes) {
+        return postEntityJpaRepository.countsGroupBySubscribeId(subscribes);
+    }
 }

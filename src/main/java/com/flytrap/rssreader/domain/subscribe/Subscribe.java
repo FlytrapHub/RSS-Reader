@@ -13,12 +13,14 @@ import lombok.NoArgsConstructor;
 public class Subscribe implements DefaultDomain {
 
     private Long id;
+    private String title;
     private String url;
     private String description;
 
     @Builder
-    protected Subscribe(Long id, String url, String description) {
+    public Subscribe(Long id, String title, String url, String description) {
         this.id = id;
+        this.title = title;
         this.url = url;
         this.description = description;
     }
@@ -30,17 +32,10 @@ public class Subscribe implements DefaultDomain {
                 .build();
     }
 
-    public static Subscribe of(Long id, String url, String description) {
+    public static Subscribe of(Long id, String title, String url) {
         return Subscribe.builder()
                 .id(id)
-                .url(url)
-                .description(description)
-                .build();
-    }
-
-    public static Subscribe of(Long id, String url) {
-        return Subscribe.builder()
-                .id(id)
+                .title(title)
                 .url(url)
                 .build();
     }

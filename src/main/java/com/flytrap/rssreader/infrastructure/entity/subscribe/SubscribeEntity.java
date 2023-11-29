@@ -53,11 +53,11 @@ public class SubscribeEntity {
     }
 
     public Subscribe toDomain(RssFeedData rssFeedData) {
-        return Subscribe.of(this.id, url, rssFeedData.description());
+        return Subscribe.of(this.id, rssFeedData.title(), url);
     }
 
     public Subscribe toDomain() {
-        return Subscribe.of(this.id, this.url);
+        return Subscribe.of(this.id, this.title, this.url);
     }
 
     public void updateTitle(String title) {

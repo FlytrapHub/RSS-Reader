@@ -2,6 +2,9 @@ package com.flytrap.rssreader.domain.folder;
 
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +20,7 @@ public class Folder implements DefaultDomain {
     private Long memberId;
     private SharedStatus sharedStatus;
     private Boolean isDeleted;
+    private List<FolderSubscribe> subscribes = new ArrayList<>();
 
     @Builder
     protected Folder(Long id, String name, Long memberId, Boolean isShared, Boolean isDeleted) {
@@ -69,5 +73,36 @@ public class Folder implements DefaultDomain {
 
     public boolean isOwner(long id) {
         return this.memberId == id;
+    }
+
+    public void addSubscribe(FolderSubscribe subscribe) {
+        this.subscribes.add(subscribe);
+    }
+
+    public void addAllSubscribes(List<FolderSubscribe> subscribes) {
+        this.subscribes.addAll(subscribes);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Folder && ((Folder) obj).getId().equals(this.id);
+    }
+
+    public List<Long> getSubscribeIds() {
+        return subscribes.stream()
+                .map(FolderSubscribe::getId)
+                .toList();
+    }
+
+    public void addUnreadCountsBySubscribes(Map<Long, Integer> countsPost, Map<Long, Integer> countsOpen) {
+        for (FolderSubscribe subscribe : subscribes) {
+            subscribe.addUnreadCount(countsPost.get(subscribe.getId()), countsOpen.get(subscribe.getId()));
+        }
+    }
+
+    public int getUnreadCount() {
+        return subscribes.stream()
+                .mapToInt(FolderSubscribe::getUnreadCount)
+                .sum();
     }
 }

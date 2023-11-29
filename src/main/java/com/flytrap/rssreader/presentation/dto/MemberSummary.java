@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.presentation.dto;
 
 import com.flytrap.rssreader.domain.member.Member;
+import java.util.List;
 
 public record MemberSummary(Long id,
                             String name,
@@ -14,4 +15,9 @@ public record MemberSummary(Long id,
         );
     }
 
+    public static List<MemberSummary> from(List<Member> invitedMembers) {
+        return invitedMembers.stream()
+                .map(MemberSummary::from)
+                .toList();
+    }
 }

@@ -16,4 +16,6 @@ public interface FolderSubscribeEntityJpaRepository extends
             @Param("folderId") Long folderId);
 
     List<FolderSubscribeEntity> findAllByFolderId(Long folderId);
+
+    List<FolderSubscribeEntity> findAllByFolderIdIn(List<Long> folderIds);
 }

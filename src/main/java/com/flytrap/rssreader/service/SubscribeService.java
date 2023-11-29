@@ -6,7 +6,9 @@ import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import com.flytrap.rssreader.presentation.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +53,7 @@ public class SubscribeService {
         return subscribeRepository.findById(subscribedId).orElseThrow();
     }
 
-    public List<Subscribe> read(List<Long> subscribeIds) {
+    public List<Subscribe> read(Collection<Long> subscribeIds) {
         return subscribeIds.stream()
                 .map(subscribeRepository::findById)
                 .filter(Optional::isPresent)
