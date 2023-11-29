@@ -1,16 +1,13 @@
 package com.flytrap.rssreader.infrastructure.api;
 
-import com.flytrap.rssreader.global.exception.NoSuchDomainException;
+import com.flytrap.rssreader.global.utill.DateConvertor;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemTagName;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeTagName;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -70,7 +67,7 @@ public class RssPostParser {
                     getTagValue(node, RssItemTagName.GUID),
                     getTagValue(node, RssItemTagName.TITLE),
                     getTagValue(node, RssItemTagName.DESCRIPTION),
-                    convertToInstant(getTagValue(node, RssItemTagName.PUB_DATE))
+                    DateConvertor.convertToInstant(getTagValue(node, RssItemTagName.PUB_DATE))
                 )
             );
         }
@@ -78,18 +75,10 @@ public class RssPostParser {
         return itemResources;
     }
 
-
     private String getTagValue(Node parentNode, RssItemTagName tagName) {
         Element element = (Element) parentNode;
 
         return element.getElementsByTagName(tagName.getTagName()).item(0).getTextContent();
-    }
-
-    private Instant convertToInstant(String parsingDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z",
-            Locale.ENGLISH);
-
-        return Instant.from(formatter.parse(parsingDate));
     }
 
 }
