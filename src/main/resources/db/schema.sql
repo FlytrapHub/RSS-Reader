@@ -78,3 +78,15 @@ CREATE TABLE IF NOT EXISTS `post_react` (
     FOREIGN KEY (`post_id`) REFERENCES `rss_post`(`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `alert` (
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `member_id`	bigint	NOT NULL,
+    `folder_id`	bigint	NOT NULL,
+    `service_id`   bigint	NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `alert_service` (
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `service`	 varchar(30)	NOT NULL
+);
+
