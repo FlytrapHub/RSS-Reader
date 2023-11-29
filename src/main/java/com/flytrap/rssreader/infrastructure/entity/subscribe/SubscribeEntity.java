@@ -60,4 +60,8 @@ public class SubscribeEntity {
         return Subscribe.of(this.id, this.url);
     }
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
 }

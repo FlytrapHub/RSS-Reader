@@ -8,7 +8,7 @@ import com.flytrap.rssreader.fixture.FixtureFields.PostEntityFields;
 import com.flytrap.rssreader.fixture.FixtureFields.RssItemResourceFields;
 import com.flytrap.rssreader.fixture.FixtureFields.SubscribeEntityFields;
 import com.flytrap.rssreader.fixture.FixtureFields.UserResourceFields;
-import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;

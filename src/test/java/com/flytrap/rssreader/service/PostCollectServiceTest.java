@@ -11,11 +11,12 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.dto.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,15 +63,15 @@ class PostCollectServiceTest {
     void collectPosts() throws InterruptedException {
 
         // given
-        List<RssItemResource> itemResources = generate50RssItemResourceList();
+        RssSubscribeResource subscribeResource = new RssSubscribeResource("title", generate50RssItemResourceList());
         when(postParser.parseRssDocuments(anyString()))
-                .thenReturn(itemResources);
+                .thenReturn(Optional.of(subscribeResource));
 
         // when
         postCollectService.collectPosts();
 
         // then
-        verify(postEntityJpaRepository, times(itemResources.size())).save(any());
+        verify(postEntityJpaRepository, times(subscribeResource.itemResources().size())).save(any());
     }
 
 }
