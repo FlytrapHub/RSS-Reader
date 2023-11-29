@@ -123,8 +123,8 @@ public class FolderUpdateController {
             @Login SessionMember member) {
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        AlertPlatform platform = AlertPlatform.ofCode(request.platformNum());
-        Long alertID = alertService.on(verifiedFolder.getId(), member.id(), platform);
+        AlertPlatform.ofCode(request.platformNum());
+        Long alertID = alertService.on(verifiedFolder.getId(), member.id(), request.platformNum());
         return new ApplicationResponse<>(alertID);
     }
 
