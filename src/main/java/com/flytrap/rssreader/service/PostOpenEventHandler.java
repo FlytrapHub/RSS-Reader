@@ -3,7 +3,6 @@ package com.flytrap.rssreader.service;
 import com.flytrap.rssreader.domain.post.PostOpenEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -18,7 +17,6 @@ public class PostOpenEventHandler {
     @Async
     @TransactionalEventListener(PostOpenEvent.class)
     public void handle(PostOpenEvent event) {
-        log.info("PostOpenEvent: {}", event);
         postOpenService.open(event.getValue());
     }
 }

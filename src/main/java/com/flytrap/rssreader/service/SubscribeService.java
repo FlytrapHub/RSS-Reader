@@ -8,8 +8,6 @@ import com.flytrap.rssreader.presentation.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,10 +52,8 @@ public class SubscribeService {
     }
 
     public List<Subscribe> read(Collection<Long> subscribeIds) {
-        return subscribeIds.stream()
-                .map(subscribeRepository::findById)
-                .filter(Optional::isPresent)
-                .map(entity -> entity.get().toDomain())
+        return subscribeRepository.findAllById(subscribeIds).stream()
+                .map(SubscribeEntity::toDomain)
                 .toList();
     }
 
