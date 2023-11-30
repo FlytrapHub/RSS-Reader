@@ -75,6 +75,7 @@ public class PostCollectService {
             postEntityJpaRepository.save(post);
         }
     }
+
     private static Map<String, PostEntity> convertListToHashSet(List<PostEntity> postEntities) {
         Map<String, PostEntity> map = new HashMap<>();
 

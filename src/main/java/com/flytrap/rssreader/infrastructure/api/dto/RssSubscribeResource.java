@@ -12,7 +12,8 @@ public record RssSubscribeResource(
         String guid,
         String title,
         String description,
-        Instant pubDate
+        Instant pubDate,
+        String thumbnailUrl
     ) {
 
     }
