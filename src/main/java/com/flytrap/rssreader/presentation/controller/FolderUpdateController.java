@@ -3,10 +3,13 @@ package com.flytrap.rssreader.presentation.controller;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
+import com.flytrap.rssreader.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.service.AlertService;
 import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;
@@ -34,6 +37,7 @@ public class FolderUpdateController {
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
+    private final AlertService alertService;
 
     @PostMapping
     public ApplicationResponse<FolderRequest.Response> createFolder(
@@ -66,7 +70,7 @@ public class FolderUpdateController {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
 
-        return new ApplicationResponse<>("폴더가 삭제되었습니다 : "+folder.getName());
+        return new ApplicationResponse<>("폴더가 삭제되었습니다 : " + folder.getName());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -99,6 +103,7 @@ public class FolderUpdateController {
         return new ApplicationResponse<>(null);
     }
 
+    //TODO 요거 ReadController에 옮겨야합니다.
     @GetMapping("/{folderId}/rss")
     public ApplicationResponse<SubscribeRequest.ResponseList> read(
             @PathVariable Long folderId,
@@ -109,5 +114,27 @@ public class FolderUpdateController {
         List<Long> list = folderSubscribeService.getFolderSubscribeId(verifiedFolder.getId());
         List<Subscribe> subscribeList = subscribeService.read(list);
         return new ApplicationResponse<>(SubscribeRequest.ResponseList.from(subscribeList));
+    }
+
+    @PostMapping("/{folderId}/alerts")
+    public ApplicationResponse<Long> onAlert(
+            @PathVariable Long folderId,
+            @Valid @RequestBody AlertRequest request,
+            @Login SessionMember member) {
+
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        AlertPlatform.ofCode(request.platformNum());
+        Long alertID = alertService.on(verifiedFolder.getId(), member.id(), request.platformNum());
+        return new ApplicationResponse<>(alertID);
+    }
+
+    @DeleteMapping("/{folderId}/alerts ")
+    public ApplicationResponse<Void> offAlert(
+            @PathVariable Long folderId,
+            @Login SessionMember member) {
+
+        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        alertService.off(verifiedFolder.getId(), member.id());
+        return new ApplicationResponse<>(null);
     }
 }

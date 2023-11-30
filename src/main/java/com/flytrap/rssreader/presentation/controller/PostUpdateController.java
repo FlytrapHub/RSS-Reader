@@ -4,9 +4,7 @@ import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.ReactionRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.ReactionService;
-import com.flytrap.rssreader.service.SharedFolderReadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostUpdateController {
 
     private final ReactionService reactionService;
-    private final SharedFolderReadService sharedFolderReadService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
 
     /**
      * 리액션 반응은 공유된 폴더의 POST만 가능합니다. 공유 된 폴더인지 체크 한 후 POST와 MEMBER사이에 리액션이 일어납니다.
