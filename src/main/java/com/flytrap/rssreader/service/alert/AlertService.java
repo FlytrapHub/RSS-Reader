@@ -2,6 +2,7 @@ package com.flytrap.rssreader.service.alert;
 
 import com.flytrap.rssreader.domain.alert.AlertEvent;
 import com.flytrap.rssreader.global.event.PublishEvent;
+import com.flytrap.rssreader.service.alert.platform.SlackAlarmService;
 import com.flytrap.rssreader.service.dto.AlertParam;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class AlertService {
 
     private final AlertEntityJpaRepository alertRepository;
+    private final SlackAlarmService slackAlarmService;
 
     public Long on(Long folderId, Long memberId, Integer platformNum) {
         return alertRepository.save(AlertEntity.create(memberId, folderId, platformNum))
@@ -33,6 +35,7 @@ public class AlertService {
 
     public void notifyPlatform(AlertParam value) {
         //TODO 플랫폼 별 알람
+        slackAlarmService.notifyReturn();
         log.info("플랫폼 별 알람 value = {}", value);
     }
 
