@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -20,7 +19,6 @@ public class AlertFacadeService {
     private final AlertService alertService;
 
     @Async("taskScheduler")
-    @Transactional(readOnly = true)
     @Scheduled(fixedRate = 1000)
     public void alert() {
         //TODO: 먼저 큐에있는 Susbscirbe를 확인한다.
