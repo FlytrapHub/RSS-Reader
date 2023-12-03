@@ -46,14 +46,14 @@ public class SubscribeEntity {
 
     public static SubscribeEntity from(RssFeedData rssFeedData) {
         return SubscribeEntity.builder()
-            .title(rssFeedData.title())
-            .url(rssFeedData.url())
-            .platform(rssFeedData.platform())
-            .build();
+                .title(rssFeedData.title())
+                .url(rssFeedData.url())
+                .platform(rssFeedData.platform())
+                .build();
     }
 
     public Subscribe toDomain(RssFeedData rssFeedData) {
-        return Subscribe.of(this.id, rssFeedData.title(), url);
+        return Subscribe.of(this.id, rssFeedData.title(), url, rssFeedData.description());
     }
 
     public Subscribe toDomain() {
