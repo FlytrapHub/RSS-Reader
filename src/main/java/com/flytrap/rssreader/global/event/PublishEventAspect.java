@@ -47,6 +47,7 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
 
         Object event;
 
+        //TODO PARM이 안들어와을경우 구현
         if (isSpel(publishEvent.params())) {
             String spel = publishEvent.params().replaceAll(spelRegex, "$1");
             StandardEvaluationContext context = getEvaluationContext(joinPoint, spel);
@@ -55,6 +56,8 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
             event = publishEvent.eventType()
                     .getDeclaredConstructor(constructArg.getClass())
                     .newInstance(constructArg);
+        } else if (publishEvent.params() == null || publishEvent.params().isEmpty()) {
+            event = publishEvent.eventType().getDeclaredConstructor().newInstance();
         } else {
             event = publishEvent.eventType()
                     .getConstructor(String.class)
