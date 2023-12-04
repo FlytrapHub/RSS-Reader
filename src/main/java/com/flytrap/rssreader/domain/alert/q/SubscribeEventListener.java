@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class SubscribeEventListener {
 
     private final SubscribeEventQueue eventQueue;
-    private final AlertEntityJpaRepository repository;
 
     @EventListener
     public void onEvent(Subscribe subscribe) {
@@ -21,6 +20,5 @@ public class SubscribeEventListener {
             log.info("eventQueue full ");
         }
         eventQueue.offer(subscribe);
-        log.info("eventQueue peek 의 상태 = {}  ", eventQueue.peek());
     }
 }
