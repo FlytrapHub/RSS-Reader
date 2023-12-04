@@ -20,7 +20,7 @@ public class Folder implements DefaultDomain {
     private Long memberId;
     private SharedStatus sharedStatus;
     private Boolean isDeleted;
-    private List<FolderSubscribe> subscribes = new ArrayList<>();
+    private final List<FolderSubscribe> subscribes = new ArrayList<>();
 
     @Builder
     protected Folder(Long id, String name, Long memberId, Boolean isShared, Boolean isDeleted) {

@@ -14,7 +14,8 @@ public record Folders(Map<SharedStatus, List<FolderListSummary>> folders) {
         Map<SharedStatus, List<Folder>> collect = unreadCountInSubscribes.stream()
                 .collect(Collectors.groupingBy(Folder::getSharedStatus));
 
-        Map<SharedStatus, List<FolderListSummary>> result = Map.of(SharedStatus.SHARED,
+        Map<SharedStatus, List<FolderListSummary>> result = Map.of(
+                SharedStatus.SHARED,
                 collect.getOrDefault(SharedStatus.SHARED, new ArrayList<>()).stream()
                         .map(FolderListSummary::from)
                         .collect(Collectors.toList()),

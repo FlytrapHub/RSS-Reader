@@ -15,7 +15,6 @@ public class FolderVerifyOwnerService {
 
     private final FolderEntityJpaRepository repository;
 
-
     @Transactional(readOnly = true)
     public Folder getVerifiedFolder(Long folderId, long memberId) {
         FolderEntity folderEntity = repository.findByIdAndIsDeletedFalse(folderId)
