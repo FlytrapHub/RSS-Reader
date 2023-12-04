@@ -40,6 +40,9 @@ public class PostEntity {
     @Column(length = 2500, nullable = false)
     private String title;
 
+    @Column(length = 2500, nullable = true)
+    private String thumbnailUrl;
+
     @Lob
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String description;
@@ -62,11 +65,12 @@ public class PostEntity {
     // TODO: React, Thumbnail 추가 하기
 
     @Builder
-    protected PostEntity(Long id, String guid, String title, String description, Instant pubDate,
+    protected PostEntity(Long id, String guid, String title, String thumbnailUrl, String description, Instant pubDate,
         SubscribeEntity subscribe, List<OpenEntity> opens, List<BookmarkEntity> bookmarks) {
         this.id = id;
         this.guid = guid;
         this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
         this.description = description;
         this.pubDate = pubDate;
         this.subscribe = subscribe;
@@ -78,6 +82,7 @@ public class PostEntity {
         return PostEntity.builder()
             .guid(rssItemResource.guid())
             .title(rssItemResource.title())
+            .thumbnailUrl(rssItemResource.thumbnailUrl())
             .description(rssItemResource.description())
             .pubDate(rssItemResource.pubDate())
             .subscribe(subscribe)
@@ -86,6 +91,7 @@ public class PostEntity {
 
     public void updateBy(RssItemResource itemResource) {
         this.title = itemResource.title();
+        this.thumbnailUrl = itemResource.thumbnailUrl();
         this.description = itemResource.description();
     }
 
@@ -95,6 +101,7 @@ public class PostEntity {
             .subscribeId(subscribe.getId())
             .guid(guid)
             .title(title)
+            .thumbnailUrl(thumbnailUrl)
             .description(description)
             .pubDate(pubDate)
             .build();
@@ -106,6 +113,7 @@ public class PostEntity {
             .subscribeId(subscribe.getId())
             .guid(guid)
             .title(title)
+            .thumbnailUrl(thumbnailUrl)
             .description(description)
             .pubDate(pubDate)
             .subscribeTitle(subscribe.getTitle())

@@ -17,7 +17,8 @@ INSERT INTO `rss_subscribe`(title, url, platform)
 VALUES ('조금씩, 꾸준히, 자주', 'https://v2.velog.io/rss/jinny-l', 'VELOG'),
        ('ape.log', 'https://v2.velog.io/rss/ape', 'VELOG'),
        ('janeljs.log', 'https://v2.velog.io/rss/janeljs', 'VELOG'),
-       ('louie.log', 'https://v2.velog.io/rss/louie', 'VELOG');
+       ('louie.log', 'https://v2.velog.io/rss/louie', 'VELOG'),
+       ('✨ iirin''s space', 'https://new-pow.tistory.com/rss', 'TISTORY');
 
 INSERT INTO `rss_post`(guid, subscribe_id, title, description, pub_date)
 VALUES ('https://velog.io/@ape/test-l4lqt827', 2, 'test', '<p>test</p>\n', '2023-11-08 10:40:18.000000'),

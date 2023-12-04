@@ -17,6 +17,7 @@ public class Post implements DefaultDomain {
     private Long subscribeId;
     private String guid;
     private String title;
+    private String thumbnailUrl;
     private String description;
     private Instant pubDate;
     private String subscribeTitle;
@@ -25,12 +26,14 @@ public class Post implements DefaultDomain {
     // TODO: react
 
     @Builder
-    protected Post(Long id, Long subscribeId, String guid, String title, String description,
-        Instant pubDate, String subscribeTitle, boolean open, boolean bookmark) {
+    protected Post(Long id, Long subscribeId, String guid, String title, String thumbnailUrl,
+        String description, Instant pubDate, String subscribeTitle, boolean open,
+        boolean bookmark) {
         this.id = id;
         this.subscribeId = subscribeId;
         this.guid = guid;
         this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
         this.description = description;
         this.pubDate = pubDate;
         this.subscribeTitle = subscribeTitle;

@@ -7,6 +7,7 @@ import java.util.List;
 public record PostResponse(
     String guid,
     String title,
+    String thumbnailUrl,
     String description,
     Instant pubDate,
     String subscribeTitle,
@@ -23,6 +24,7 @@ public record PostResponse(
         return new PostResponse(
             post.getGuid(),
             post.getTitle(),
+            post.getThumbnailUrl(),
             post.getDescription(),
             post.getPubDate(),
             post.getSubscribeTitle(),

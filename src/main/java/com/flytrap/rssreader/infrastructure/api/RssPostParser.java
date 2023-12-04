@@ -1,20 +1,17 @@
 package com.flytrap.rssreader.infrastructure.api;
 
-import com.flytrap.rssreader.global.exception.NoSuchDomainException;
+import com.flytrap.rssreader.global.utill.DateConvertor;
 import com.flytrap.rssreader.infrastructure.api.dto.RssItemTagName;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeTagName;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -27,11 +24,13 @@ import org.xml.sax.SAXException;
  * 구독한 블로그의 RSS 문서에서 게시글을 파싱해 그 결과를 반환하는 RSS 게시글 파서
  */
 @Slf4j
-@NoArgsConstructor
+@AllArgsConstructor
 @Component
 public class RssPostParser {
 
     private static final String RSS_PARSING_ERROR_MESSAGE = "RSS문서를 파싱할 수 없습니다.";
+
+    private final HTMLImageParser htmlImageParser;
 
     public Optional<RssSubscribeResource> parseRssDocuments(String url) {
 
@@ -64,13 +63,15 @@ public class RssPostParser {
 
         for (int i = 0; i < itemList.getLength(); i++) {
             Node node = itemList.item(i);
+            String description = getTagValue(node, RssItemTagName.DESCRIPTION);
 
             itemResources.add(
                 new RssItemResource(
                     getTagValue(node, RssItemTagName.GUID),
                     getTagValue(node, RssItemTagName.TITLE),
-                    getTagValue(node, RssItemTagName.DESCRIPTION),
-                    convertToInstant(getTagValue(node, RssItemTagName.PUB_DATE))
+                    description,
+                    DateConvertor.convertToInstant(getTagValue(node, RssItemTagName.PUB_DATE)),
+                    htmlImageParser.extractImageUrl(description)
                 )
             );
         }
@@ -78,18 +79,10 @@ public class RssPostParser {
         return itemResources;
     }
 
-
     private String getTagValue(Node parentNode, RssItemTagName tagName) {
         Element element = (Element) parentNode;
 
         return element.getElementsByTagName(tagName.getTagName()).item(0).getTextContent();
-    }
-
-    private Instant convertToInstant(String parsingDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z",
-            Locale.ENGLISH);
-
-        return Instant.from(formatter.parse(parsingDate));
     }
 
 }

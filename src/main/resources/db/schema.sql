@@ -23,12 +23,13 @@ CREATE TABLE IF NOT EXISTS `rss_subscribe`
 
 CREATE TABLE IF NOT EXISTS `rss_post`
 (
-    `id`           bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `guid`         varchar(2500) NOT NULL,
-    `subscribe_id` bigint        NOT NULL,
-    `title`        varchar(2500) NOT NULL,
-    `description`  longtext      NOT NULL,
-    `pub_date`     timestamp     NOT NULL
+    `id`            bigint        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `guid`          varchar(2500) NOT NULL,
+    `subscribe_id`  bigint        NOT NULL,
+    `title`         varchar(2500) NOT NULL,
+    `thumbnail_url` varchar(2500),
+    `description`   longtext      NOT NULL,
+    `pub_date`      timestamp     NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `open`
@@ -76,5 +77,17 @@ CREATE TABLE IF NOT EXISTS `post_react` (
     `emoji`     bigint	NOT NULL,
     FOREIGN KEY (`member_id`) REFERENCES `member`(`id`),
     FOREIGN KEY (`post_id`) REFERENCES `rss_post`(`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `alert` (
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `member_id`	bigint	NOT NULL,
+    `folder_id`	bigint	NOT NULL,
+    `service_id`   bigint	NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `alert_service` (
+    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `service`	 varchar(30)	NOT NULL
 );
 

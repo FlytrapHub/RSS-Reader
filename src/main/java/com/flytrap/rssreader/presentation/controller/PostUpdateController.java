@@ -7,7 +7,6 @@ import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.PostOpenService;
 import com.flytrap.rssreader.service.ReactionService;
-import com.flytrap.rssreader.service.SharedFolderReadService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -53,6 +53,8 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
     // AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+    // jsoup HTML parser library @ https://jsoup.org/
+    implementation 'org.jsoup:jsoup:1.17.1'
 }
 
 test {
