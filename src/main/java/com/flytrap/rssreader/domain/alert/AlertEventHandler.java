@@ -17,7 +17,6 @@ public class AlertEventHandler {
     @Async
     @EventListener(AlertEvent.class)
     public void onEvent(AlertEvent event) {
-        log.info("PostOpenEvent: {}", event);
         alertService.notifyPlatform(event.getValue());
     }
 }
