@@ -3,6 +3,7 @@ package com.flytrap.rssreader.service;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
+import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import java.util.List;
@@ -21,7 +22,7 @@ public class PostListReadService {
     public List<Post> getPostsBySubscribe(SessionMember member, Long subscribeId, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllBySubscribe(subscribeId, postFilter, pageable)
             .stream()
-            .map(p -> p.toDomain(member.id()))
+            .map(PostOutput::toDomain)
             .toList();
     }
 

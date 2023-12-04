@@ -9,8 +9,11 @@ import static com.flytrap.rssreader.infrastructure.entity.post.QPostEntity.postE
 import static com.flytrap.rssreader.infrastructure.entity.subscribe.QSubscribeEntity.subscribeEntity;
 
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
+import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -27,7 +30,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public List<PostEntity> findAllBySubscribe(long subscribeId, PostFilter postFilter, Pageable pageable) {
+    public List<PostOutput> findAllBySubscribe(long subscribeId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -35,8 +38,24 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
-        return queryFactory.selectFrom(postEntity)
+        return queryFactory
+            .selectDistinct(
+                Projections.constructor(PostOutput.class,
+                    postEntity.id,
+                    postEntity.subscribe.id,
+                    postEntity.guid,
+                    postEntity.title,
+                    postEntity.thumbnailUrl,
+                    postEntity.description,
+                    postEntity.pubDate,
+                    postEntity.subscribe.title,
+                    Expressions.booleanTemplate("{0} is not null", openEntity.id),
+                    Expressions.booleanTemplate("{0} is not null", bookmarkEntity.id)
+                )
+            )
+            .from(postEntity)
             .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
             .where(builder)
             .orderBy(postEntity.pubDate.desc())
             .offset(pageable.getOffset())
