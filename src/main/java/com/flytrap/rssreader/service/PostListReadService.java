@@ -36,7 +36,7 @@ public class PostListReadService {
     public List<Post> getPostsByMember(SessionMember member, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllByMember(member.id(), postFilter, pageable)
             .stream()
-            .map(p -> p.toDomain(member.id()))
+            .map(PostOutput::toDomain)
             .toList();
     }
 }
