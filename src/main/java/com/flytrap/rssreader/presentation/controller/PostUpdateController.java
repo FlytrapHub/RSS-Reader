@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/posts")
 public class PostUpdateController {
 
     private final ReactionService reactionService;
     private final SharedFolderReadService sharedFolderReadService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final PostOpenService postOpenService;
 
     /**
      * 리액션 반응은 공유된 폴더의 POST만 가능합니다. 공유 된 폴더인지 체크 한 후 POST와 MEMBER사이에 리액션이 일어납니다.
@@ -32,7 +33,7 @@ public class PostUpdateController {
      * @param member
      * @return
      */
-    @PostMapping("/posts/{postId}/reactions")
+    @PostMapping("/{postId}/reactions")
     public ApplicationResponse<Long> addReaction(
             @PathVariable Long postId,
             @Valid @RequestBody ReactionRequest request,
@@ -45,7 +46,7 @@ public class PostUpdateController {
         return new ApplicationResponse<>(reaction);
     }
 
-    @DeleteMapping("/posts/{postId}/reactions")
+    @DeleteMapping("/{postId}/reactions")
     public ApplicationResponse<Void> deleteReaction(
             @PathVariable Long postId,
             @Login SessionMember member) {
