@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventPublisher;
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
@@ -31,7 +32,6 @@ public class PostCollectService {
     private final PostEntityJpaRepository postEntityJpaRepository;
     private final SubscribeEventPublisher publisher;
     private final AlertFacadeService alertFacadeService;
-    private final TaskExecutor taskExecutor;
 
     @Scheduled(fixedDelay = TEN_MINUTE)
     public void collectPosts() {
@@ -60,7 +60,8 @@ public class PostCollectService {
 
         futurePosts.thenAccept(posts -> {
             if (!posts.isEmpty()) {
-                publisher.publish(subscribe.toDomain());
+                SubscribeEvent event = new SubscribeEvent(subscribe.getId(), posts);
+                publisher.publish(event);
             }
         });
     }
