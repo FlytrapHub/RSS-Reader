@@ -6,8 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @Domain(name = "subscribe")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subscribe implements DefaultDomain {
@@ -27,6 +29,15 @@ public class Subscribe implements DefaultDomain {
 
     public static Subscribe create(String url, String description) {
         return Subscribe.builder()
+                .url(url)
+                .description(description)
+                .build();
+    }
+
+    public static Subscribe of(Long id, String title, String url, String description) {
+        return Subscribe.builder()
+                .id(id)
+                .title(title)
                 .url(url)
                 .description(description)
                 .build();
