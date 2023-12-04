@@ -1,10 +1,10 @@
 package com.flytrap.rssreader.service.dto;
 
 
-public record AlertParam(Integer serviceId) {
+public record AlertParam(String url, String title) {
 
-    public static AlertParam create(Integer serviceId) {
-        return new AlertParam(serviceId);
+    public static AlertParam create(String url, String title) {
+        return new AlertParam(url, title);
     }
 }
 

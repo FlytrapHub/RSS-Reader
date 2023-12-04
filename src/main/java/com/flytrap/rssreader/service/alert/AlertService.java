@@ -35,14 +35,14 @@ public class AlertService {
 
     public void notifyPlatform(AlertParam value) {
         //TODO 플랫폼 별 알람
-        slackAlarmService.notifyReturn();
+        slackAlarmService.notifyReturn(value);
         log.info("플랫폼 별 알람 value = {}", value);
     }
 
     //TODO: 굳이 사실 지금은 필요없어 보이기는합니다.
     @PublishEvent(eventType = AlertEvent.class,
-            params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#serviceId)}")
-    public void notifyAlert(Integer serviceId) {
+            params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#url,#title)}")
+    public void notifyAlert(String url, String title) {
         log.info("notifyAlert evnet publish");
     }
 

@@ -26,12 +26,12 @@ public class AlertFacadeService {
         //TODO: ex) 만약 0번 Member가 6번 Folder를 Subscribe 중이라면 이때 Slack(1)으로 알람 받기를 원하는 경우
         if (queue.isRemaining()) {
             Subscribe subscribe = queue.poll();
-            log.info("eventQueue poll 의 상태 = {}  ", subscribe.toString());
+            log.info("alert 스케쥴러 실행 eventQueue poll 의 상태 = {}  ", subscribe.toString());
             List<AlertEntity> alertList = alertService.getAlertList(subscribe.getId());
 
             for (AlertEntity alertEntity : alertList) {
                 log.info("alert 정보 = {} ", alertEntity);
-                alertService.notifyAlert(alertEntity.getServiceId());
+                alertService.notifyAlert(subscribe.getUrl(), subscribe.getTitle());
             }
         }
     }
