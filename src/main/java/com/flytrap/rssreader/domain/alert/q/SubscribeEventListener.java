@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.domain.alert.q;
 
+import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,10 @@ public class SubscribeEventListener {
     private final SubscribeEventQueue eventQueue;
 
     @EventListener
-    public void onEvent(Subscribe subscribe) {
+    public void onEvent(SubscribeEvent event) {
         if (eventQueue.isFull()) {
             log.info("eventQueue full ");
         }
-        eventQueue.offer(subscribe);
+        eventQueue.offer(event);
     }
 }
