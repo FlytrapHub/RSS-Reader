@@ -30,4 +30,6 @@ public interface PostOpenRepository extends JpaRepository<OpenEntity, Long> {
 
         return result;
     }
+
+    void deleteByMemberIdAndPostId(long memberId, Long postId);
 }
