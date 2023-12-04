@@ -29,7 +29,7 @@ public class PostListReadService {
     public List<Post> getPostsByFolder(SessionMember member, Folder folder, PostFilter postFilter, Pageable pageable) {
         return postListReadRepository.findAllByFolder(folder.getId(), postFilter, pageable)
             .stream()
-            .map(p -> p.toDomain(member.id()))
+            .map(PostOutput::toDomain)
             .toList();
     }
 

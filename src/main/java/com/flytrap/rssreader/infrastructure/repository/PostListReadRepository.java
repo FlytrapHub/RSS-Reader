@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface PostListReadRepository {
     List<PostOutput> findAllBySubscribe(long subscribeId, PostFilter postFilter, Pageable pageable);
 
-    List<PostEntity> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable);
+    List<PostOutput> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable);
 
     List<PostEntity> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable);
 

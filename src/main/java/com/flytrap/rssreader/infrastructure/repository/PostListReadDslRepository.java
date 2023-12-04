@@ -63,7 +63,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .fetch();
     }
 
-    public List<PostEntity> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable) {
+    public List<PostOutput> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -71,8 +71,24 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
-        return queryFactory.selectFrom(postEntity)
+        return queryFactory
+            .selectDistinct(
+                Projections.constructor(PostOutput.class,
+                    postEntity.id,
+                    postEntity.subscribe.id,
+                    postEntity.guid,
+                    postEntity.title,
+                    postEntity.thumbnailUrl,
+                    postEntity.description,
+                    postEntity.pubDate,
+                    postEntity.subscribe.title,
+                    Expressions.booleanTemplate("{0} is not null", openEntity.id),
+                    Expressions.booleanTemplate("{0} is not null", bookmarkEntity.id)
+                )
+            )
+            .from(postEntity)
             .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
+            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
             .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
             .where(builder)
