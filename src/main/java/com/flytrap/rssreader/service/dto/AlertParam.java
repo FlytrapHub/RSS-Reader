@@ -1,10 +1,12 @@
 package com.flytrap.rssreader.service.dto;
 
 
-public record AlertParam(String url, String title) {
+import java.util.Map;
 
-    public static AlertParam create(String url, String title) {
-        return new AlertParam(url, title);
+public record AlertParam(Map<String, String> posts, String name) {
+
+    public static AlertParam create(Map<String, String> posts, String name) {
+        return new AlertParam(posts, name);
     }
 }
 

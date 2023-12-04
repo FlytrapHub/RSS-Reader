@@ -3,13 +3,16 @@ package com.flytrap.rssreader.service.alert.platform;
 import com.flytrap.rssreader.infrastructure.properties.SlackProperties;
 import com.flytrap.rssreader.service.dto.AlertParam;
 import java.util.Map;
+import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SlackAlarmService implements AlarmService {
@@ -20,11 +23,14 @@ public class SlackAlarmService implements AlarmService {
     @Override
     public void notifyReturn(AlertParam value) {
         StringBuilder sb = new StringBuilder();
-        sb.append("새로운 글이 갱신되었습니다!\n\n")
-                .append("주소 :").append(value.url()).append("\n\n")
-                .append("제목 :").append(value.title());
-        send(sb.toString());
+        sb.append("새로운 글이 갱신되었습니다!\n\n");
+        sb.append("폴더 이름 :").append(value.name()).append("\n\n");
 
+        for (Entry<String, String> entry : value.posts().entrySet()) {
+            sb.append("주소 :").append(entry.getKey()).append("\n\n")
+                    .append("제목 :").append(entry.getValue()).append("\n\n");
+        }
+        send(sb.toString());
     }
 
 
