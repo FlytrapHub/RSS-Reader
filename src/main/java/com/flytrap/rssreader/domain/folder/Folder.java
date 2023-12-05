@@ -2,6 +2,8 @@ package com.flytrap.rssreader.domain.folder;
 
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
+import com.flytrap.rssreader.infrastructure.entity.post.OpenPostCount;
+import com.flytrap.rssreader.infrastructure.entity.post.SubscribePostCount;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class Folder implements DefaultDomain {
     private Long memberId;
     private SharedStatus sharedStatus;
     private Boolean isDeleted;
-    private List<FolderSubscribe> subscribes = new ArrayList<>();
+    private final List<FolderSubscribe> subscribes = new ArrayList<>();
 
     @Builder
     protected Folder(Long id, String name, Long memberId, Boolean isShared, Boolean isDeleted) {
@@ -94,9 +96,18 @@ public class Folder implements DefaultDomain {
                 .toList();
     }
 
-    public void addUnreadCountsBySubscribes(Map<Long, Integer> countsPost, Map<Long, Integer> countsOpen) {
+    public void addUnreadCountsBySubscribes(Map<Long, SubscribePostCount> countsPost, Map<Long, OpenPostCount> countsOpen) {
         for (FolderSubscribe subscribe : subscribes) {
-            subscribe.addUnreadCount(countsPost.get(subscribe.getId()), countsOpen.get(subscribe.getId()));
+
+            SubscribePostCount subscribePostCount = countsPost.get(subscribe.getId());
+            OpenPostCount openPostCount = countsOpen.get(subscribe.getId());
+            int totalCount = 0;
+            int openCount = 0;
+
+            if (openPostCount != null) openCount = openPostCount.getPostCount();
+            if (subscribePostCount != null) totalCount = subscribePostCount.getPostCount();
+
+            subscribe.addUnreadCount(totalCount, openCount);
         }
     }
 

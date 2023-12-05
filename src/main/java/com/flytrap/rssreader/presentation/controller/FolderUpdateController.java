@@ -9,7 +9,7 @@ import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.AlertService;
+import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.FolderSubscribeService;
 import com.flytrap.rssreader.service.FolderUpdateService;
 import com.flytrap.rssreader.service.FolderVerifyOwnerService;

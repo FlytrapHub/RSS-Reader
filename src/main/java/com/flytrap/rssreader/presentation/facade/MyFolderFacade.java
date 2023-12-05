@@ -14,7 +14,7 @@ public class MyFolderFacade {
     private final FolderReadService folderReadService;
     private final SharedFolderReadService sharedFolderReadService;
 
-    public List<Folder> getMyFoldersMappedBySharedStatus(long id) {
+    public List<Folder> getMyFolders(long id) {
         List<Folder> myFolders = folderReadService.findAllByMemberId(id);
 
         // 내가 초대받은 폴더 목록

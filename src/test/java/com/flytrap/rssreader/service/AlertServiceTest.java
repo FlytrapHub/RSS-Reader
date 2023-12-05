@@ -1,7 +1,6 @@
 package com.flytrap.rssreader.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +12,7 @@ import com.flytrap.rssreader.fixture.FolderFixtureFactory;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
+import com.flytrap.rssreader.service.alert.AlertService;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
