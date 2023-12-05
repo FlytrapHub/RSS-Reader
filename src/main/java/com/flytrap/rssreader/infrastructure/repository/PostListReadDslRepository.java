@@ -13,6 +13,7 @@ import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -37,24 +38,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
-        return queryFactory
-            .selectDistinct(
-                Projections.constructor(PostOutput.class,
-                    postEntity.id,
-                    postEntity.subscribe.id,
-                    postEntity.guid,
-                    postEntity.title,
-                    postEntity.thumbnailUrl,
-                    postEntity.description,
-                    postEntity.pubDate,
-                    postEntity.subscribe.title,
-                    Expressions.booleanTemplate("{0} is not null", openEntity.id),
-                    Expressions.booleanTemplate("{0} is not null", bookmarkEntity.id)
-                )
-            )
-            .from(postEntity)
-            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
-            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
+        return initFindAllQuery()
             .where(builder)
             .orderBy(postEntity.pubDate.desc())
             .offset(pageable.getOffset())
@@ -70,24 +54,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
-        return queryFactory
-            .selectDistinct(
-                Projections.constructor(PostOutput.class,
-                    postEntity.id,
-                    postEntity.subscribe.id,
-                    postEntity.guid,
-                    postEntity.title,
-                    postEntity.thumbnailUrl,
-                    postEntity.description,
-                    postEntity.pubDate,
-                    postEntity.subscribe.title,
-                    Expressions.booleanTemplate("{0} is not null", openEntity.id),
-                    Expressions.booleanTemplate("{0} is not null", bookmarkEntity.id)
-                )
-            )
-            .from(postEntity)
-            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
-            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
+        return initFindAllQuery()
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
             .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
             .where(builder)
@@ -105,24 +72,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
-        return queryFactory
-            .selectDistinct(
-                Projections.constructor(PostOutput.class,
-                    postEntity.id,
-                    postEntity.subscribe.id,
-                    postEntity.guid,
-                    postEntity.title,
-                    postEntity.thumbnailUrl,
-                    postEntity.description,
-                    postEntity.pubDate,
-                    postEntity.subscribe.title,
-                    Expressions.booleanTemplate("{0} is not null", openEntity.id),
-                    Expressions.booleanTemplate("{0} is not null", bookmarkEntity.id)
-                )
-            )
-            .from(postEntity)
-            .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
-            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
+        return initFindAllQuery()
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
             .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
             .join(folderEntity).on(folderSubscribeEntity.folderId.eq(folderEntity.id))
@@ -141,6 +91,15 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         addFilterCondition(builder, postFilter);
 
+        return initFindAllQuery()
+            .where(builder)
+            .orderBy(postEntity.pubDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    private JPAQuery<PostOutput> initFindAllQuery() {
         return queryFactory
             .selectDistinct(
                 Projections.constructor(PostOutput.class,
@@ -158,12 +117,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
             )
             .from(postEntity)
             .leftJoin(openEntity).on(postEntity.id.eq(openEntity.postId))
-            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId))
-            .where(builder)
-            .orderBy(postEntity.pubDate.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+            .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId));
     }
 
     private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter) {
