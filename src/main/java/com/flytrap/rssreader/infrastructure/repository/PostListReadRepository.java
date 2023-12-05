@@ -1,6 +1,5 @@
 package com.flytrap.rssreader.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import java.util.List;
@@ -13,5 +12,5 @@ public interface PostListReadRepository {
 
     List<PostOutput> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable);
 
-    List<PostEntity> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable);
+    List<PostOutput> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable);
 }
