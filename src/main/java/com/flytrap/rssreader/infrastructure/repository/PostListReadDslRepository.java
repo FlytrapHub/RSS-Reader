@@ -18,6 +18,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -30,13 +31,24 @@ public class PostListReadDslRepository implements PostListReadRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public List<PostOutput> findAllBySubscribe(long subscribeId, PostFilter postFilter, Pageable pageable) {
+    public Optional<PostOutput> findById(Long postId) {
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder
+            .and(postEntity.id.eq(postId));
+
+        return Optional.ofNullable(initFindAllQuery()
+            .where(builder)
+            .fetchOne());
+    }
+
+    public List<PostOutput> findAllBySubscribe(long memberId, long subscribeId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
             .and(postEntity.subscribe.id.eq(subscribeId));
 
-        addFilterCondition(builder, postFilter);
+        addFilterCondition(builder, postFilter, memberId);
 
         return initFindAllQuery()
             .where(builder)
@@ -46,13 +58,13 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .fetch();
     }
 
-    public List<PostOutput> findAllByFolder(long folderId, PostFilter postFilter, Pageable pageable) {
+    public List<PostOutput> findAllByFolder(long memberId, long folderId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
             .and(folderSubscribeEntity.folderId.eq(folderId));
 
-        addFilterCondition(builder, postFilter);
+        addFilterCondition(builder, postFilter, memberId);
 
         return initFindAllQuery()
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
@@ -70,7 +82,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
         builder
             .and(folderEntity.memberId.eq(memberId));
 
-        addFilterCondition(builder, postFilter);
+        addFilterCondition(builder, postFilter, memberId);
 
         return initFindAllQuery()
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
@@ -89,7 +101,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
         builder
             .and(bookmarkEntity.memberId.eq(memberId));
 
-        addFilterCondition(builder, postFilter);
+        addFilterCondition(builder, postFilter, memberId);
 
         return initFindAllQuery()
             .where(builder)
@@ -120,7 +132,12 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .leftJoin(bookmarkEntity).on(postEntity.id.eq(bookmarkEntity.postId));
     }
 
-    private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter) {
+    private void addFilterCondition(BooleanBuilder builder, PostFilter postFilter, long memberId) {
+
+        builder
+            .and(openEntity.memberId.eq(memberId).or(openEntity.memberId.isNull()))
+            .and(bookmarkEntity.memberId.eq(memberId).or(bookmarkEntity.memberId.isNull()));
+
         if (postFilter.hasKeyword()) {
             builder
                 .and(postEntity.title.contains(postFilter.keyword()))
