@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 
 public record PostResponse(
+    long id,
     String guid,
     String title,
     String thumbnailUrl,
@@ -22,6 +23,7 @@ public record PostResponse(
 
     public static PostResponse from(Post post) {
         return new PostResponse(
+            post.getId(),
             post.getGuid(),
             post.getTitle(),
             post.getThumbnailUrl(),
