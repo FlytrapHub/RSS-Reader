@@ -29,13 +29,13 @@ public class FolderReadController {
     public ApplicationResponse<Folders> getFolders(@Login SessionMember member) {
 
         // 내가 소속된 폴더 목록 반환
-        List<Folder> folders = myFolderFacade.getMyFoldersMappedBySharedStatus(member.id());
+        List<Folder> folders = myFolderFacade.getMyFolders(member.id());
 
         // 폴더당 블로그 목록 추가
-        folders = subscribeInFolderFacade.addSubscribesInFolders(folders);
+        folders = subscribeInFolderFacade.addSubscribesInFolder(folders);
 
         // 폴더당 초대된 멤버 추가
-        folders = invitedToFolderFacade.getSharedFolders(folders);
+        folders = invitedToFolderFacade.addInvitedMembersInFolder(folders);
 
         // 블로그당 읽지 않은 글 개수 추가
         folders = openCheckFacade.addUnreadCountInSubscribes(member.id(), folders);

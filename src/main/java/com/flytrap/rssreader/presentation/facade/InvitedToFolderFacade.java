@@ -20,7 +20,7 @@ public class InvitedToFolderFacade {
     private final SharedFolderReadService sharedFolderReadService;
     private final MemberService memberService;
 
-    public List<Folder> getSharedFolders(List<Folder> folders) {
+    public List<Folder> addInvitedMembersInFolder(List<Folder> folders) {
         List<Long> folderIds = folders.stream().map(Folder::getId).toList();
         Map<Long, List<Long>> membersInFolders =    // 폴더마다 초대된 멤버 목록
                 sharedFolderReadService.findMembersInFolders(folderIds);

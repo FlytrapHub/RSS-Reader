@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import com.flytrap.rssreader.infrastructure.entity.post.OpenPostCount;
 import com.flytrap.rssreader.infrastructure.repository.PostOpenRepository;
 import com.flytrap.rssreader.service.dto.PostOpenParam;
 import java.util.List;
@@ -26,8 +27,9 @@ public class PostOpenService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, Integer> countOpens(long id, List<Long> subscribes) {
-        return postOpenRepository.countsGroupBySubscribeId(id, subscribes);
+    public Map<Long, OpenPostCount> countOpens(long id, List<Long> subscribes) {
+        return postOpenRepository.countOpens(id, subscribes).stream()
+                .collect(Collectors.toMap(OpenPostCount::getSubscribeId, it -> it));
     }
 
     @Transactional
