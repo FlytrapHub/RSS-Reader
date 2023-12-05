@@ -19,7 +19,7 @@ public class SubscribeInFolderFacade {
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
 
-    public List<Folder> addSubscribesInFolders(List<Folder> folders) {
+    public List<Folder> addSubscribesInFolder(List<Folder> folders) {
         Map<Folder, List<Long>> folderSubscribeIds =
                 folderSubscribeService.getFolderSubscribeIds(folders);
 
