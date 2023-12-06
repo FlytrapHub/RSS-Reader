@@ -31,10 +31,8 @@ public class AlertFacadeService {
             log.info("alert 스케쥴러 실행 eventQueue poll 의 상태 = {}  ", event.toString()); //새로운 게시글들
             List<AlertEntity> alertList = alertService.getAlertList(event.subscribeId());
             if (!alertList.isEmpty()) {
-                alertList.forEach(alertEntity -> {
-                alertService.notifyAlert(event.posts(),
-                            folderReadService.findById(alertEntity.getFolderId()).getName());
-                });
+                alertList.forEach(alertEntity -> alertService.notifyAlert(event.posts(),
+                            folderReadService.findById(alertEntity.getFolderId()).getName()));
             }
         }
     }
