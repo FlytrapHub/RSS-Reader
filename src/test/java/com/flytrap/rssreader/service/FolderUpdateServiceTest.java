@@ -9,6 +9,8 @@ import com.flytrap.rssreader.fixture.FolderFixtureFactory;
 import com.flytrap.rssreader.infrastructure.entity.folder.FolderEntity;
 import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
+import com.flytrap.rssreader.service.folder.FolderUpdateService;
+import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
