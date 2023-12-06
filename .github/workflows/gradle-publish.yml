@@ -1,0 +1,78 @@
+name: Gradle Package
+
+on:
+  push:
+    branches: [ "rel/test" ]
+
+env:
+  working-directory: .
+  AWS_REGION: ap-northeast-2                   
+  EC2_REPOSITORY: 15.164.40.102:5000
+  AWS_SG_NAME: FlytrapDevelopment
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+
+    - name: Get Github action IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+       
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml 
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+        submodules: true # submodule 이있습니다.
+
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      with:
+        arguments: build
+         
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+         aws-region: ${{env.AWS_REGION}}
+
+    - name: Add Github Actions IP to Security group
+      run: |
+        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{env.AWS_REGION}}
+
+    - name: Build, tag, and push image to Amazon EC2
+      id: build-image
+      env:
+        EC2_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG_LATEST: latest  # "latest" 태그 추가
+
+        run: |
+          # 이미지를 "latest" 태그와 SHA 태그로 빌드
+          docker buildx build --platform linux/amd64 -t $EC2_REGISTRY/was:dev-$IMAGE_TAG_LATEST -t $EC2_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_LATEST .
+          # 이미지를 Amazon EC2에 푸시
+          docker push $EC2_REPOSITORY/was:$IMAGE_TAG_LATEST
+          # GitHub Actions의 출력에 이미지 정보 추가
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_LATEST" >> $GITHUB_OUTPUT
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AWS_HOST }}
+        username: ubuntu
+        key: ${{ secrets.AWS_KEY }}
+        script: |
+          ./run.sh
