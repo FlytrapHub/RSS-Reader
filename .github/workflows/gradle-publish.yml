@@ -2,7 +2,7 @@ name: Gradle Package
 
 on:
   push:
-    branches: [ "rel/test" ]
+    branches: [ "rel/test-1" ]
 
 env:
   working-directory: .
@@ -47,11 +47,13 @@ jobs:
 
     - name: Add Github Actions IP to Security group
       run: |
-        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
+        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{env.AWS_REGION}}
+
 
     - name: Build, tag, and push image to Amazon EC2
       id: build-image
@@ -59,14 +61,10 @@ jobs:
         EC2_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG_LATEST: latest  # "latest" 태그 추가
-
         run: |
-          # 이미지를 "latest" 태그와 SHA 태그로 빌드
           docker buildx build --platform linux/amd64 -t $EC2_REGISTRY/was:dev-$IMAGE_TAG_LATEST -t $EC2_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_LATEST .
-          # 이미지를 Amazon EC2에 푸시
           docker push $EC2_REPOSITORY/was:$IMAGE_TAG_LATEST
-          # GitHub Actions의 출력에 이미지 정보 추가
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_LATEST" >> $GITHUB_OUTPUT
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_LATEST" >> $GITHUB_ENV
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
@@ -76,3 +74,11 @@ jobs:
         key: ${{ secrets.AWS_KEY }}
         script: |
           ./run.sh
+
+    - name: Remove Github Actions IP from security group
+      run: |
+         aws ec2 revoke-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{env.AWS_REGION}}
