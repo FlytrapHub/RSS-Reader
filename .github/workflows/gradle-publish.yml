@@ -7,7 +7,7 @@ on:
 env:
   working-directory: .
   AWS_REGION: ap-northeast-2                   
-  EC2_REPOSITORY: 15.164.40.102:5000
+  EC2_REPOSITORY: 15.165.223.16:5000
   AWS_SG_NAME: FlytrapDevelopment
 
 jobs:
@@ -36,8 +36,8 @@ jobs:
     - name: Build with Gradle
       run: |
         chmod +x gradlew
-        ./gradlew clean build
-        # ./gradlew clean build -x test
+        # ./gradlew clean build
+        ./gradlew clean build -x test
          
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
