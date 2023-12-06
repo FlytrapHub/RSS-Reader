@@ -19,6 +19,7 @@ public class FixtureFields {
     private static final String DESCRIPTION = "description";
 
     public static class UserResourceFields {
+
         public static Long id = LONG_1L;
         public static String email = EMAIL_TEST_GMAIL;
         public static String login = LOGIN;
@@ -26,6 +27,7 @@ public class FixtureFields {
     }
 
     public static class MemberEntityFields {
+
         public static Long id = LONG_1L;
         public static String email = EMAIL_TEST_GMAIL;
         public static String name = NAME;
@@ -35,6 +37,7 @@ public class FixtureFields {
     }
 
     public static class MemberFields {
+
         public static Long id = LONG_1L;
         public static String name = NAME;
         public static String email = EMAIL_TEST_GMAIL;
@@ -50,13 +53,16 @@ public class FixtureFields {
     }
 
     public static class RssItemResourceFields {
+
         public static String guid = GUID;
         public static String title = TITLE;
         public static String description = DESCRIPTION;
         public static Instant pubDate = INSTANT_20231115;
+        public static String thumbnailUrl = AVATAR_URL;
     }
 
     public static class SubscribeEntityFields {
+
         public static Long id = LONG_1L;
         public static String url = RSS_URL;
         public static String description = DESCRIPTION;
@@ -64,6 +70,7 @@ public class FixtureFields {
     }
 
     public static class PostEntityFields {
+
         public static Long id = LONG_1L;
         public static String guid = GUID;
         public static String title = TITLE;
