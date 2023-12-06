@@ -23,15 +23,15 @@ public class SlackAlarmService implements AlarmService {
     @Override
     public void notifyReturn(AlertParam value) {
         StringBuilder sb = new StringBuilder();
-        sb.append("새로운 글이 갱신되었습니다!\n\n");
-        sb.append("폴더 이름 :").append(value.name()).append("\n\n");
+        sb.append("*새로운 글이 갱신되었습니다!*\n\n");
+        sb.append("*폴더 이름:* ").append(value.name()).append("\n\n");
 
         for (Entry<String, String> entry : value.posts().entrySet()) {
-            sb.append("주소 :").append(entry.getKey()).append("\n\n")
-                    .append("제목 :").append(entry.getValue()).append("\n\n");
+            sb.append("<").append(entry.getKey()).append("|").append(entry.getValue()).append(">\n\n");
         }
         send(sb.toString());
     }
+
 
 
     private void send(String message) {
@@ -43,7 +43,9 @@ public class SlackAlarmService implements AlarmService {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(Map.of("text", message)))
                 .retrieve()
-                .toBodilessEntity()
+                .bodyToMono(String.class)
+                .doOnSuccess(response -> log.info("Slack notification sent successfully. Response: {}", response))
+                .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage()))
                 .block();
     }
 }
