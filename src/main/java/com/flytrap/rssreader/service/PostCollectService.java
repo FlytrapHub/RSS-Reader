@@ -10,13 +10,13 @@ import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import com.flytrap.rssreader.service.alert.AlertFacadeService;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -58,12 +58,11 @@ public class PostCollectService {
                         })
                         .orElse(new HashMap<>()));
 
-        futurePosts.thenAccept(posts -> {
-            if (!posts.isEmpty()) {
-                SubscribeEvent event = new SubscribeEvent(subscribe.getId(), posts);
-                publisher.publish(event);
-            }
-        });
+        if (!futurePosts.join().isEmpty()) {
+            SubscribeEvent event = new SubscribeEvent(subscribe.getId(),
+                    Collections.unmodifiableMap(futurePosts.join()));
+            publisher.publish(event);
+        }
     }
 
     private void updateSubscribeTitle(RssSubscribeResource subscribeResource,
