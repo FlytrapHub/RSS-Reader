@@ -7,7 +7,7 @@ import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.PostResponse.PostListResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.PostListReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

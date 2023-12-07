@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.presentation.facade;
 
 import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.service.FolderReadService;
+import com.flytrap.rssreader.service.folder.FolderReadService;
 import com.flytrap.rssreader.service.SharedFolderReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
