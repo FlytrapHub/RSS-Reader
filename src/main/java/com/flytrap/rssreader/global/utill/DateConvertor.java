@@ -2,16 +2,17 @@ package com.flytrap.rssreader.global.utill;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 public class DateConvertor {
 
     private static final String DATE_FORMAT_ABBREVIATION = "EEE, dd MMM yyyy HH:mm:ss z";
     private static final String DATE_FORMAT_NUMERICAL = "EEE, dd MMM yyyy HH:mm:ss Z";
-    private static final String OFFSET_GMT = "GMT";
-    private static final String OFFSET_0000 = "+0000";
-    private static final String OFFSET_0900 = "+0900";
-    private static final String REGEX_SPACE = "\\s+";
+    private static final DateTimeFormatter[] FORMATTERS = {
+        DateTimeFormatter.ofPattern(DATE_FORMAT_ABBREVIATION).withLocale(Locale.ENGLISH),
+        DateTimeFormatter.ofPattern(DATE_FORMAT_NUMERICAL).withLocale(Locale.ENGLISH),
+    };
 
     /**
      * "Wed, 29 Nov 2023 13:49:14 +0900" 및 "Tue, 07 Nov 2023 14:12:30 GMT"
@@ -21,18 +22,15 @@ public class DateConvertor {
      * @return Instant 객체
      */
     public static Instant convertToInstant(String parsingDate) {
-        String[] dateParts = parsingDate.split(REGEX_SPACE);
-        String offsetZ = dateParts[dateParts.length - 1];
 
-        DateTimeFormatter formatter = switch (offsetZ) {
-            case OFFSET_GMT -> DateTimeFormatter.ofPattern(DATE_FORMAT_ABBREVIATION)
-                .withLocale(Locale.ENGLISH);
-            case OFFSET_0000, OFFSET_0900 -> DateTimeFormatter.ofPattern(DATE_FORMAT_NUMERICAL)
-                .withLocale(Locale.ENGLISH);
-            default -> throw new IllegalStateException("Unexpected value: " + parsingDate);
-        };
+        for (DateTimeFormatter formatter : FORMATTERS) {
+            try {
+                return Instant.from(formatter.parse(parsingDate));
+            } catch (DateTimeParseException ignored) {
 
-        return Instant.from(formatter.parse(parsingDate));
+            }
+        }
+        throw new IllegalStateException("Unexpected value: " + parsingDate);
     }
 
     /**
