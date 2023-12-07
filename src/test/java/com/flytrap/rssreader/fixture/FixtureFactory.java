@@ -69,7 +69,8 @@ public class FixtureFactory {
                 RssItemResourceFields.guid,
                 RssItemResourceFields.title,
                 RssItemResourceFields.description,
-                RssItemResourceFields.pubDate
+                RssItemResourceFields.pubDate,
+                RssItemResourceFields.thumbnailUrl
         );
     }
 

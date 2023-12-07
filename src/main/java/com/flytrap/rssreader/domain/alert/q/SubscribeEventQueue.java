@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.domain.alert.q;
 
-import com.flytrap.rssreader.domain.subscribe.Subscribe;
+import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SubscribeEventQueue {
 
-    private final Queue<Subscribe> queue;
+    private final Queue<SubscribeEvent> queue;
     private final int queueSize;
 
     private SubscribeEventQueue(int size) {
@@ -20,24 +20,24 @@ public class SubscribeEventQueue {
         return new SubscribeEventQueue(size);
     }
 
-    public boolean offer(Subscribe subscribe) {
-        boolean returnValue = queue.offer(subscribe);
+    public boolean offer(SubscribeEvent event) {
+        boolean returnValue = queue.offer(event);
         healthCheck();
         return returnValue;
     }
 
-    public Subscribe peek() {
+    public SubscribeEvent peek() {
         return queue.peek();
     }
 
 
-    public Subscribe poll() {
+    public SubscribeEvent poll() {
         if (queue.isEmpty()) {
             throw new IllegalStateException("No events in the queue !");
         }
-        Subscribe subscribe = queue.poll();
+        SubscribeEvent event = queue.poll();
         healthCheck();
-        return subscribe;
+        return event;
     }
 
     private int size() {
