@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostUpdateController {
 
     private final ReactionService reactionService;
-    private final SharedFolderReadService sharedFolderReadService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final PostOpenService postOpenService;
 
     /**

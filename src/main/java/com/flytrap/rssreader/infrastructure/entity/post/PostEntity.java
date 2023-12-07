@@ -54,19 +54,11 @@ public class PostEntity {
     @JoinColumn(name = "subscribe_id")
     private SubscribeEntity subscribe;
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
-    private List<OpenEntity> opens = new ArrayList<OpenEntity>();
-
-    @OneToMany
-    @JoinColumn(name = "post_id")
-    private List<BookmarkEntity> bookmarks = new ArrayList<BookmarkEntity>();
-
-    // TODO: React, Thumbnail 추가 하기
+    // TODO: React 추가 하기
 
     @Builder
     protected PostEntity(Long id, String guid, String title, String thumbnailUrl, String description, Instant pubDate,
-        SubscribeEntity subscribe, List<OpenEntity> opens, List<BookmarkEntity> bookmarks) {
+        SubscribeEntity subscribe) {
         this.id = id;
         this.guid = guid;
         this.title = title;
@@ -74,8 +66,6 @@ public class PostEntity {
         this.description = description;
         this.pubDate = pubDate;
         this.subscribe = subscribe;
-        this.opens = opens;
-        this.bookmarks = bookmarks;
     }
 
     public static PostEntity from(RssItemResource rssItemResource, SubscribeEntity subscribe) {
@@ -105,41 +95,6 @@ public class PostEntity {
             .description(description)
             .pubDate(pubDate)
             .build();
-    }
-
-    public Post toDomain(Long memberId) {
-        return Post.builder()
-            .id(id)
-            .subscribeId(subscribe.getId())
-            .guid(guid)
-            .title(title)
-            .thumbnailUrl(thumbnailUrl)
-            .description(description)
-            .pubDate(pubDate)
-            .subscribeTitle(subscribe.getTitle())
-            .open(isOpen(memberId))
-            .bookmark(isBookmark(memberId))
-            .build();
-    }
-
-    public boolean isOpen(Long memberId) {
-        for (OpenEntity o : opens) {
-            if (o.isSameMember(memberId)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isBookmark(Long memberId) {
-        for (BookmarkEntity b : bookmarks) {
-            if (b.isSameMember(memberId)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }
