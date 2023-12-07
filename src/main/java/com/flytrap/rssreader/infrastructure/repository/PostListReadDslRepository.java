@@ -6,6 +6,7 @@ import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderEntity.f
 import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QOpenEntity.openEntity;
 import static com.flytrap.rssreader.infrastructure.entity.post.QPostEntity.postEntity;
+import static com.flytrap.rssreader.infrastructure.entity.shared.QSharedFolderEntity.sharedFolderEntity;
 import static com.flytrap.rssreader.infrastructure.entity.subscribe.QSubscribeEntity.subscribeEntity;
 
 import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
@@ -80,7 +81,8 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
-            .and(folderEntity.memberId.eq(memberId));
+            .and(folderEntity.memberId.eq(memberId))
+            .or(sharedFolderEntity.memberId.eq(memberId));
 
         addFilterCondition(builder, postFilter, memberId);
 
@@ -88,6 +90,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
             .join(subscribeEntity).on(postEntity.subscribe.id.eq(subscribeEntity.id))
             .join(folderSubscribeEntity).on(subscribeEntity.id.eq(folderSubscribeEntity.subscribeId))
             .join(folderEntity).on(folderSubscribeEntity.folderId.eq(folderEntity.id))
+            .leftJoin(sharedFolderEntity).on(folderEntity.id.eq(sharedFolderEntity.folderId))
             .where(builder)
             .orderBy(postEntity.pubDate.desc())
             .offset(pageable.getOffset())
