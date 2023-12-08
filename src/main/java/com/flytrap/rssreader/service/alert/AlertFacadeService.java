@@ -3,7 +3,7 @@ package com.flytrap.rssreader.service.alert;
 import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
-import com.flytrap.rssreader.service.FolderReadService;
+import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
