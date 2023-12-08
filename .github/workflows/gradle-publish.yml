@@ -61,7 +61,6 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG_LATEST: latest
       run: |
-        echo "image=${{ env.EC2_REGISTRY}}/rss-app:$IMAGE_TAG_LATEST" >> $GITHUB_ENV
         docker build --platform amd64 --build-arg DEPENDENCY=build/dependency -f ./Dockerfile -t ${{env.EC2_REGISTRY}}/app .
         docker push ${{ env.EC2_REGISTRY }}/app
 
