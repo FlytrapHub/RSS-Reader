@@ -61,8 +61,8 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG_LATEST: latest
       run: |
-        docker buildx build --platform linux/amd64 -t rss-app:$IMAGE_TAG_LATEST -t $EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST .
-        docker push $EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST
+        docker buildx build --platform linux/amd64 -t $EC2_REGISTRY/rss-app .
+        docker push $EC2_REGISTRY/rss-app
         echo "image=$EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST" >> $GITHUB_ENV
 
     - name: 원격 SSH 명령 실행
