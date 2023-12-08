@@ -27,6 +27,7 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        log.info(request.getInputStream().toString());
         try {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException e) {
