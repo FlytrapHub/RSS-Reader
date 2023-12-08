@@ -7,7 +7,7 @@ on:
 env:
   working-directory: .
   AWS_REGION: ap-northeast-2                   
-  EC2_REPOSITORY: ghcr.io/Flytrap-Ware
+  EC2_REPOSITORY: 'ghcr.io/Flytrap-Ware'
   AWS_SG_NAME: FlytrapDevelopment
   AWS_SG_ID: sg-0895e77b2da12a6c9
 
