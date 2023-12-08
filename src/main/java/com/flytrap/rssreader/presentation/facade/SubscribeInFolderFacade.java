@@ -3,7 +3,7 @@ package com.flytrap.rssreader.presentation.facade;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.folder.FolderSubscribe;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.service.FolderSubscribeService;
+import com.flytrap.rssreader.service.folder.FolderSubscribeService;
 import com.flytrap.rssreader.service.SubscribeService;
 import java.util.List;
 import java.util.Map;

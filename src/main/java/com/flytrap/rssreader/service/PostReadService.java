@@ -4,6 +4,8 @@ import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.domain.post.PostOpenEvent;
 import com.flytrap.rssreader.global.event.PublishEvent;
 import com.flytrap.rssreader.global.exception.NoSuchDomainException;
+import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
+import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
 import com.flytrap.rssreader.infrastructure.entity.post.SubscribePostCount;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostReadService {
 
     private final PostEntityJpaRepository postEntityJpaRepository;
+    private final PostListReadRepository postListReadRepository;
     private final PostOpenRepository postOpenRepository;
 
     @Transactional(readOnly = true)
@@ -28,10 +31,9 @@ public class PostReadService {
             params = "#{T(com.flytrap.rssreader.service.dto.PostOpenParam).create(#sessionMember.id(), #postId)}")
     public Post getPost(SessionMember sessionMember, Long postId) {
 
-        PostEntity post = postEntityJpaRepository.findById(postId)
-                .orElseThrow(() -> new NoSuchDomainException(Post.class));
-
-        return post.toDomain(sessionMember.id());
+        return postListReadRepository.findById(postId)
+            .orElseThrow(() -> new NoSuchDomainException(Post.class))
+            .toDomain();
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+#  registry:
+#    image: registry
+#    restart: always
+#    container_name: registry
+#    volumes:
+#      - registry-data:/var/lib/registry/docker/registry/v2
+#    ports:
+#      - "5000:5000"
+
+  balancer:
+    image: nginx
+    container_name: balancer
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - was-dev
+      - web-dev
+
+  was-dev:
+    image: registry:latest
+    ports:
+      - "8080:8080"
+    container_name: was-dev
+
+#  web-dev:
+#    image: 566827815182.dkr.ecr.ap-northeast-2.amazonaws.com/labelingtool-web:latest
+#    ports:
+#      - "8081:80"
+#    container_name: web-dev
+
+#  redis:
+#    image: redis:latest
+#    restart: always
+#    container_name: redis_container
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - redis-data:/data/redis
+#
+#  mysql:
+#    image: mysql:latest
+#    restart: always
+#    container_name: mysql_container
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=12341234
+#    volumes:
+#      - ../test/data/mysql:/var/lib/mysql
+
+volumes:
+  redis-data:
+  registry-data:
