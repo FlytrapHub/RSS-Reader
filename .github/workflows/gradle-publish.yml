@@ -2,7 +2,7 @@ name: Gradle Package
 
 on:
   push:
-    branches: ["rel/test-1"]
+    branches: ["release"]
 
 env:
   working-directory: .
@@ -62,7 +62,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/flytrap-ware/app:release
+        tags: ghcr.io/flytrap-ware/rss-reader:release
       env:
         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
