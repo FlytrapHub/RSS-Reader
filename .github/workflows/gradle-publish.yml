@@ -9,7 +9,7 @@ env:
   AWS_REGION: ap-northeast-2                   
   EC2_REPOSITORY: 15.165.223.16:5000
   AWS_SG_NAME: FlytrapDevelopment
-  AWS_SG_ID: vpc-05fc397cf6106ca9c
+  AWS_SG_ID: sg-0895e77b2da12a6c9
 
 jobs:
   build:
