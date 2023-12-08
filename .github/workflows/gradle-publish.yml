@@ -60,11 +60,10 @@ jobs:
     - name: Build, tag, and push image to Amazon EC2
       id: build-image
       env:
-        EC2_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
         IMAGE_TAG_LATEST: latest  # "latest" 태그 추가
       run: |
-        docker buildx build --platform linux/amd64 -t rss-app:$IMAGE_TAG_LATEST -t $EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST .
+        docker buildx build --platform linux/amd64 -t $EC2_REGISTRY/was:rss-app$IMAGE_TAG -t $EC2_REGISTRY/rss-app:$IMAGE_TAG .
         docker push $EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST
         echo "image=$EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST" >> $GITHUB_ENV
 
