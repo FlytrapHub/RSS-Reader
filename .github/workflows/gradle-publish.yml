@@ -54,8 +54,8 @@ jobs:
     - name: 이미지 빌드, 태그 설정, Amazon EC2에 푸시
       id: build-image
       run: |
-        docker build --platform amd64 --build-arg DEPENDENCY=build/dependency -f ./Dockerfile -t ${{env.EC2_REGISTRY}}/app .
-        docker push ${{ env.EC2_REGISTRY }}/app
+        docker build --platform amd64 --build-arg DEPENDENCY=build/dependency -f ./Dockerfile -t ${{env.EC2_REPOSITORY}}/app .
+        docker push ${{ env.EC2_REPOSITORY }}/app
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
