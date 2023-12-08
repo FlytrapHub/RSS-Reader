@@ -9,6 +9,7 @@ env:
   AWS_REGION: ap-northeast-2                   
   EC2_REPOSITORY: 15.165.223.16:5000
   AWS_SG_NAME: FlytrapDevelopment
+  AWS_SG_ID: vpc-05fc397cf6106ca9c
 
 jobs:
   build:
@@ -48,8 +49,8 @@ jobs:
 
     - name: Add Github Actions IP to Security group
       run: |
-        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32 --vpc-id vpc-05fc397cf6106ca9c
-        aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32 --vpc-id vpc-05fc397cf6106ca9c
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
