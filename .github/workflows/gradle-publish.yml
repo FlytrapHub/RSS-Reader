@@ -30,9 +30,6 @@ jobs:
         settings-path: ${{ github.workspace }} 
         submodules: true 
 
-    - name: Docker Buildx 설정
-      uses: docker/setup-buildx-action@v1
-
     - name: Gradle로 빌드
       run: |
         chmod +x gradlew
@@ -66,6 +63,8 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ghcr.io/flytrap-ware/app:release
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
