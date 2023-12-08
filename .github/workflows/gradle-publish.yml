@@ -2,7 +2,7 @@ name: Gradle Package
 
 on:
   push:
-    branches: [ "rel/test-1" ]
+    branches: ["rel/test-1"]
 
 env:
   working-directory: .
@@ -20,54 +20,53 @@ jobs:
 
     steps:
 
-    - name: Get Github action IP
+    - name: Github Action IP 가져오기
       id: ip
       uses: haythem/public-ip@v1.2
-       
+
     - uses: actions/checkout@v3
-    - name: Set up JDK 17
+
+    - name: JDK 17 설정
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml 
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-        submodules: true # submodule 이있습니다.
+        server-id: github 
+        settings-path: ${{ github.workspace }} 
+        submodules: true 
 
-    - name: Build with Gradle
+    - name: Docker Buildx 설정
+      uses: docker/setup-buildx-action@v1
+
+    - name: Gradle로 빌드
       run: |
         chmod +x gradlew
-        # ./gradlew clean build
         ./gradlew clean build -x test
-         
-    - name: Configure AWS credentials
+
+    - name: AWS 자격 증명 설정
       uses: aws-actions/configure-aws-credentials@v1
       with:
          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
          aws-region: ${{env.AWS_REGION}}
 
-    - name: Add Github Actions IP to Security group
+    - name: 보안 그룹에 Github Actions IP 추가
       run: |
         aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 5000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
         aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{env.AWS_REGION}}
 
-
-    - name: Build, tag, and push image to Amazon EC2
+    - name: 이미지 빌드, 태그 설정, Amazon EC2에 푸시
       id: build-image
       env:
         IMAGE_TAG: ${{ github.sha }}
-        IMAGE_TAG_LATEST: latest  # "latest" 태그 추가
+        IMAGE_TAG_LATEST: latest
       run: |
+        docker buildx create --use
         docker buildx build --platform linux/amd64 -t rss-app:$IMAGE_TAG -t $EC2_REGISTRY/rss-app:$IMAGE_TAG .
         docker push $EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST
         echo "image=$EC2_REGISTRY/rss-app:$IMAGE_TAG_LATEST" >> $GITHUB_ENV
 
-    - name: executing remote ssh commands using password
+    - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AWS_HOST }}
@@ -76,10 +75,6 @@ jobs:
         script: |
           ./run.sh
 
-    - name: Remove Github Actions IP from security group
+    - name: 보안 그룹에서 Github Actions IP 제거
       run: |
          aws ec2 revoke-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{env.AWS_REGION}}
