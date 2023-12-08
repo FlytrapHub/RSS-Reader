@@ -7,7 +7,6 @@ on:
 env:
   working-directory: .
   AWS_REGION: ap-northeast-2                   
-  EC2_REPOSITORY: 'ghcr.io/Flytrap-Ware'
   AWS_SG_NAME: FlytrapDevelopment
   AWS_SG_ID: sg-0895e77b2da12a6c9
 
@@ -54,8 +53,9 @@ jobs:
     - name: 이미지 빌드, 태그 설정, Amazon EC2에 푸시
       id: build-image
       run: |
-        docker build --platform amd64 --build-arg DEPENDENCY=build/dependency -f ./Dockerfile -t ${{env.EC2_REPOSITORY}}/app .
-        docker push ${{ env.EC2_REPOSITORY }}/app
+        docker login https://ghcr.io -u Flytrap-Ware
+        docker build --platform amd64 --build-arg DEPENDENCY=build/dependency -f ./Dockerfile -t ghcr.io/Flytrap-ware/app .
+        docker push  ghcr.io/Flytrap-ware/app
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
