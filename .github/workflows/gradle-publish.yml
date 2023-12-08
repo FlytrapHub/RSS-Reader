@@ -65,7 +65,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/${{secrets.USER}}/app:release
+        tags: ghcr.io/flytrap-ware/app:release
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
