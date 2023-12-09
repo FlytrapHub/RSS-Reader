@@ -34,6 +34,9 @@ jobs:
         server-id: github 
         settings-path: ${{ github.workspace }} 
         
+    - name: Initialize and Update Submodules
+      run: git submodule update --init --recursive
+
     - name: Gradle로 빌드
       run: |
         chmod +x gradlew
