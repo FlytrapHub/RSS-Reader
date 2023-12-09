@@ -12,7 +12,7 @@ services:
       - was-dev
 
   was-dev:
-    image: ghcr.io/flytrap-ware/rss-reader:latest
+    image: ghcr.io/flytrap-ware/rss-reader:release
     ports:
       - "8080:8080"
     container_name: was-dev
