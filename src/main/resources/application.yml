@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: prod
     group:
         local: [ local ] # localhost
     include: [ admin, oauth, auth ]

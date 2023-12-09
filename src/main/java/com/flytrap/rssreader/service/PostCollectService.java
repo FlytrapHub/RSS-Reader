@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventPublisher;
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
@@ -9,12 +10,13 @@ import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import com.flytrap.rssreader.service.alert.AlertFacadeService;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,6 @@ public class PostCollectService {
     private final PostEntityJpaRepository postEntityJpaRepository;
     private final SubscribeEventPublisher publisher;
     private final AlertFacadeService alertFacadeService;
-    private final TaskExecutor taskExecutor;
 
     @Scheduled(fixedDelay = TEN_MINUTE)
     public void collectPosts() {
@@ -40,7 +41,6 @@ public class PostCollectService {
             processPostCollectionAsync(subscribe);
         }
         //TODO 스케줄 작업이 끝나면 알림 envet작업이 발생한다. 큐에 담긴 이벤트를 발행한다.
-        log.info("alert 실행");
         alertFacadeService.alert();
     }
 
@@ -50,11 +50,19 @@ public class PostCollectService {
      * @param subscribe 구독한 블로그
      */
     private void processPostCollectionAsync(SubscribeEntity subscribe) {
-        taskExecutor.execute(() -> postParser.parseRssDocuments(subscribe.getUrl())
-                .ifPresent(resource -> {
-                    updateSubscribeTitle(resource, subscribe);
-                    savePosts(resource, subscribe);
-                }));
+        CompletableFuture<Map<String, String>> futurePosts = CompletableFuture.supplyAsync(() ->
+                postParser.parseRssDocuments(subscribe.getUrl())
+                        .map(resource -> {
+                            updateSubscribeTitle(resource, subscribe);
+                            return savePosts(resource, subscribe);
+                        })
+                        .orElse(new HashMap<>()));
+
+        if (!futurePosts.join().isEmpty()) {
+            SubscribeEvent event = new SubscribeEvent(subscribe.getId(),
+                    Collections.unmodifiableMap(futurePosts.join()));
+            publisher.publish(event);
+        }
     }
 
     private void updateSubscribeTitle(RssSubscribeResource subscribeResource,
@@ -63,11 +71,14 @@ public class PostCollectService {
         subscribeEntityJpaRepository.save(subscribe);
     }
 
-    private void savePosts(RssSubscribeResource subscribeResource, SubscribeEntity subscribe) {
+    //TODO: 글이 새로 추가되면 슬랙에 보낼URL을 기억한다.
+    private Map<String, String> savePosts(RssSubscribeResource subscribeResource,
+            SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(
                 subscribe);
 
         Map<String, PostEntity> postMap = convertListToHashSet(posts);
+        Map<String, String> postUrlMap = new HashMap<>();
 
         for (RssItemResource itemResource : subscribeResource.itemResources()) {
             PostEntity post;
@@ -77,12 +88,11 @@ public class PostCollectService {
                 post.updateBy(itemResource);
             } else {
                 post = PostEntity.from(itemResource, subscribe);
+                postUrlMap.put(post.getGuid(), post.getTitle());
             }
-
             postEntityJpaRepository.save(post);
         }
-        //TODO 새로운 POST가 수집 되면  큐에 구독을 담는다 이것을 이벤트로 발생
-        publisher.publish(subscribe.toDomain());
+        return postUrlMap;
     }
 
     private static Map<String, PostEntity> convertListToHashSet

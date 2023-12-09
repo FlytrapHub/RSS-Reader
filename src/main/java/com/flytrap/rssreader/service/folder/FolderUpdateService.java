@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.folder;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.folder.SharedStatus;

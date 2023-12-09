@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,9 +14,11 @@ import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
 import com.flytrap.rssreader.service.alert.AlertService;
+import com.flytrap.rssreader.service.alert.platform.SlackAlarmService;
+import com.flytrap.rssreader.service.dto.AlertParam;
+import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +33,9 @@ class AlertServiceTest {
 
     @Mock
     AlertEntityJpaRepository alertRepository;
+
+    @Mock
+    SlackAlarmService slackAlarmService;
 
     @InjectMocks
     AlertService alertService;
@@ -51,7 +57,7 @@ class AlertServiceTest {
                             0); // Get the passed AlertEntity
                     Integer serviceId = savedEntity.getServiceId();
                     AlertPlatform platform = AlertPlatform.ofCode(serviceId);
-                    Assertions.assertEquals(platform.getValue(), slack.getValue());
+                    assertEquals(platform.getValue(), slack.getValue());
                     return savedEntity;
                 });
 
@@ -81,5 +87,23 @@ class AlertServiceTest {
         SoftAssertions.assertSoftly(softAssertions -> {
             verify(alertRepository, times(1)).delete(any());
         });
+    }
+
+    @Test
+    @DisplayName("특정 플랫폼 알람 받기")
+    void testNotifyPlatform() {
+
+        // then
+        AlertParam alertParam = new AlertParam(Map.of(
+                "test_url1", "test_title 1",
+                "test_url2", "test_title 2",
+                "test_url3", "test_title 3"
+        ), "folderName");
+
+        // when
+        alertService.notifyPlatform(alertParam);
+
+        // then
+        verify(slackAlarmService).notifyReturn(alertParam);
     }
 }

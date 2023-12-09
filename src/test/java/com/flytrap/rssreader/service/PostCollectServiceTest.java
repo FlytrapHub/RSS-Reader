@@ -5,7 +5,6 @@ import static com.flytrap.rssreader.fixture.FixtureFactory.generate50RssItemReso
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateSingleSubscribeEntityList;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doAnswer;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
@@ -15,6 +14,7 @@ import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
+import com.flytrap.rssreader.service.alert.AlertFacadeService;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,14 +24,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.task.TaskExecutor;
 
 @DisplayName("PostCollect 서비스 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class PostCollectServiceTest {
-
-    @Mock
-    TaskExecutor taskExecutor;
 
     @Mock
     RssPostParser postParser;
@@ -42,8 +38,12 @@ class PostCollectServiceTest {
     @Mock
     PostEntityJpaRepository postEntityJpaRepository;
 
+    @Mock
+    AlertFacadeService alertFacadeService;
+
     @InjectMocks
     PostCollectService postCollectService;
+
 
     @BeforeEach
     void init() {
@@ -51,11 +51,7 @@ class PostCollectServiceTest {
         when(subscribeEntityJpaRepository.findAll()).thenReturn(subscribes);
         when(postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(any()))
                 .thenReturn(generate100PostEntityList());
-        doAnswer(invocation -> {
-            Runnable runnable = invocation.getArgument(0);
-            runnable.run();
-            return null;
-        }).when(taskExecutor).execute(any());
+
     }
 
     @DisplayName("RSS 문서에서 파싱된 게시글 목록을 모두 DB에 저장할 수 있다.")
@@ -63,15 +59,17 @@ class PostCollectServiceTest {
     void collectPosts() throws InterruptedException {
 
         // given
-        RssSubscribeResource subscribeResource = new RssSubscribeResource("title", generate50RssItemResourceList());
+        RssSubscribeResource subscribeResource = new RssSubscribeResource("title",
+                generate50RssItemResourceList());
+
         when(postParser.parseRssDocuments(anyString()))
                 .thenReturn(Optional.of(subscribeResource));
 
         // when
         postCollectService.collectPosts();
 
-        // then
-        verify(postEntityJpaRepository, times(subscribeResource.itemResources().size())).save(any());
+        verify(postEntityJpaRepository, times(subscribeResource.itemResources().size()))
+                .save(any());
+        verify(alertFacadeService, times(1)).alert();
     }
-
 }
