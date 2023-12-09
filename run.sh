@@ -2,12 +2,11 @@
 
 echo "🏁 Script Start."
 echo "👉 Pulling github repository..."
-cd RSS-Reader/
 git pull origin release
 
 echo "👉 Pulling backend Docker image..."
 cd ..
-cat TOKEN.txt | docker login https://ghcr.io -u outsideris --password-stdin
+cat token/TOKEN.txt | docker login https://ghcr.io -u outsideris --password-stdin
 sudo docker pull ghcr.io/flytrap-ware/rss-reader:release
 
 echo "👉 Starting Docker Compose..."
