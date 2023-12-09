@@ -1,7 +1,6 @@
 FROM openjdk:17
 
-WORKDIR /application
-COPY ./build/libs/*.jar application.jar
+ARG JAR_FILE=/build/libs/*-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
 
-
-ENTRYPOINT ["java", "-jar", "/application.jar"]
+ENTRYPOINT ["java","-jar","/app.jar"]
