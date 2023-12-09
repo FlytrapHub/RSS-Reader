@@ -74,6 +74,7 @@ jobs:
         key: ${{ secrets.AWS_KEY }}
         script: |
           cd RSS-Reader/
+          chmod +x ./run.sh
           ./run.sh
 
     - name: 보안 그룹에서 Github Actions IP 제거
