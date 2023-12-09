@@ -1,15 +1,6 @@
 version: "3"
 
 services:
-#  registry:
-#    image: registry
-#    restart: always
-#    container_name: registry
-#    volumes:
-#      - registry-data:/var/lib/registry/docker/registry/v2
-#    ports:
-#      - "5000:5000"
-
   balancer:
     image: nginx
     container_name: balancer
@@ -19,19 +10,12 @@ services:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
       - was-dev
-      - web-dev
 
   was-dev:
     image: registry:latest
     ports:
       - "8080:8080"
     container_name: was-dev
-
-#  web-dev:
-#    image: 566827815182.dkr.ecr.ap-northeast-2.amazonaws.com/labelingtool-web:latest
-#    ports:
-#      - "8081:80"
-#    container_name: web-dev
 
 #  redis:
 #    image: redis:latest
@@ -55,4 +39,3 @@ services:
 
 volumes:
   redis-data:
-  registry-data:
