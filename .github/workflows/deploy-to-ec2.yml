@@ -46,7 +46,7 @@ jobs:
 
     - name: 보안 그룹에 Github Actions IP 추가
       run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.publicip.outputs.ip }}/32
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -80,4 +80,4 @@ jobs:
 
     - name: 보안 그룹에서 Github Actions IP 제거
       run: |
-         aws ec2 revoke-security-group-ingress  --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+         aws ec2 revoke-security-group-ingress  --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.publicip.outputs.ip }}/32
