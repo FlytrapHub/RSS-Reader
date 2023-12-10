@@ -38,7 +38,7 @@ jobs:
       run: |
         git submodule update --init --recursive
         chmod +x gradlew
-        ./gradlew clean build -x test
+        ./gradlew clean build
 
     - name: AWS 자격 증명 설정
       uses: aws-actions/configure-aws-credentials@v1
