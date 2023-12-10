@@ -3,6 +3,7 @@ spring:
     active: prod
     group:
         local: [ local ] # localhost
+        prod: [ prod ] # aws ec2
     include: [ admin, oauth, auth ]
   jpa:
     open-in-view: false

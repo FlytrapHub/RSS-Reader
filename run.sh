@@ -6,8 +6,8 @@ git pull origin release
 
 echo "👉 Pulling backend Docker image..."
 cd ..
-cat token/TOKEN.txt | docker login https://ghcr.io -u outsideris --password-stdin
-sudo docker pull ghcr.io/flytrap-ware/rss-reader:release
+cat token/TOKEN.txt | docker login ghcr.io -u new-pow --password-stdin
+docker pull ghcr.io/flytrap-ware/rss-reader:release
 
 echo "👉 Starting Docker Compose..."
 cd RSS-Reader/

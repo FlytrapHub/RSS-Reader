@@ -7,35 +7,35 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - was-dev
 
   was-dev:
-    image: ghcr.io/flytrap-ware/rss-reader:latest
+    image: ghcr.io/flytrap-ware/rss-reader:release
     ports:
       - "8080:8080"
     container_name: was-dev
 
-#  redis:
-#    image: redis:latest
-#    restart: always
-#    container_name: redis_container
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - redis-data:/data/redis
-#
-#  mysql:
-#    image: mysql:latest
-#    restart: always
-#    container_name: mysql_container
-#    ports:
-#      - "3306:3306"
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=12341234
-#    volumes:
-#      - ../test/data/mysql:/var/lib/mysql
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data/redis
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: mysql_container
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=12341234
+    volumes:
+      - ../test/data/mysql:/var/lib/mysql
 
 volumes:
   redis-data:
