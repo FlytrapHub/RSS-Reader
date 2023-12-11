@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.infrastructure.properties.AdminProperties;
 import com.flytrap.rssreader.infrastructure.properties.AuthProperties;
+import com.flytrap.rssreader.presentation.controller.api.AdminControllerApi;
 import com.flytrap.rssreader.presentation.dto.Login;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController {
+public class AdminController implements AdminControllerApi {
 
     private final AdminProperties properties;
     private final AuthProperties authProperties;

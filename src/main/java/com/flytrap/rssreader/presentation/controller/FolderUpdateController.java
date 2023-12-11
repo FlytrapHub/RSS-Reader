@@ -4,6 +4,7 @@ import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
+import com.flytrap.rssreader.presentation.controller.api.FolderUpdateControllerApi;
 import com.flytrap.rssreader.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
-public class FolderUpdateController {
+public class FolderUpdateController implements FolderUpdateControllerApi {
 
     private final FolderUpdateService folderService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
