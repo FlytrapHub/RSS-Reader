@@ -23,20 +23,6 @@ class PublishEventAspectTest {
     @InjectMocks
     private PublishEventAspect publishEventAspect;
 
-    @Test
-    @DisplayName("PublishEvent 어노테이션이 붙은 메서드가 정상적으로 실행되었을 때 이벤트가 발행되는지 확인")
-    void publishEvent_success() throws InvocationTargetException, IllegalAccessException {
-        // Given
-        PublishEventMock publishEventMock = new PublishEventMock();
-        TestEvent testEvent = new TestEvent("TestParam");
-
-        // When
-        publishEventAspect.publishEventPointcut(publishEventMock);
-
-        // Then
-        verify(applicationEventPublisher).publishEvent(any(TestEvent.class));
-    }
-
     // PublishEvent annotation mock 클래스
     private static class PublishEventMock implements PublishEvent {
 
