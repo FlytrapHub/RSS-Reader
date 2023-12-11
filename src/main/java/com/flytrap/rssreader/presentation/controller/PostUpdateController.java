@@ -1,11 +1,10 @@
 package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.controller.api.PostUpdateControllerApi;
 import com.flytrap.rssreader.presentation.dto.ReactionRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.SharedFolderReadService;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.PostOpenService;
 import com.flytrap.rssreader.service.ReactionService;
 import jakarta.validation.Valid;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
-public class PostUpdateController {
+public class PostUpdateController implements PostUpdateControllerApi {
 
     private final ReactionService reactionService;
     private final PostOpenService postOpenService;
