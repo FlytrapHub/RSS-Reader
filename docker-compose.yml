@@ -26,16 +26,5 @@ services:
     volumes:
       - redis-data:/data/redis
 
-  mysql:
-    image: mysql:latest
-    restart: always
-    container_name: mysql_container
-    ports:
-      - "3310:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=12341234
-    volumes:
-      - ../test/data/mysql:/var/lib/mysql
-
 volumes:
   redis-data:
