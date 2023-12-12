@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.controller.api.FolderReadControllerApi;
 import com.flytrap.rssreader.presentation.dto.Folders;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.facade.InvitedToFolderFacade;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
-public class FolderReadController {
+public class FolderReadController implements FolderReadControllerApi {
 
     private final MyFolderFacade myFolderFacade;
     private final SubscribeInFolderFacade subscribeInFolderFacade;

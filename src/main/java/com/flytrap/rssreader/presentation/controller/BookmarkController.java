@@ -3,6 +3,7 @@ package com.flytrap.rssreader.presentation.controller;
 import com.flytrap.rssreader.domain.bookmark.Bookmark;
 import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.controller.api.BookmarkControllerApi;
 import com.flytrap.rssreader.presentation.dto.BookmarkRequest;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.PostResponse;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/bookmarks")
-public class BookmarkController {
+public class BookmarkController implements BookmarkControllerApi {
 
     private static final String DELETE_BOOKMARK_MESSAGE = "북마크가 삭제되었습니다. : ";
 
