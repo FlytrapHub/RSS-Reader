@@ -36,7 +36,7 @@ public class FolderSubscribeService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Folder, List<Long>> getFolderSubscribeIds(List<Folder> folders) {
+    public Map<Folder, List<Long>> getFolderSubscribeIds(List<? extends Folder> folders) {
         List<Long> folderIds = folders.stream()
                 .map(Folder::getId)
                 .toList();

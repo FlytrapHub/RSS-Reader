@@ -20,12 +20,12 @@ public class InvitedToFolderFacade {
     private final SharedFolderReadService sharedFolderReadService;
     private final MemberService memberService;
 
-    public List<Folder> addInvitedMembersInFolder(List<Folder> folders) {
+    public List<? extends Folder> addInvitedMembersInFolder(List<? extends Folder> folders) {
         List<Long> folderIds = folders.stream().map(Folder::getId).toList();
         Map<Long, List<Long>> membersInFolders =    // 폴더마다 초대된 멤버 목록
                 sharedFolderReadService.findMembersInFolders(folderIds);
 
-        Map<Long, Member> memberInfo = getMemberInfomations(membersInFolders);
+        Map<Long, Member> memberInfo = getMemberInformation(membersInFolders);
 
         return folders.stream()
                 .map(folder -> injectMemberInfo(membersInFolders, memberInfo, folder))
@@ -38,13 +38,13 @@ public class InvitedToFolderFacade {
         if (folder.getSharedStatus() == SharedStatus.PRIVATE) {
             return folder;
         }
-        List<Member> members = membersInFolders.get(folder.getId()).stream()
+        List<Member> members = membersInFolders.getOrDefault(folder.getId(), List.of()).stream()
                 .map(memberInfo::get)
                 .toList();
         return SharedFolder.of(folder, members);
     }
 
-    private Map<Long, Member> getMemberInfomations(Map<Long, List<Long>> membersInFolders) {
+    private Map<Long, Member> getMemberInformation(Map<Long, List<Long>> membersInFolders) {
         Set<Long> memberSet = membersInFolders.values().stream()
                 .flatMap(List::stream)
                 .collect(Collectors.toSet());

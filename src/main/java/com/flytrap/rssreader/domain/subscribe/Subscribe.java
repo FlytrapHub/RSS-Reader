@@ -20,7 +20,7 @@ public class Subscribe implements DefaultDomain {
     private String description;
 
     @Builder
-    public Subscribe(Long id, String title, String url, String description) {
+    protected Subscribe(Long id, String title, String url, String description) {
         this.id = id;
         this.title = title;
         this.url = url;

@@ -19,7 +19,7 @@ public class SubscribeInFolderFacade {
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
 
-    public List<Folder> addSubscribesInFolder(List<Folder> folders) {
+    public List<? extends Folder> addSubscribesInFolder(List<? extends Folder> folders) {
         Map<Folder, List<Long>> folderSubscribeIds =
                 folderSubscribeService.getFolderSubscribeIds(folders);
 
@@ -30,7 +30,7 @@ public class SubscribeInFolderFacade {
                 .collect(Collectors.toMap(Subscribe::getId, subscribe -> subscribe));
 
         folders.forEach(folder -> {
-            List<Long> subscribeIdsInFolder = folderSubscribeIds.get(folder);
+            List<Long> subscribeIdsInFolder = folderSubscribeIds.getOrDefault(folder, List.of());
             subscribeIdsInFolder.stream()
                     .map(subscribes::get)
                     .forEach(e -> folder.addSubscribe(FolderSubscribe.from(e)));
