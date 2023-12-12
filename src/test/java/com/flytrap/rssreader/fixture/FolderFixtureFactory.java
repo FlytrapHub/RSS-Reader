@@ -32,4 +32,14 @@ public class FolderFixtureFactory {
                 .build();
     }
 
+    public static Folder generateSharedFolder() {
+        return Folder.builder()
+                .id(FolderFields.id)
+                .name(FolderFields.name)
+                .memberId(FolderFields.member.getId())
+                .isShared(true)
+                .isDeleted(false)
+                .build();
+    }
+
 }
