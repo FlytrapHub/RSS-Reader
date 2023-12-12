@@ -2,7 +2,6 @@ package com.flytrap.rssreader.presentation.dto;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.folder.SharedStatus;
-import com.flytrap.rssreader.domain.shared.SharedFolder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.stream.Collectors;
 
 public record Folders(Map<SharedStatus, List<FolderListSummary>> folders) {
 
-    public static Folders from(List<Folder> unreadCountInSubscribes) {
+    public static Folders from(List<? extends Folder> unreadCountInSubscribes) {
         Map<SharedStatus, List<Folder>> collect = unreadCountInSubscribes.stream()
                 .collect(Collectors.groupingBy(Folder::getSharedStatus));
 

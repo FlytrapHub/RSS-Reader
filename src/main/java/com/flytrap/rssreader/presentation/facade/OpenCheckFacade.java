@@ -18,7 +18,7 @@ public class OpenCheckFacade {
     private final PostOpenService postOpenService;
 
 
-    public List<Folder> addUnreadCountInSubscribes(long id, List<Folder> foldersWithSubscribe) {
+    public List<? extends Folder> addUnreadCountInSubscribes(long id, List<? extends Folder> foldersWithSubscribe) {
         List<Long> subscribes = foldersWithSubscribe.stream().map(Folder::getSubscribeIds)
                 .flatMap(List::stream).toList();
 
