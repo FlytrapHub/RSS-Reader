@@ -30,7 +30,7 @@ public class FolderReadController implements FolderReadControllerApi {
     public ApplicationResponse<Folders> getFolders(@Login SessionMember member) {
 
         // 내가 소속된 폴더 목록 반환
-        List<Folder> folders = myFolderFacade.getMyFolders(member.id());
+        List<? extends Folder> folders = myFolderFacade.getMyFolders(member.id());
 
         // 폴더당 블로그 목록 추가
         folders = subscribeInFolderFacade.addSubscribesInFolder(folders);
