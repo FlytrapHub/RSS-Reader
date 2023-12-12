@@ -14,6 +14,7 @@ import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.service.alert.AlertFacadeService;
 import com.flytrap.rssreader.service.alert.AlertService;
+import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
@@ -87,4 +88,3 @@ class AlertFacadeServiceTest {
         verify(alertService, never()).notifyAlert(any(), anyString());
     }
 }
-
