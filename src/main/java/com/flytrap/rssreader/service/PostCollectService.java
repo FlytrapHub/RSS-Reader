@@ -25,7 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostCollectService {
 
-    private static final int TEN_MINUTE = 600_000;
+  //  private static final int TEN_MINUTE = 600_000;
+    private static final int TEN_MINUTE = 1000;
 
     private final RssPostParser postParser;
     private final SubscribeEntityJpaRepository subscribeEntityJpaRepository;
