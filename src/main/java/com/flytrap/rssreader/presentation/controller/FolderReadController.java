@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.controller.api.FolderReadControllerApi;
 import com.flytrap.rssreader.presentation.dto.Folders;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.facade.InvitedToFolderFacade;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
-public class FolderReadController {
+public class FolderReadController implements FolderReadControllerApi {
 
     private final MyFolderFacade myFolderFacade;
     private final SubscribeInFolderFacade subscribeInFolderFacade;
@@ -29,7 +30,7 @@ public class FolderReadController {
     public ApplicationResponse<Folders> getFolders(@Login SessionMember member) {
 
         // 내가 소속된 폴더 목록 반환
-        List<Folder> folders = myFolderFacade.getMyFolders(member.id());
+        List<? extends Folder> folders = myFolderFacade.getMyFolders(member.id());
 
         // 폴더당 블로그 목록 추가
         folders = subscribeInFolderFacade.addSubscribesInFolder(folders);

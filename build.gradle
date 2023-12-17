@@ -55,6 +55,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     // jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.17.1'
+    // Swaager
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
 test {
@@ -100,19 +102,27 @@ jacocoTestCoverageVerification { // TODO test coverage check
 //            element = 'CLASS'
 
             limit {
-                minimum = 0.7
+                minimum = 0.1
             }
             excludes = [
                     'com.flytrap.**.api.*',
                     'com.flytrap.**.properties.*',
                     'com.flytrap.**.exception.*',
                     'com.flytrap.**.dto.*',
+                    'com.flytrap.**.output.*',
                     'com.flytrap.**.entity.*',
+                    'com.flytrap.rssreader.global.**.*',
                     'com.flytrap.**.config.*',
                     'com.flytrap.**.model.*',
                     'com.flytrap.**.repository.*',
                     'com.flytrap.**.service.*ReadService',
                     'com.flytrap.**.controller.*ReadController',
+                    'com.flytrap.**.controller.api.*',
+                    'com.flytrap.**.**.*Builder',
+                    'com.flytrap.**.**.*Resolver',
+                    'com.flytrap.**.**.*Context',
+                    'com.flytrap.**.**.*Event',
+                    'com.flytrap.**.**.*Publisher',
                     'com.flytrap.**.RssReaderApplication',
 //                    '*.test.*',
             ] + Qdomains

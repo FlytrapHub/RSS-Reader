@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.controller;
 
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.controller.api.PostListReadControllerApi;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.PostResponse.PostListResponse;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class PostListReadController {
+public class PostListReadController implements PostListReadControllerApi {
 
     private final PostListReadService postListReadService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;

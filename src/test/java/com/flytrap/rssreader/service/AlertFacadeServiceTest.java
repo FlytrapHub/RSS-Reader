@@ -88,4 +88,3 @@ class AlertFacadeServiceTest {
         verify(alertService, never()).notifyAlert(any(), anyString());
     }
 }
-

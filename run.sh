@@ -1,6 +1,20 @@
-java -javaagent:/c/Users/vugil/scouter/agent.java/scouter.agent.jar \
--Dscouter.config=/c/Users/vugil/scouter/agent.java/conf/scouter.conf \
--jar "/c/spring_framework/rss-reader/build/libs/rss-reader-0.0.1-SNAPSHOT.jar"
 
-#ngrinder명령어
-java  -jar ngrinder-controller-3.5.8.war --port 7070
+#!/bin/bash
+
+echo "🏁 Script Start."
+echo "👉 Pulling github repository..."
+git pull origin release
+
+echo "👉 Pulling backend Docker image..."
+cd ..
+cat token/TOKEN.txt | docker login ghcr.io -u new-pow --password-stdin
+docker pull ghcr.io/flytrap-ware/rss-reader:release
+
+echo "👉 Starting Docker Compose..."
+cd RSS-Reader/
+sudo docker-compose up -d
+
+echo "👉 Cleaning up unused Docker images..."
+sudo docker image prune -a -f
+
+echo "🫡  Script execution completed."

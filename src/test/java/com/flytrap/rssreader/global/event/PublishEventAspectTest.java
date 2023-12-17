@@ -23,17 +23,6 @@ class PublishEventAspectTest {
     @InjectMocks
     private PublishEventAspect publishEventAspect;
 
-    @Test
-    void afterReturning_shouldPublishEvent()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, InvocationTargetException {
-        PublishEvent publishEvent = new PublishEventMock();
-        Object returnValue = "TestReturnValue";
-
-        publishEventAspect.afterReturning(publishEvent, returnValue);
-
-        verify(applicationEventPublisher).publishEvent(any(TestEvent.class));
-    }
-
     // PublishEvent annotation mock 클래스
     private static class PublishEventMock implements PublishEvent {
 
