@@ -1,15 +1,11 @@
 package com.flytrap.rssreader.presentation.filter;
 
-import com.flytrap.rssreader.global.exception.ApplicationException;
 import com.flytrap.rssreader.global.model.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +23,6 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        log.info(request.getInputStream().toString());
         try {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException e) {
