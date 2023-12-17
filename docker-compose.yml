@@ -10,22 +10,22 @@ services:
 #    ports:
 #      - "5000:5000"
 
-  balancer:
-    image: nginx
-    container_name: balancer
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
     ports:
       - "80:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
-    depends_on:
-      - was-dev
-      - web-dev
+#    depends_on:
+#      - was-dev
+#      - web-dev
 
-  was-dev:
-    image: registry:latest
-    ports:
-      - "8080:8080"
-    container_name: was-dev
+#  was-dev:
+#    image: registry:latest
+#    ports:
+#      - "8080:8080"
+#    container_name: was-dev
 
 #  web-dev:
 #    image: 566827815182.dkr.ecr.ap-northeast-2.amazonaws.com/labelingtool-web:latest
@@ -33,15 +33,15 @@ services:
 #      - "8081:80"
 #    container_name: web-dev
 
-#  redis:
-#    image: redis:latest
-#    restart: always
-#    container_name: redis_container
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - redis-data:/data/redis
-#
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data/redis
+
 #  mysql:
 #    image: mysql:latest
 #    restart: always
