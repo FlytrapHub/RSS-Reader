@@ -57,4 +57,7 @@ public class SubscribeService {
                 .toList();
     }
 
+    public List<SubscribeEntity> findSubscribeList() {
+        return subscribeRepository.findAll();
+    }
 }
