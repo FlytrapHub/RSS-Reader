@@ -20,8 +20,8 @@ public class AlertFacadeService {
     private final AlertService alertService;
     private final FolderReadService folderReadService;
 
-    @Async("taskScheduler")
-    @Scheduled(fixedRate = 1000)
+    @Async("alertThreadExecutor")
+    @Scheduled(fixedRate = 1000L)
     public void alert() {
         //TODO: 먼저 큐에있는 Susbscirbe를 확인한다.
         //TODO:큐를 확인해 큐의 Subscribe로 구독된 Folder를 찾는다. -> Alert를 찾는다 -> Member에게 알림을 고한다.
@@ -32,7 +32,7 @@ public class AlertFacadeService {
             List<AlertEntity> alertList = alertService.getAlertList(event.subscribeId());
             if (!alertList.isEmpty()) {
                 alertList.forEach(alertEntity -> alertService.notifyAlert(event.posts(),
-                            folderReadService.findById(alertEntity.getFolderId()).getName()));
+                        folderReadService.findById(alertEntity.getFolderId()).getName()));
             }
         }
     }
