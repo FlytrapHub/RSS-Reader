@@ -42,11 +42,6 @@ public interface FolderUpdateControllerApi {
         @Login SessionMember member);
 
     // TODO: Swaager 어노테이션 붙여주세요.
-    ApplicationResponse<SubscribeRequest.ResponseList> read(
-        @PathVariable Long folderId,
-        @Login SessionMember member);
-
-    // TODO: Swaager 어노테이션 붙여주세요.
     ApplicationResponse<Long> onAlert(
         @PathVariable Long folderId,
         @Valid @RequestBody AlertRequest request,
