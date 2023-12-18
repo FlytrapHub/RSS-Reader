@@ -7,8 +7,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PostBulkInsertQueueInitializer {
 
+
+    private static final int QUEUE_SIZE = 1_000;
+
+    private final PostBulkInsertQueue postBulkInsertQueue = PostBulkInsertQueue.of(QUEUE_SIZE);
+
     @Bean
     public PostBulkInsertQueue transactionPostBulkInsertQueue() {
-        return PostBulkInsertQueue.of(1_00);
+        return postBulkInsertQueue;
     }
 }

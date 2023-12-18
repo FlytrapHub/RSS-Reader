@@ -55,10 +55,9 @@ public class PostBulkInsertQueue {
     public List<PostEntity> pollBatch(int batchSize) {
         List<PostEntity> postsToInsert = new ArrayList<>();
         for (int i = 0; i < batchSize && !queue.isEmpty(); i++) {
-            log.info("======================================");
-            log.info("bulkInsertQueue.size = {}", queue.size());
-            log.info("bulkInsertQueue.hashCode = {}", queue.hashCode());
             postsToInsert.add(queue.poll());
+            log.info("======================================");
+            log.info("bulkInsertQueue.peek = {}", queue.peek());
         }
         return postsToInsert;
     }
