@@ -19,6 +19,7 @@ public class SubscribeEventListener {
     public void onEvent(SubscribeEvent event) {
         if (eventQueue.isFull()) {
             log.info("eventQueue full ");
+            return;
         }
         eventQueue.offer(event);
     }
