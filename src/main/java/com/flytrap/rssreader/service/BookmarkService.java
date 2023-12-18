@@ -39,9 +39,9 @@ public class BookmarkService {
         return bookmarkRepository.save(BookmarkEntity.create(member.id(), post.getId())).toDomain();
     }
 
-    public void removeBookmark(Bookmark bookmark) {
+    public void removeBookmark(SessionMember member, Long postId) {
 
-        bookmarkRepository.delete(BookmarkEntity.from(bookmark));
+        bookmarkRepository.deleteAllByMemberIdAndPostId(member.id(), postId);
     }
 
     public boolean existBookmark(SessionMember member, Post post) {
