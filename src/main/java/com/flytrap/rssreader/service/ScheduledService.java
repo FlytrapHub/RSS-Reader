@@ -28,7 +28,7 @@ public class ScheduledService {
     //TODO post크롤링, 큐에inset, 큐에서 poll한다음 alert 발생을 각각의 스레드를 할당해 실행 하도록한다.
 
     //Post 수집 크롤링
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void collectPosts() {
         String threadName = Thread.currentThread().getName();
         log.info("[{}] Collecting posts...", threadName);
@@ -56,11 +56,10 @@ public class ScheduledService {
         String threadName = Thread.currentThread().getName();
         log.info("[{}] Inserting posts into the database...", threadName);
 
-        while (bulkInsertQueue.isRemaining() && bulkInsertQueue.size() > 10) {
-            List<PostEntity> posts = bulkInsertQueue.pollBatch(10);
+        if (bulkInsertQueue.isRemaining() && bulkInsertQueue.size() > 10) {
+            List<PostEntity> posts = bulkInsertQueue.pollBatch(30);
             log.info("---------------------------------------------");
-            log.info("bulkInsertQueue.size = {}", bulkInsertQueue.size());
-            log.info("bulkInsertQueue.hashCode = {}", bulkInsertQueue.hashCode());
+            log.info("bulkInsertQueue.peek = {}", bulkInsertQueue.peek());
             postEntityJpaRepository.saveAll(posts);
         }
         log.info("[{}] Post insertion completed.", threadName);
