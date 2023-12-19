@@ -36,7 +36,6 @@ public class PostCollectService {
      * @return
      */
 
-    //TODO: POST bulk insert 자료구조일종의 자료구조 100개씩 insert
     public CompletableFuture<Map<String, String>> processPostCollectionAsync(
             SubscribeEntity subscribe) {
         return CompletableFuture.supplyAsync(

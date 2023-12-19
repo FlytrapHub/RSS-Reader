@@ -42,7 +42,6 @@ public class ScheduledService {
             if (!future.join().isEmpty()) {
                 SubscribeEvent event = new SubscribeEvent(subscribe.getId(),
                         Collections.unmodifiableMap(future.join()));
-                log.info("future.join.size = {}", future.join().size());
                 publisher.publish(event);
             }
         }
