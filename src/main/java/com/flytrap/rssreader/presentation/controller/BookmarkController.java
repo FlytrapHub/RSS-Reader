@@ -29,16 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bookmarks")
+@RequestMapping("/api")
 public class BookmarkController implements BookmarkControllerApi {
 
-    private static final String DELETE_BOOKMARK_MESSAGE = "북마크가 삭제되었습니다. : ";
+    private static final String DELETE_BOOKMARK_MESSAGE = "북마크가 삭제되었습니다. postId = ";
 
     private final PostService postService;
     private final BookmarkService bookmarkService;
     private final BookmarkVerifyOwnerService bookmarkVerifyOwnerService;
 
-    @GetMapping
+    @GetMapping("/bookmarks")
     public ApplicationResponse<PostListResponse> getBookmarks(
         PostFilter postFilter,
         @PageableDefault(page = 0, size = 15) Pageable pageable,
@@ -55,30 +55,28 @@ public class BookmarkController implements BookmarkControllerApi {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
+    @PostMapping("/posts/{postId}/bookmarks")
     public ApplicationResponse<BookmarkRequest.Response> addBookmark(
-        @RequestBody BookmarkRequest.CreateRequest request,
+        @PathVariable Long postId,
         @Login SessionMember member
     ) {
 
-        Post post = postService.findById(request.postId());
+        Post post = postService.findById(postId);
         Bookmark bookmark = bookmarkService.addBookmark(member, post);
 
         return new ApplicationResponse<>(BookmarkRequest.Response.from(bookmark));
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{bookmarkId}")
+    @DeleteMapping("/posts/{postId}/bookmarks")
     public ApplicationResponse<String> removeBookmark(
-        @PathVariable Long bookmarkId,
+        @PathVariable Long postId,
         @Login SessionMember member
     ) {
 
-        Bookmark bookmark = bookmarkVerifyOwnerService
-            .getVerifiedBookmark(member, bookmarkId);
-        bookmarkService.removeBookmark(bookmark);
+        bookmarkService.removeBookmark(member, postId);
 
-        return new ApplicationResponse<>(DELETE_BOOKMARK_MESSAGE + bookmark.getId());
+        return new ApplicationResponse<>(DELETE_BOOKMARK_MESSAGE + postId);
     }
 
 }
