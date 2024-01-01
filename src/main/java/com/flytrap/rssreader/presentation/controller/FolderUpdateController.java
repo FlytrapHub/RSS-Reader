@@ -104,19 +104,6 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         return new ApplicationResponse<>(null);
     }
 
-    //TODO 요거 ReadController에 옮겨야합니다.
-    @GetMapping("/{folderId}/rss")
-    public ApplicationResponse<SubscribeRequest.ResponseList> read(
-            @PathVariable Long folderId,
-            @Login SessionMember member) {
-
-        //TODO 폴더에 추가된 블로그 리스트 보기 즉 folderId 가 일치하는 구독된 정보를 다가져오기
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        List<Long> list = folderSubscribeService.getFolderSubscribeId(verifiedFolder.getId());
-        List<Subscribe> subscribeList = subscribeService.read(list);
-        return new ApplicationResponse<>(SubscribeRequest.ResponseList.from(subscribeList));
-    }
-
     @PostMapping("/{folderId}/alerts")
     public ApplicationResponse<Long> onAlert(
             @PathVariable Long folderId,
