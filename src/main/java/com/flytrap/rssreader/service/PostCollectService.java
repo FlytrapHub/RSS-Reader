@@ -53,6 +53,7 @@ public class PostCollectService {
     }
 
     //TODO: 글이 새로 추가되면 슬랙에 보낼URL을 기억한다.
+    //TODO: RSS에서 50개를 긁어올 때 findAll 하지말고 APE랑 얘기를 해본다.
     private Map<String, String> savePosts(RssSubscribeResource subscribeResource,
             SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(
