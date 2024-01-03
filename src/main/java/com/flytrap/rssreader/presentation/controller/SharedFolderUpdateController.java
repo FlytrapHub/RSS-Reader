@@ -5,6 +5,7 @@ import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.controller.api.SharedFolderUpdateControllerApi;
 import com.flytrap.rssreader.presentation.dto.InviteMemberRequest;
+import com.flytrap.rssreader.presentation.dto.MemberSummary;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
@@ -34,7 +35,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{folderId}/members")
-    public ApplicationResponse inviteMember(
+    public ApplicationResponse<MemberSummary> inviteMember(
             @PathVariable Long folderId,
             @Login SessionMember loginMember,
             @RequestBody InviteMemberRequest request
@@ -45,7 +46,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
         Member member = memberService.findById(request.inviteeId());
         sharedFolderService.invite(verifiedFolder, member.getId());
 
-        return ApplicationResponse.success("멤버가 초대되었습니다 : " + request.inviteeId());
+        return new ApplicationResponse<>(MemberSummary.from(member));
     }
 
     // 공유 폴더에 사람 나가기 (내가 스스로 나간다)
