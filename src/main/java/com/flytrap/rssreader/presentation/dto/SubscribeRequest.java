@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.presentation.dto;
 
+import com.flytrap.rssreader.domain.folder.FolderSubscribe;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import jakarta.validation.constraints.Size;
 import java.util.List;
@@ -13,11 +14,12 @@ public record SubscribeRequest() {
 
     }
 
-    public record Response(Long subscribeId) {
+    public record Response(Long subscribeId, String subscribeTitle, Integer unreadCount) {
 
         public static SubscribeRequest.Response from(
-                Subscribe subscribe) {
-            return new SubscribeRequest.Response(subscribe.getId());
+            FolderSubscribe folderSubscribe) {
+            return new SubscribeRequest.Response(folderSubscribe.getId(),
+                folderSubscribe.getTitle(), folderSubscribe.getUnreadCount());
         }
     }
 
