@@ -103,7 +103,6 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @Login SessionMember member) {
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        subscribeService.unsubscribe(subscribeId);
         folderSubscribeService.folderUnsubscribe(subscribeId,
             verifiedFolder.getId());
         return new ApplicationResponse<>(null);
