@@ -73,6 +73,10 @@ public class Folder implements DefaultDomain {
         this.sharedStatus = SharedStatus.SHARED;
     }
 
+    public void toPrivate() {
+        this.sharedStatus = SharedStatus.PRIVATE;
+    }
+
     public boolean isOwner(long id) {
         return this.memberId == id;
     }

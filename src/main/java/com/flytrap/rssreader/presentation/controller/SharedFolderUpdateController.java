@@ -51,24 +51,28 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
 
     // 공유 폴더에 사람 나가기 (내가 스스로 나간다)
     @DeleteMapping("/{folderId}/members/me")
-    public ApplicationResponse leaveFolder(
+    public ApplicationResponse<String> leaveFolder(
             @PathVariable Long folderId,
             @Login SessionMember member
     ) {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         sharedFolderService.leave(verifiedFolder, member.id());
+        folderUpdateService.toPrivate(verifiedFolder);
+
         return ApplicationResponse.success();
     }
 
     //공유 폴더에 사람 삭제하기 (만든 사람만)
     @DeleteMapping("/{folderId}/members/{inviteeId}")
-    public ApplicationResponse deleteMember(
+    public ApplicationResponse<String> deleteMember(
             @PathVariable Long folderId,
             @PathVariable Long inviteeId,
             @Login SessionMember member
     ) throws AuthenticationException {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         sharedFolderService.removeFolderMember(verifiedFolder, inviteeId, member.id());
+        folderUpdateService.toPrivate(verifiedFolder);
+
         return ApplicationResponse.success();
     }
 }
