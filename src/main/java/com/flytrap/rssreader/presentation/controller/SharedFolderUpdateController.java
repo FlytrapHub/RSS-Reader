@@ -42,9 +42,9 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
     ) throws AuthenticationException {
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, loginMember.id());
-        folderUpdateService.shareFolder(verifiedFolder);
         Member member = memberService.findById(request.inviteeId());
         sharedFolderService.invite(verifiedFolder, member.getId());
+        folderUpdateService.shareFolder(verifiedFolder);
 
         return new ApplicationResponse<>(MemberSummary.from(member));
     }
