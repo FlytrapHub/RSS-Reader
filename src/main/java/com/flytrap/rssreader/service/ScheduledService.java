@@ -6,6 +6,7 @@ import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,18 +22,19 @@ import org.springframework.stereotype.Service;
 public class ScheduledService {
 
     private final PostCollectService postCollectService;
-    private final SubscribeService subscribeService;
     private final SubscribeEventPublisher publisher;
     private final PostBulkInsertQueue bulkInsertQueue;
     private final PostEntityJpaRepository postEntityJpaRepository;
+    private final SubscribeService subscribeService;
     //TODO post크롤링, 큐에inset, 큐에서 poll한다음 alert 발생을 각각의 스레드를 할당해 실행 하도록한다.
 
     //Post 수집 크롤링
-    @Scheduled(fixedRate = 50000)
+    //스케쥴폴에서 스케쥴 전용 스레드를 할당하고
+    //파서를 이용해 구독당 post를 가져오는건 비동기 병렬 처리
+    @Scheduled(fixedDelay = 3 * 1000)
     public void collectPosts() {
-        String threadName = Thread.currentThread().getName();
-        log.info("[{}] Collecting posts...", threadName);
-
+        log.info(" scheduling1 with " + Thread.currentThread().getName() + " at time: "
+                + LocalDateTime.now());
         List<SubscribeEntity> subscribes = subscribeService.findSubscribeList();
 
         for (SubscribeEntity subscribe : subscribes) {
@@ -45,22 +47,17 @@ public class ScheduledService {
                 publisher.publish(event);
             }
         }
-
-        log.info("[{}] Post collection completed.", threadName);
     }
 
     //queue에 bulk inert 10개씩
-    @Scheduled(fixedRate = 5000)
+    //TODO: 수정해야함
+    @Scheduled(fixedRate = 10000)
     public void queueBulkInsert() {
-        String threadName = Thread.currentThread().getName();
-        log.info("[{}] Inserting posts into the database...", threadName);
-
+        log.info(" scheduling2 with" + Thread.currentThread().getName() + " at time: "
+                + LocalDateTime.now());
         if (bulkInsertQueue.isRemaining() && bulkInsertQueue.size() > 10) {
             List<PostEntity> posts = bulkInsertQueue.pollBatch(30);
-            log.info("---------------------------------------------");
-            log.info("bulkInsertQueue.peek = {}", bulkInsertQueue.peek());
             postEntityJpaRepository.saveAll(posts);
         }
-        log.info("[{}] Post insertion completed.", threadName);
     }
 }
