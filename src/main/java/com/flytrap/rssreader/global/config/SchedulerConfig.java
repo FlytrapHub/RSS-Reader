@@ -13,6 +13,7 @@ public class SchedulerConfig {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(THREADS_COUNT);
+        threadPoolTaskScheduler.setThreadNamePrefix("MY-SCHEDULER-");
         return threadPoolTaskScheduler;
     }
 }
