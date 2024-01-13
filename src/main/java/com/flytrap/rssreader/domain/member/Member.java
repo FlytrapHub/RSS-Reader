@@ -2,7 +2,6 @@ package com.flytrap.rssreader.domain.member;
 
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
-import java.io.Serializable;
 import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,11 +45,12 @@ public class Member implements DefaultDomain {
                 .build();
     }
 
-    public static Member adminOf(long userId, String userName, String userEmail) {
+    public static Member adminOf(long userId, String userName, String userEmail, String profile) {
         return Member.builder()
                 .id(userId)
                 .name(userName)
                 .email(userEmail)
+                .profile(profile)
                 .build();
     }
 

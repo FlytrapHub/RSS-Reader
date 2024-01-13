@@ -4,7 +4,7 @@ import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.controller.api.AuthControllerApi;
 import com.flytrap.rssreader.presentation.dto.Login;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
+import com.flytrap.rssreader.presentation.dto.LoginResponse;
 import com.flytrap.rssreader.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +24,13 @@ public class AuthController implements AuthControllerApi {
 
     @Override
     @PostMapping("/login")
-    public ApplicationResponse<SessionMember> login(@RequestBody Login request,
+    public ApplicationResponse<LoginResponse> login(@RequestBody Login request,
             HttpSession session) {
 
         Member member = authService.doAuthentication(request);
+        authService.login(member, session);
 
-        return new ApplicationResponse<>(authService.login(member, session));
+        return new ApplicationResponse<>(LoginResponse.from(member));
     }
 
     @Override
