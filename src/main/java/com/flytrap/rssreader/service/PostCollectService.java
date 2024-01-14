@@ -9,6 +9,8 @@ import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +34,28 @@ public class PostCollectService {
     @Async("asyncTaskExecutor")
     public CompletableFuture<Map<String, String>> processPostCollectionAsync(
             SubscribeEntity subscribe) {
-        log.info(" task1 with " + Thread.currentThread().getName() + " at time: "
+        long startTime = System.currentTimeMillis();
+        log.info(" task with " + Thread.currentThread().getName() + " at time: "
                 + LocalDateTime.now());
-        return CompletableFuture.supplyAsync(
-                () -> postParser.parseRssDocuments(subscribe.getUrl())
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                long executionTime = System.currentTimeMillis() - startTime;
+
+                return postParser.parseRssDocuments(subscribe.getUrl())
                         .map(resource -> {
                             updateSubscribeTitle(resource, subscribe);
+                            log.info("[PostCollectService.processPostCollectionAsync] Execution time (ms): {}", executionTime);
+                            log.info(" task resource with " + Thread.currentThread().getName() + " at time: "
+                                    + LocalDateTime.now());
                             return savePosts(resource, subscribe);
-                        }).orElse(new HashMap<>()));
+                        }).orElse(new HashMap<>());
+            } catch (Exception e) {
+                log.error("Error processing post collection for subscribeId: {}", subscribe.getId(),
+                        e);
+                return Collections.emptyMap();
+            }
+        });
     }
 
     private void updateSubscribeTitle(RssSubscribeResource subscribeResource,
@@ -54,9 +70,9 @@ public class PostCollectService {
             SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(
                 subscribe);
-
         Map<String, PostEntity> postMap = convertListToHashSet(posts);
         Map<String, String> postUrlMap = new HashMap<>();
+        List<PostEntity> entitiesToSave = new ArrayList<>();
 
         for (RssItemResource itemResource : subscribeResource.itemResources()) {
             PostEntity post;
@@ -68,10 +84,11 @@ public class PostCollectService {
                 post = PostEntity.from(itemResource, subscribe);
                 postUrlMap.put(post.getGuid(), post.getTitle());
             }
-            publisher.publish(post);
-//            log.info("bulkInsertQueue.size() = {}", bulkInsertQueue.size());
-            //     postEntityJpaRepository.save(post);
+            //     publisher.publish(post);
+            entitiesToSave.add(post);
         }
+        postEntityJpaRepository.saveAll(entitiesToSave);
+
         return postUrlMap;
     }
 
