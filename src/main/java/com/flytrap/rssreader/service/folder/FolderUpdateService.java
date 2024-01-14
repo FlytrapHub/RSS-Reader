@@ -46,7 +46,7 @@ public class FolderUpdateService {
         }
     }
 
-    public void toPrivate(Folder folder) {
+    public void makePrivate(Folder folder) {
         if (folder.isShared()) {
             folder.toPrivate();
             repository.save(FolderEntity.from(folder));

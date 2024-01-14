@@ -57,7 +57,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
     ) {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         sharedFolderService.leave(verifiedFolder, member.id());
-        folderUpdateService.toPrivate(verifiedFolder);
+        folderUpdateService.makePrivate(verifiedFolder);
 
         return ApplicationResponse.success();
     }
@@ -71,7 +71,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
     ) throws AuthenticationException {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         sharedFolderService.removeFolderMember(verifiedFolder, inviteeId, member.id());
-        folderUpdateService.toPrivate(verifiedFolder);
+        folderUpdateService.makePrivate(verifiedFolder);
 
         return ApplicationResponse.success();
     }
