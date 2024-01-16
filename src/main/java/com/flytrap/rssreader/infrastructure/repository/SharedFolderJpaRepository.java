@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SharedFolderJpaRepository extends JpaRepository<SharedFolderEntity, Long> {
 
+    long countAllByFolderId(long folderId);
+
     List<SharedFolderEntity> findAllByFolderId(long folderId);
 
     boolean existsByFolderIdAndMemberId(long folderId, long memberId);
