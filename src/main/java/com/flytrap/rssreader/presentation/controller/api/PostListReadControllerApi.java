@@ -46,7 +46,7 @@ public interface PostListReadControllerApi {
             @ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostListResponse.class))),
     })
     ApplicationResponse<PageResponse<PostListResponse>> getPostsByMember(
-            @Parameter(description = "페이지네이션 용 커서(cursor: 특정(현재) 지점을 기준으로 다음 데이터를 가져옵니다.") @RequestParam(required = false) Long cursor,
+            @Parameter(description = "페이지네이션 용 커서(cursor: 특정(현재) 지점을 기준으로 다음 데이터를 가져옵니다.") @RequestParam String cursor,
             @Parameter(description = "페이지네이션 용 필터(page: 불러올 페이지 0부터 시작, size: 한번에 불러올 게시글 수)")@RequestParam(required = false, defaultValue = "10") int size,
             @Parameter(description = "검색용 필터(read: 게시글 열람 여부, start: 검색할 범위의 첫 번째 날짜, end: 검색할 범위의 마지막 날짜, keyword: 검색어)") PostFilter postFilter,
             @Parameter(description = "현재 로그인한 회원 정보") @Login SessionMember member);
