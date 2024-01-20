@@ -8,6 +8,7 @@ import com.flytrap.rssreader.presentation.dto.InviteMemberRequest;
 import com.flytrap.rssreader.presentation.dto.MemberSummary;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.service.SharedFolderReadService;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
 import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.MemberService;
@@ -28,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/folders")
 public class SharedFolderUpdateController implements SharedFolderUpdateControllerApi {
 
-    private final SharedFolderUpdateService sharedFolderService;
+    private final SharedFolderReadService sharedFolderReadService;
+    private final SharedFolderUpdateService sharedFolderUpdateService;
     private final FolderUpdateService folderUpdateService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final MemberService memberService;
@@ -43,7 +45,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, loginMember.id());
         Member member = memberService.findById(request.inviteeId());
-        sharedFolderService.invite(verifiedFolder, member.getId());
+        sharedFolderUpdateService.invite(verifiedFolder, member.getId());
         folderUpdateService.shareFolder(verifiedFolder);
 
         return new ApplicationResponse<>(MemberSummary.from(member));
@@ -56,8 +58,12 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
             @Login SessionMember member
     ) {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        sharedFolderService.leave(verifiedFolder, member.id());
-        folderUpdateService.makePrivate(verifiedFolder);
+        
+        sharedFolderUpdateService.leave(verifiedFolder, member.id());
+
+        if (sharedFolderReadService.countAllMembersByFolder(folderId) <= 0) {
+            folderUpdateService.makePrivate(verifiedFolder);
+        }
 
         return ApplicationResponse.success();
     }
@@ -70,8 +76,12 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
             @Login SessionMember member
     ) throws AuthenticationException {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        sharedFolderService.removeFolderMember(verifiedFolder, inviteeId, member.id());
-        folderUpdateService.makePrivate(verifiedFolder);
+
+        sharedFolderUpdateService.removeFolderMember(verifiedFolder, inviteeId, member.id());
+
+        if (sharedFolderReadService.countAllMembersByFolder(folderId) <= 0) {
+            folderUpdateService.makePrivate(verifiedFolder);
+        }
 
         return ApplicationResponse.success();
     }

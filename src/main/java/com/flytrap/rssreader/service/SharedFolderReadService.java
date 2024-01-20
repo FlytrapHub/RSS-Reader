@@ -16,6 +16,11 @@ public class SharedFolderReadService {
 
     private final SharedFolderJpaRepository sharedFolderJpaRepository;
 
+    @Transactional(readOnly = true)
+    public long countAllMembersByFolder(long folderId) {
+        return sharedFolderJpaRepository.countAllByFolderId(folderId);
+    }
+
     /**
      * 멤버Id로 초대된 폴더Id 목록을 반환합니다.
      * @param memberId
