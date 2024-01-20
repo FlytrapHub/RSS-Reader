@@ -61,7 +61,5 @@ public class ScheduledService {
         long executionTime = System.currentTimeMillis() - startTime;
 
         log.info("[PostFacadeService.createPost] Execution time (ms): {}", executionTime);
-        log.info("Thread: Name={}, ID={}", Thread.currentThread().getName(),
-                Thread.currentThread().getId());
     }
 }

@@ -34,18 +34,15 @@ public class PostCollectService {
     @Async("asyncTaskExecutor")
     public CompletableFuture<Map<String, String>> processPostCollectionAsync(
             SubscribeEntity subscribe) {
-        long startTime = System.currentTimeMillis();
         log.info(" task with " + Thread.currentThread().getName() + " at time: "
                 + LocalDateTime.now());
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                long executionTime = System.currentTimeMillis() - startTime;
 
                 return postParser.parseRssDocuments(subscribe.getUrl())
                         .map(resource -> {
                             updateSubscribeTitle(resource, subscribe);
-                            log.info("[PostCollectService.processPostCollectionAsync] Execution time (ms): {}", executionTime);
                             log.info(" task resource with " + Thread.currentThread().getName() + " at time: "
                                     + LocalDateTime.now());
                             return savePosts(resource, subscribe);
