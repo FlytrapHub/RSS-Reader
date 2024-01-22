@@ -39,12 +39,6 @@ class PostCollectServiceTest {
     @Mock
     PostEntityJpaRepository postEntityJpaRepository;
 
-    @Mock
-    PostBulkInsertPublisher publisher;
-
-    @Mock
-    PostBulkInsertQueue bulkInsertQueue;
-
     @InjectMocks
     PostCollectService postCollectService;
 
@@ -73,6 +67,5 @@ class PostCollectServiceTest {
         // then
         verify(subscribeEntityJpaRepository).save(subscribe);
         verify(postEntityJpaRepository).findAllBySubscribeOrderByPubDateDesc(subscribe);
-        verify(publisher, times(subscribeResource.itemResources().size())).publish(any());
     }
 }
