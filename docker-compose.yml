@@ -29,23 +29,10 @@ services:
       image: ghcr.io/flytrap-ware/rss-reader:release
       ports:
         - "8080:8080"
+      depends_on:
+        - scouter-server
       container_name: was-dev
 
-# 로컬 전용 WAS
-#  was-dev:
-#      build: #image를 DockerFile 기반으로 사용한다
-#        context: .    #DockerFile이 있는 디렉토리
-#        dockerfile: Dockerfile
-#      ports:
-#        - "8080:8080"
-#      environment:
-#        SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/rss_reader?useSSL=false&allowPublicKeyRetrieval=true
-#        SPRING_DATASOURCE_USERNAME: "root"
-#        SPRING_DATASOURCE_PASSWORD: "admin"
-#      depends_on:
-#          - mysql
-#          - scouter-server
-#      container_name: was-dev
   scouter-server:
     build :
       context : /scouter-server
@@ -70,7 +57,7 @@ services:
       - 6180:6180
       - 6100:6100
       - 6100:6100/udp
-
+    container_name: scouter-server
   redis:
     image: redis:latest
     restart: always
