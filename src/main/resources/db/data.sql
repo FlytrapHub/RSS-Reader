@@ -14,6 +14,7 @@ VALUES (1, 4);
 
 INSERT INTO `folder_subscribe`(folder_id, subscribe_id, description)
 VALUES (1, 1, ''), (1, 2, ''),
+       (1, 5, ''), (1, 6, ''),
        (2, 1, ''), (2, 3, ''),
        (3, 4, ''), (4, 2, ''),
        (4, 5, ''), (4, 6, '');

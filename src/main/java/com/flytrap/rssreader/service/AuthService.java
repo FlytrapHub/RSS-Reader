@@ -25,9 +25,8 @@ public class AuthService {
                 .block();
     }
 
-    public SessionMember login(Member member, HttpSession session) {
+    public void login(Member member, HttpSession session) {
         session.setAttribute(authProperties.sessionId(), SessionMember.from(member));
-        return SessionMember.from(member);
     }
 
     public void logout(HttpSession session) {

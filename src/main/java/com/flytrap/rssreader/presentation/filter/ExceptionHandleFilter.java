@@ -1,20 +1,15 @@
 package com.flytrap.rssreader.presentation.filter;
 
-import com.flytrap.rssreader.global.exception.ApplicationException;
 import com.flytrap.rssreader.global.model.ErrorResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
 import javax.security.sasl.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,8 +26,9 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException e) {
             log.error(e.getMessage());
-            response.getWriter().println(ErrorResponse.occur("login", e).toString());
-            response.setHeader(HttpHeaders.ACCEPT_CHARSET, "utf-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/plain;charset=UTF-8");
+            response.getWriter().println(ErrorResponse.occur("login", e));
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         } catch (Exception e) {
             e.printStackTrace();

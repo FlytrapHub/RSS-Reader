@@ -5,8 +5,10 @@ import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.controller.api.SharedFolderUpdateControllerApi;
 import com.flytrap.rssreader.presentation.dto.InviteMemberRequest;
+import com.flytrap.rssreader.presentation.dto.MemberSummary;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.service.SharedFolderReadService;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
 import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
 import com.flytrap.rssreader.service.MemberService;
@@ -27,47 +29,60 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/folders")
 public class SharedFolderUpdateController implements SharedFolderUpdateControllerApi {
 
-    private final SharedFolderUpdateService sharedFolderService;
+    private final SharedFolderReadService sharedFolderReadService;
+    private final SharedFolderUpdateService sharedFolderUpdateService;
     private final FolderUpdateService folderUpdateService;
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final MemberService memberService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{folderId}/members")
-    public ApplicationResponse inviteMember(
+    public ApplicationResponse<MemberSummary> inviteMember(
             @PathVariable Long folderId,
             @Login SessionMember loginMember,
             @RequestBody InviteMemberRequest request
     ) throws AuthenticationException {
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, loginMember.id());
-        folderUpdateService.shareFolder(verifiedFolder);
         Member member = memberService.findById(request.inviteeId());
-        sharedFolderService.invite(verifiedFolder, member.getId());
+        sharedFolderUpdateService.invite(verifiedFolder, member.getId());
+        folderUpdateService.shareFolder(verifiedFolder);
 
-        return ApplicationResponse.success("멤버가 초대되었습니다 : " + request.inviteeId());
+        return new ApplicationResponse<>(MemberSummary.from(member));
     }
 
     // 공유 폴더에 사람 나가기 (내가 스스로 나간다)
     @DeleteMapping("/{folderId}/members/me")
-    public ApplicationResponse leaveFolder(
+    public ApplicationResponse<String> leaveFolder(
             @PathVariable Long folderId,
             @Login SessionMember member
     ) {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        sharedFolderService.leave(verifiedFolder, member.id());
+        
+        sharedFolderUpdateService.leave(verifiedFolder, member.id());
+
+        if (sharedFolderReadService.countAllMembersByFolder(folderId) <= 0) {
+            folderUpdateService.makePrivate(verifiedFolder);
+        }
+
         return ApplicationResponse.success();
     }
 
     //공유 폴더에 사람 삭제하기 (만든 사람만)
     @DeleteMapping("/{folderId}/members/{inviteeId}")
-    public ApplicationResponse deleteMember(
+    public ApplicationResponse<String> deleteMember(
             @PathVariable Long folderId,
             @PathVariable Long inviteeId,
             @Login SessionMember member
     ) throws AuthenticationException {
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
-        sharedFolderService.removeFolderMember(verifiedFolder, inviteeId, member.id());
+
+        sharedFolderUpdateService.removeFolderMember(verifiedFolder, inviteeId, member.id());
+
+        if (sharedFolderReadService.countAllMembersByFolder(folderId) <= 0) {
+            folderUpdateService.makePrivate(verifiedFolder);
+        }
+
         return ApplicationResponse.success();
     }
 }

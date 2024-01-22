@@ -7,9 +7,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record AdminProperties(String code,
                               int memberId,
                               String memberName,
-                              String memberEmail) {
+                              String memberEmail,
+                              String memberProfile) {
 
     public Member getMember() {
-        return Member.adminOf(memberId, memberName, memberEmail);
+        return Member.adminOf(memberId, memberName, memberEmail, memberProfile);
     }
 }

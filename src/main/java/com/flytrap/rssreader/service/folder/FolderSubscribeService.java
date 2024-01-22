@@ -51,6 +51,6 @@ public class FolderSubscribeService {
 
         return folders.stream()
                 .collect(Collectors.toMap(folder -> folder,
-                        folder -> folderSubscribeIds.get(folder.getId())));
+                        folder -> folderSubscribeIds.getOrDefault(folder.getId(), List.of())));
     }
 }
