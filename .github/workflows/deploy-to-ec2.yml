@@ -1,8 +1,8 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches: ["release"]
+  # push:
+  #   branches: ["release"]
   pull_request: # 디버깅을 위한 임시 추가
     branches: ["**"]
 
