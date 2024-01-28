@@ -75,7 +75,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/flytrap-ware/rss-reader-app:release
+        tags: ghcr.io/flytrap-ware/rss-reader:release
       # env:
         # NODE_AUTH_TOKEN: ${{secrets.G_TOKEN}}
 
