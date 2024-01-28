@@ -19,7 +19,6 @@ jobs:
       contents: read
       packages: write
     steps:
-
     - name: Get Public IP
       id: publicip
       run: |
@@ -44,7 +43,7 @@ jobs:
         git submodule update --init --recursive
         chmod +x gradlew
         ./gradlew clean build
-
+        
     - name: AWS 자격 증명 설정
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -71,7 +70,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/flytrap-ware/rss-reader-app:release
+        tags: ghcr.io/flytrap-ware/rss-reader-test:release
       # env:
         # NODE_AUTH_TOKEN: ${{secrets.G_TOKEN}}
 
