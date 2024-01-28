@@ -3,6 +3,8 @@ name: Build and Deploy
 on:
   push:
     branches: ["release"]
+  pull_request: # 디버깅을 위한 임시 추가
+    branches: ["**"]
 
 env:
   working-directory: .
@@ -69,7 +71,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/flytrap-ware/rss-reader:release
+        tags: ghcr.io/flytrap-ware/rss-reader-app:release
       # env:
         # NODE_AUTH_TOKEN: ${{secrets.G_TOKEN}}
 
