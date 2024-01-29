@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @Component
-@Order(Integer.MIN_VALUE)
+@Order(2)
 @RequiredArgsConstructor
 public class ExceptionHandleFilter extends OncePerRequestFilter {
 
