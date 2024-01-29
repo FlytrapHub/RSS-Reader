@@ -22,7 +22,7 @@ public class CorsFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println(">>>>>>>>>>> CorsFilter <<<<<<<<<<<<");
+        System.out.println(">>>>>>>>>>> CorsFilter 2 <<<<<<<<<<<<");
 
         String originHeader = request.getHeader("Origin");
         if (!allowedOrigins.contains(originHeader)) {
@@ -38,9 +38,9 @@ public class CorsFilter extends OncePerRequestFilter {
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
-        } else {
-            filterChain.doFilter(request, response);
+            return;
         }
+        filterChain.doFilter(request, response);
     }
 
 }
