@@ -24,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173", "https://flytraphub.net")
+            .allowedOrigins("http://localhost:5173", "https://www.flytraphub.net")
             .allowedMethods(
                 HttpMethod.OPTIONS.name(), HttpMethod.GET.name(),
                 HttpMethod.POST.name(), HttpMethod.PUT.name(),
