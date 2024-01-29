@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @Component
-@Order(2)
+@Order(3)
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter { //TODO 통합테스트 해보면 좋겠습니다.
 
