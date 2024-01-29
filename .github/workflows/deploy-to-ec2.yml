@@ -65,7 +65,6 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-        # password: ${{ secrets.PACKAGE_TOKEN }}
         
     - name: Build and push
       uses: docker/build-push-action@v5
@@ -74,8 +73,6 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ghcr.io/flytraphub/rss-reader:release
-      # env:
-        # NODE_AUTH_TOKEN: ${{secrets.G_TOKEN}}
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
