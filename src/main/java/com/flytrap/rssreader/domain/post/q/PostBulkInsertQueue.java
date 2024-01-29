@@ -3,19 +3,19 @@ package com.flytrap.rssreader.domain.post.q;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PostBulkInsertQueue {
 
-    private final Queue<PostEntity> queue;
+    private final BlockingQueue<PostEntity> queue;
     private final int space;
 
     private PostBulkInsertQueue(int size) {
         this.space = size;
-        this.queue = new LinkedBlockingQueue<>(space);
+        this.queue = new LinkedBlockingQueue<>(size);
     }
 
     public static PostBulkInsertQueue of(int size) {
@@ -23,21 +23,18 @@ public class PostBulkInsertQueue {
     }
 
     public boolean offer(PostEntity event) {
-        boolean returnValue = queue.offer(event);
-        return returnValue;
+        return queue.offer(event);
     }
 
     public PostEntity peek() {
         return queue.peek();
     }
 
-
     public PostEntity poll() {
         if (queue.isEmpty()) {
-            throw new IllegalStateException("No events in the queue !");
+            throw new IllegalStateException("No events in the queue!");
         }
-        PostEntity event = queue.poll();
-        return event;
+        return queue.poll();
     }
 
     public int size() {
@@ -52,13 +49,9 @@ public class PostBulkInsertQueue {
         return size() > 0;
     }
 
-    public List<PostEntity> pollBatch(int batchSize) {
-        List<PostEntity> postsToInsert = new ArrayList<>();
-        for (int i = 0; i < batchSize && !queue.isEmpty(); i++) {
-            postsToInsert.add(queue.poll());
-            log.info("======================================");
-            log.info("bulkInsertQueue.peek = {}", queue.peek());
-        }
-        return postsToInsert;
+    public List<PostEntity> pollAll() {
+        List<PostEntity> polledPosts = new ArrayList<>();
+        queue.drainTo(polledPosts);
+        return polledPosts;
     }
 }

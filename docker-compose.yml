@@ -1,6 +1,18 @@
 version: "3"
 
 services:
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: mysql_db
+    ports:
+      - 3306:3306 # HOST:CONTAINER
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
   balancer:
     image: nginx
     container_name: balancer
@@ -8,15 +20,44 @@ services:
       - "80:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+    extra_hosts:
+      - "host.docker,internal:host-gateway"
     depends_on:
-      - was-dev
+          - was-dev
 
   was-dev:
-    image: ghcr.io/flytrap-ware/rss-reader:release
-    ports:
-      - "8080:8080"
-    container_name: was-dev
+      image: ghcr.io/flytrap-ware/rss-reader:release
+      ports:
+        - "8080:8080"
+      depends_on:
+        - scouter-server
+      container_name: was-dev
 
+  scouter-server:
+    build :
+      context : /scouter-server
+      dockerfile: Dockerfile
+      args:
+        - SCOUTER_VERSION=${SCOUTER_VERSION}
+    image : scouterapm/scouter-server:${SCOUTER_VERSION}
+    restart : always
+    environment:
+      - SC_SERVER_ID=SCCOUTER-COLLECTOR
+      - NET_HTTP_SERVER_ENABLED=true
+      - NET_HTTP_API_SWAGGER_ENABLED=true
+      - NET_HTTP_API_ENABLED=true
+      - MGR_PURGE_PROFILE_KEEP_DAYS=2
+      - MGR_PURGE_XLOG_KEEP_DAYS=5
+      - MGR_PURGE_COUNTER_KEEP_DAYS=15
+      - JAVA_OPT=-Xms1024m -Xmx1024m
+    volumes:
+      - ./logs:/home/scouter-server/logs
+      - ./sc-data:/home/scouter-server/database
+    ports:
+      - 6180:6180
+      - 6100:6100
+      - 6100:6100/udp
+    container_name: scouter-server
   redis:
     image: redis:latest
     restart: always

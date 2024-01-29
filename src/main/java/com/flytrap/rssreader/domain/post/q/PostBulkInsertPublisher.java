@@ -14,7 +14,6 @@ public class PostBulkInsertPublisher {
     private final ApplicationEventPublisher publisher;
 
     public void publish(PostEntity post) {
-        log.info("Create new offer post! {}", post.toString());
         publisher.publishEvent(post);
     }
 }
