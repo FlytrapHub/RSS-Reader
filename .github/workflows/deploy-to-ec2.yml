@@ -1,8 +1,10 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches: ["release"]
+  pull_request: # 디버깅을 위한 임시 추가
+    branches: [ '**' ]
+# push:
+  #   branches: ["release"]
 
 env:
   working-directory: .
@@ -13,8 +15,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-
     - name: Get Public IP
       id: publicip
       run: |
@@ -39,7 +43,7 @@ jobs:
         git submodule update --init --recursive
         chmod +x gradlew
         ./gradlew clean build
-
+        
     - name: AWS 자격 증명 설정
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -50,25 +54,30 @@ jobs:
     - name: 보안 그룹에 Github Actions IP 추가
       run: |
         aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.publicip.outputs.ip }}/32
-
+    -
+      name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v3
       
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: new-pow
-        password: ${{secrets.GITHUB_TOKEN}}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        # password: ${{ secrets.PACKAGE_TOKEN }}
+        
     - name: Build and push
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/flytrap-ware/rss-reader:release
+        tags: ghcr.io/flytraphub/rss-reader:release
       # env:
-        # NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        # NODE_AUTH_TOKEN: ${{secrets.G_TOKEN}}
 
     - name: 원격 SSH 명령 실행
       uses: appleboy/ssh-action@master
