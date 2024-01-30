@@ -51,6 +51,8 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
 
         Mono<List<UserEmailResource>> userEmailResource = getEmailResource(accessToken);
 
+        log.error(">>>>>>>> accessToken : " + accessToken.accessToken() + " <<<<<<<<<<<<<<");
+
         return githubResourceServer
             .get()
             .header(HttpHeaders.AUTHORIZATION, accessToken.getHeadValue())
