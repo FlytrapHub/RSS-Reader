@@ -6,7 +6,6 @@ import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.properties.OauthProperties;
 import java.util.List;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,7 +17,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-@Slf4j
 @Component
 public record AuthGithubProvider(WebClient githubAuthorizationServer,
                                  WebClient githubResourceServer,
@@ -51,8 +49,6 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
 
         Mono<List<UserEmailResource>> userEmailResource = getEmailResource(accessToken);
 
-        log.error(">>>>>>>> accessToken : " + accessToken.accessToken() + " <<<<<<<<<<<<<<");
-
         return githubResourceServer
             .get()
             .header(HttpHeaders.AUTHORIZATION, accessToken.getHeadValue())
@@ -62,12 +58,9 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
             .onStatus(status -> status.is4xxClientError()
                     || status.is5xxServerError()
                 , clientResponse ->
-                    clientResponse.bodyToMono(String.class).flatMap(body -> {
-                        log.error(">>>> Error response from GitHub: Status Code: {}, Body: {}",
-                            clientResponse.statusCode(), body);
-                        return Mono.error(
-                            new Exception("Exception due to error response from server"));
-                    })) // TODO 외부 API 오류시 처리
+                    clientResponse.bodyToMono(String.class)
+                        .map(body -> new Exception(
+                            "exception"))) // TODO 외부 API 오류시 처리
             .bodyToMono(UserResource.class)
             .publishOn(Schedulers.boundedElastic())
             .map(userResource -> {
@@ -90,8 +83,7 @@ public record AuthGithubProvider(WebClient githubAuthorizationServer,
                     clientResponse.bodyToMono(String.class)
                         .map(body -> new Exception(
                             "exception"))) // TODO 외부 API 오류시 처리
-            .bodyToMono(new ParameterizedTypeReference<List<UserEmailResource>>() {
-            });
+            .bodyToMono(new ParameterizedTypeReference<List<UserEmailResource>>() {});
     }
 
 }
