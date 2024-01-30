@@ -7,10 +7,8 @@ import com.flytrap.rssreader.presentation.dto.Login;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,7 +19,6 @@ public class AuthService {
     private final MemberService memberService;
 
     public Member doAuthentication(Login request) {
-        log.error(">>>>>>>>> Login request code : " + request.code() + " <<<<<<<<<<<");
         return authProvider.requestAccessToken(request.code())
                 .flatMap(authProvider::requestUserResource)
                 .map(memberService::loginMember)
