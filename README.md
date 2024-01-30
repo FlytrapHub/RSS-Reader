@@ -80,9 +80,6 @@
 
 ## 인프라 구조
 
-//topdo: 인프라 구조도 추가
-
-
 ## CI/CD 구조
 //todo : CI/CD 방법 추가
 ---
@@ -99,16 +96,6 @@ $ git clone https://github.com/FlytrapHub/RSS-Reader.git
 $ cd rss-reader
 ```
 
-백엔드 로컬 실행 예시
-```
-yml 파일 자신에게 맞게 수정 후
-
-./gradlew build
-
-docker build -t {gamja123/boards} . //{}는 예시
-
-docker docker-compose up
-```
 ---
 
 ## 프로젝트 구조
