@@ -13,10 +13,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
+
     - name: Get Public IP
       id: publicip
       run: |
