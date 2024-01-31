@@ -36,9 +36,9 @@ public class CorsFilter extends OncePerRequestFilter {
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
-            return;
+        } else {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 
 }
