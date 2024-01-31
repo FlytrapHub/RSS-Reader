@@ -21,7 +21,8 @@ jobs:
         response=$(curl -s canhazip.com)
         echo "ip=$response" >> "$GITHUB_OUTPUT"
 
-    - uses: actions/checkout@v3
+    - name: Checkout Repository and Submodules
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.G_TOKEN }}
         submodules: true
