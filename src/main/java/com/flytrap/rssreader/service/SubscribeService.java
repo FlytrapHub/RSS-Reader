@@ -19,13 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SubscribeService {
 
-    //TODO:
-    // step1검색을 누르면 유효한 RSS인지 검증한다
-    // step2 이미 구독한 블로그라면 즉 DB에 저장되어있다면
-    // 새로 구독하지말고 DB에있는 url(정보를) 가져다써라
-    //  step3하지만 새로운 블로그라면 새로 추가해주자
-    //  새로운 구독이라면 DB 관계형테이블 구독 에 넣어라
-
     private final SubscribeEntityJpaRepository subscribeRepository;
     private final RssChecker rssChecker;
 
@@ -34,11 +27,10 @@ public class SubscribeService {
         RssFeedData rssFeedData = rssChecker.parseRssDocuments(request).orElseThrow();
 
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {
-            //TODO: 없으면 새로 저장한다.
             return subscribeRepository.save(SubscribeEntity.from(rssFeedData))
                 .toNewSubscribeDomain();
         }
-        //TODO: 도메인을 DB에 넣을거면 꺼내 써는 방향?, 일단은 도메인을 만들어 리턴한다.
+
         return subscribeRepository.findByUrl(request.blogUrl()).orElseThrow()
             .toExistingSubscribeDomain();
     }
