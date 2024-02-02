@@ -36,10 +36,11 @@ public class SubscribeService {
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {
             //TODO: 없으면 새로 저장한다.
             return subscribeRepository.save(SubscribeEntity.from(rssFeedData))
-                    .toDomain(rssFeedData);
+                .toNewSubscribeDomain();
         }
         //TODO: 도메인을 DB에 넣을거면 꺼내 써는 방향?, 일단은 도메인을 만들어 리턴한다.
-        return subscribeRepository.findByUrl(request.blogUrl()).orElseThrow().toDomain(rssFeedData);
+        return subscribeRepository.findByUrl(request.blogUrl()).orElseThrow()
+            .toExistingSubscribeDomain();
     }
 
     @Transactional
@@ -53,7 +54,7 @@ public class SubscribeService {
 
     public List<Subscribe> read(Collection<Long> subscribeIds) {
         return subscribeRepository.findAllById(subscribeIds).stream()
-                .map(SubscribeEntity::toDomain)
+                .map(SubscribeEntity::toExistingSubscribeDomain)
                 .toList();
     }
 
