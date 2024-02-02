@@ -93,7 +93,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
             verifiedFolder.getId());
 
         if (subscribe.isNewSubscribe()) {
-            postCollectService.processPostCollectionAsync(subscribe);
+            postCollectService.collectPostsFromNewSubscribe(subscribe);
         }
 
         FolderSubscribe folderSubscribe = FolderSubscribe.from(subscribe);
