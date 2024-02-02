@@ -13,17 +13,16 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
+
     - name: Get Public IP
       id: publicip
       run: |
         response=$(curl -s canhazip.com)
         echo "ip=$response" >> "$GITHUB_OUTPUT"
 
-    - uses: actions/checkout@v3
+    - name: Checkout Repository and Submodules
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.G_TOKEN }}
         submodules: true
@@ -52,10 +51,7 @@ jobs:
     - name: 보안 그룹에 Github Actions IP 추가
       run: |
         aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.publicip.outputs.ip }}/32
-    -
-      name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       
