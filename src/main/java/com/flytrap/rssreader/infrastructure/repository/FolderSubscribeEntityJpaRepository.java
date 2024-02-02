@@ -15,6 +15,10 @@ public interface FolderSubscribeEntityJpaRepository extends
     void deleteBySubscribeIdAndFolderId(@Param("subscribeId") Long subscribeId,
             @Param("folderId") Long folderId);
 
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("DELETE FROM FolderSubscribeEntity fs WHERE fs.folderId = :folderId")
+    void deleteAllByFolderId(@Param("folderId") Long folderId);
+
     List<FolderSubscribeEntity> findAllByFolderId(Long folderId);
 
     List<FolderSubscribeEntity> findAllByFolderIdIn(List<Long> folderIds);

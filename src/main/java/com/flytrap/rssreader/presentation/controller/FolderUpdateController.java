@@ -71,6 +71,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
 
         Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
         Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
+        folderSubscribeService.unsubscribeAllByFolder(folder);
 
         return new ApplicationResponse<>("폴더가 삭제되었습니다 : " + folder.getName());
     }

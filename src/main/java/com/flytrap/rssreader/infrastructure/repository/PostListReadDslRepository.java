@@ -81,6 +81,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
+            .and(folderEntity.isDeleted.eq(false))
             .and(folderEntity.memberId.eq(memberId))
             .or(sharedFolderEntity.memberId.eq(memberId));
 

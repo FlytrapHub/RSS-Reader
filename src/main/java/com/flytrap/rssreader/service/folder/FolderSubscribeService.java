@@ -27,6 +27,11 @@ public class FolderSubscribeService {
         folderSubscribeRepository.deleteBySubscribeIdAndFolderId(subscribeId, folderId);
     }
 
+    @Transactional
+    public void unsubscribeAllByFolder(Folder folder) {
+        folderSubscribeRepository.deleteAllByFolderId(folder.getId());
+    }
+
     @Transactional(readOnly = true)
     public List<Long> getFolderSubscribeId(Long folderId) {
         return folderSubscribeRepository.findAllByFolderId(folderId)
