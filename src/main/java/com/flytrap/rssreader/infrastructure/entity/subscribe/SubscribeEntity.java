@@ -70,7 +70,7 @@ public class SubscribeEntity {
      * @return 새로 추가된 구독 Subscribe Domain 객체
      */
     public Subscribe toNewSubscribeDomain() {
-        return Subscribe.of(this.id, this.title, this.url, "", this.platform, true);
+        return Subscribe.of(this.id, this.title, this.url, this.platform, true);
     }
 
     /**
@@ -82,7 +82,7 @@ public class SubscribeEntity {
      * @return 기존에 존재하던 구독 Subscribe Domain 객체
      */
     public Subscribe toExistingSubscribeDomain() {
-        return Subscribe.of(this.id, this.title, this.url, "", this.platform, false);
+        return Subscribe.of(this.id, this.title, this.url, this.platform, false);
     }
 
     public void updateTitle(String title) {

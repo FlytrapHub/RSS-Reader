@@ -17,34 +17,30 @@ public class Subscribe implements DefaultDomain {
     private Long id;
     private String title;
     private String url;
-    private String description;
     private BlogPlatform platform;
     private boolean isNewSubscribe;
 
     @Builder
-    protected Subscribe(Long id, String title, String url, String description, BlogPlatform platform, boolean isNewSubscribe) {
+    protected Subscribe(Long id, String title, String url, BlogPlatform platform, boolean isNewSubscribe) {
         this.id = id;
         this.title = title;
         this.url = url;
-        this.description = description;
         this.platform = platform;
         this.isNewSubscribe = isNewSubscribe;
     }
 
-    public static Subscribe create(String url, String description) {
+    public static Subscribe create(String url) {
         return Subscribe.builder()
                 .url(url)
-                .description(description)
                 .isNewSubscribe(true)
                 .build();
     }
 
-    public static Subscribe of(Long id, String title, String url, String description, BlogPlatform platform, boolean isNewSubscribe) {
+    public static Subscribe of(Long id, String title, String url, BlogPlatform platform, boolean isNewSubscribe) {
         return Subscribe.builder()
                 .id(id)
                 .title(title)
                 .url(url)
-                .description(description)
                 .platform(platform)
                 .isNewSubscribe(isNewSubscribe)
                 .build();
