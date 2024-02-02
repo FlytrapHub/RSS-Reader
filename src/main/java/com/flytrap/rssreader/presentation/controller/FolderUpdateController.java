@@ -12,6 +12,7 @@ import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
 import com.flytrap.rssreader.presentation.facade.OpenCheckFacade;
 import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.service.PostCollectService;
 import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.folder.FolderSubscribeService;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
@@ -38,6 +39,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
     private final FolderVerifyOwnerService folderVerifyOwnerService;
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
+    private final PostCollectService postCollectService;
     private final AlertService alertService;
     private final OpenCheckFacade openCheckFacade;
 
@@ -89,6 +91,10 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         Subscribe subscribe = subscribeService.subscribe(request);
         folderSubscribeService.folderSubscribe(subscribe,
             verifiedFolder.getId());
+
+        if (subscribe.isNewSubscribe()) {
+            postCollectService.processPostCollectionAsync(subscribe);
+        }
 
         FolderSubscribe folderSubscribe = FolderSubscribe.from(subscribe);
         folderSubscribe = openCheckFacade.addUnreadCountInFolderSubscribe(member.id(), subscribe, folderSubscribe);

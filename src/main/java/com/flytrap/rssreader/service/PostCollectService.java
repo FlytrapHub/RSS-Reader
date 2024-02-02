@@ -2,6 +2,7 @@ package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
+import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.infrastructure.api.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
@@ -35,7 +36,6 @@ public class PostCollectService {
      * @param subscribe 구독한 블로그
      * @return
      */
-
     public CompletableFuture<Map<String, String>> processPostCollectionAsync(
             SubscribeEntity subscribe) {
         return CompletableFuture.supplyAsync(
@@ -44,6 +44,11 @@ public class PostCollectService {
                             updateSubscribeTitle(resource, subscribe);
                             return savePosts(resource, subscribe);
                         }).orElse(new HashMap<>()));
+    }
+
+    public void processPostCollectionAsync(
+        Subscribe subscribe) {
+        processPostCollectionAsync(SubscribeEntity.from(subscribe));
     }
 
     private void updateSubscribeTitle(RssSubscribeResource subscribeResource,
