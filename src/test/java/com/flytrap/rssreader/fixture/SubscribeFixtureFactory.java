@@ -10,7 +10,6 @@ public class SubscribeFixtureFactory {
                 .id(1L)
                 .title("에이프의 블로그")
                 .url("https://blog.naver.com/PostList.nhn?blogId=ape")
-                .description("에이프의 블로그")
                 .build();
     }
 
@@ -19,7 +18,6 @@ public class SubscribeFixtureFactory {
                 .id(id)
                 .title("??의 블로그")
                 .url("https://blog.naver.com/PostList.nhn?blogId=??")
-                .description("누군가의 블로그")
                 .build();
     }
 }

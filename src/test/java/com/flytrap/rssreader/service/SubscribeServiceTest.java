@@ -89,9 +89,8 @@ public class SubscribeServiceTest {
     @DisplayName("URL폴더 구독을 취소한다.")
     void unsubscribe() {
         // given
-        Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
         SubscribeEntity subscribeEntity = generateSubscribeEntity();
-        Subscribe subscribe = subscribeEntity.toDomain(rssFeedData.orElseThrow());
+        Subscribe subscribe = subscribeEntity.toExistingSubscribeDomain();
         when(subscribeRepository.findById(subscribe.getId())).thenReturn(
                 Optional.of(subscribeEntity));
 
