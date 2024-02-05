@@ -96,12 +96,12 @@ public class PostCollectService {
     }
 
     /**
-     * 최초로 구독한 블로그 RSS에서 파싱된 게시글들을 DB에 Insert합니다.
+     * 최초로 구독한 블로그 RSS에서 파싱된 게시글들을 DB에 INSERT합니다.
      * 최초로 구독한 블로그이기에 기존에 저장된 블로그와 비교하여 게시글 변경 시 업데이트 하는 로직이 존재하지 않습니다.
      * 따라서 기존에 존재하는 블로그의 게시글 저장에는 사용하지 마세요.
      *
      * @param subscribeResource 최초로 구독한 블로그 RSS에서 파싱된 리소스.
-     * @param subscribe 최초로 구독한 블로그. PostEntity를 생성할 때 subscribeId를 주입 위해 사용됩니다.
+     * @param subscribe 최초로 구독한 블로그. PostEntity를 생성할 때 subscribeId를 주입하기 위해 사용됩니다.
      */
     private void saveAllPostsForNewSubscribe(RssSubscribeResource subscribeResource,
         SubscribeEntity subscribe) {

@@ -64,7 +64,7 @@ public class SubscribeEntity {
     /**
      * 이 SubscribeEntity를 새로 추가된 구독을 나타내는 Subscribe Domain 객체로 변환합니다.
      * 이 메서드는 구독이 새로 생성되었다는 것을 나타내는 플래그와 함께 Subscribe 도메인 객체를 초기화합니다.
-     * SubscribeEntity를가 데이터베이스에 아직 존재하지 않는 새 구독을 나타낼 때 이 메서드를 사용하세요.
+     * SubscribeEntity가 데이터베이스에 아직 존재하지 않는 새 구독을 나타낼 때 이 메서드를 사용하세요.
      * (기존에 존재하던 구독일 경우 toExistingSubscribeDomain()으로 변환하세요.)
      *
      * @return 새로 추가된 구독 Subscribe Domain 객체
@@ -76,7 +76,7 @@ public class SubscribeEntity {
     /**
      * 이 SubscribeEntity를 기존에 존재하던 구독을 나타내는 Subscribe Domain 객체로 변환합니다.
      * 이 메서드는 구독이 기존에 존재한다는 것을 나타내는 플래그와 함께 Subscribe 도메인 객체를 초기화합니다.
-     * SubscribeEntity를가 데이터베이스에 이미 존재하는 구독을 나타낼 때 이 메서드를 사용하세요.
+     * SubscribeEntity가 데이터베이스에 이미 존재하는 구독을 나타낼 때 이 메서드를 사용하세요.
      * (새로 추가된 구독일 경우 toNewSubscribeDomain()으로 변환하세요.)
      *
      * @return 기존에 존재하던 구독 Subscribe Domain 객체
