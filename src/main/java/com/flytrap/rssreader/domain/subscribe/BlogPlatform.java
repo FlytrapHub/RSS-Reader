@@ -15,6 +15,6 @@ public enum BlogPlatform {
         return Arrays.stream(BlogPlatform.values())
                 .filter(blogPlatform -> link.toUpperCase().contains(blogPlatform.name()))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchBlogPlatformException(link));
+                .orElse(BlogPlatform.ETC);
     }
 }
