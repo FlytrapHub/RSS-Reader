@@ -8,12 +8,20 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BlogPlatform {
-    VELOG, TISTORY, GITPAGE, ETC;
+    VELOG("v2.velog.io/rss/"),
+    TISTORY(".tistory.com/rss"),
+    ETC(" 기타");
 
-    public static BlogPlatform parseLink(String link) {
+    private final String signatureUrl;
+
+    public String getSignatureUrl() {
+        return signatureUrl;
+    }
+
+    public static BlogPlatform parseLink(String url) {
 
         return Arrays.stream(BlogPlatform.values())
-                .filter(blogPlatform -> link.toUpperCase().contains(blogPlatform.name()))
+                .filter(blogPlatform -> url.contains(blogPlatform.getSignatureUrl()))
                 .findFirst()
                 .orElse(BlogPlatform.ETC);
     }
