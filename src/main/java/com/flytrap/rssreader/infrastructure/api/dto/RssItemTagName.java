@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RssItemTagName {
-    GUID("guid"), TITLE("title"), DESCRIPTION("description"), PUB_DATE("pubDate");
+    GUID("guid"), TITLE("title"), DESCRIPTION("description"), CONTENT("content:encoded"), PUB_DATE("pubDate");
 
     private final String tagName;
 }

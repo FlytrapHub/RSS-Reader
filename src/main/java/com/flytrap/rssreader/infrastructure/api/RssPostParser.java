@@ -63,7 +63,11 @@ public class RssPostParser {
 
         for (int i = 0; i < itemList.getLength(); i++) {
             Node node = itemList.item(i);
+
             String description = getTagValue(node, RssItemTagName.DESCRIPTION);
+            if (description.isEmpty()) {
+                description = getTagValue(node, RssItemTagName.CONTENT);
+            }
 
             itemResources.add(
                 new RssItemResource(
@@ -81,8 +85,9 @@ public class RssPostParser {
 
     private String getTagValue(Node parentNode, RssItemTagName tagName) {
         Element element = (Element) parentNode;
+        Node item = element.getElementsByTagName(tagName.getTagName()).item(0);
 
-        return element.getElementsByTagName(tagName.getTagName()).item(0).getTextContent();
+        return (item != null) ? item.getTextContent() : "";
     }
 
 }
