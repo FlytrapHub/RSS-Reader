@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import lombok.AllArgsConstructor;
@@ -26,14 +25,7 @@ import org.xml.sax.SAXException;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class RssPostParser {
-
-    private static final Predicate<String> IS_RSS_ROOT_TAG = rootTagName
-        -> RssTag.RSS.getRootTagName().equals(rootTagName);
-    private static final Predicate<String> IS_ATOM_ROOT_TAG = rootTagName
-        -> RssTag.ATOM.getRootTagName().equals(rootTagName);
-
-    private static final String RSS_PARSING_ERROR_MESSAGE = "RSS문서를 파싱할 수 없습니다.";
+public class RssPostParser implements RssDocumentParser {
 
     private final HTMLImageParser htmlImageParser;
 
@@ -132,13 +124,6 @@ public class RssPostParser {
         }
 
         return itemResources;
-    }
-
-    private String getTagValue(Node parentNode, String tagName) {
-        Element element = (Element) parentNode;
-        Node item = element.getElementsByTagName(tagName).item(0);
-
-        return (item != null) ? item.getTextContent() : "";
     }
 
 }
