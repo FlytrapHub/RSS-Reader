@@ -10,6 +10,7 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
+import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
 import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
@@ -40,6 +41,9 @@ class PostCollectServiceTest {
 
     @Mock
     PostBulkInsertPublisher publisher;
+
+    @Mock
+    PostBulkInsertQueue bulkInsertQueue;
 
     @InjectMocks
     PostCollectService postCollectService;
