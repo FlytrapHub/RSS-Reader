@@ -27,12 +27,8 @@ public class RssChecker implements RssDocumentParser {
 
             String rootTagName = document.getDocumentElement().getTagName();
             if (IS_RSS_ROOT_TAG.test(rootTagName)) {
-                System.out.println("This document is an RSS feed.");
-
                 return Optional.of(createFeedDataFromRss(document, request.blogUrl(), blogPlatform));
             } else if (IS_ATOM_ROOT_TAG.test(rootTagName)) {
-                System.out.println("This document is an Atom feed.");
-
                 return Optional.of(createFeedDataFromAtom(document, request.blogUrl(), blogPlatform));
             } else {
                 throw new ParserConfigurationException();
