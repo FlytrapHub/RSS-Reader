@@ -3,12 +3,12 @@ package com.flytrap.rssreader.infrastructure.api.parser.dto;
 import java.time.Instant;
 import java.util.List;
 
-public record RssSubscribeResource(
+public record RssPostsData(
     String subscribeTitle,
-    List<RssItemResource> itemResources
+    List<RssItemData> itemData
 ) {
 
-    public record RssItemResource(
+    public record RssItemData(
         String guid,
         String title,
         String description,

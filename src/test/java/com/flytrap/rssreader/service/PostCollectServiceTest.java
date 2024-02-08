@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.service;
 
 import static com.flytrap.rssreader.fixture.FixtureFactory.generate100PostEntityList;
-import static com.flytrap.rssreader.fixture.FixtureFactory.generate50RssItemResourceList;
+import static com.flytrap.rssreader.fixture.FixtureFactory.generate50RssItemDataList;
 import static com.flytrap.rssreader.fixture.FixtureFactory.generateSingleSubscribeEntityList;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyString;
@@ -10,9 +10,8 @@ import static org.mockito.BDDMockito.verify;
 import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
-import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
 import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeResource;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
@@ -42,9 +41,6 @@ class PostCollectServiceTest {
     @Mock
     PostBulkInsertPublisher publisher;
 
-    @Mock
-    PostBulkInsertQueue bulkInsertQueue;
-
     @InjectMocks
     PostCollectService postCollectService;
 
@@ -62,17 +58,17 @@ class PostCollectServiceTest {
     void processPostCollectionAsyncTest() throws InterruptedException {
 
         // given
-        RssSubscribeResource subscribeResource = new RssSubscribeResource("title",
-                generate50RssItemResourceList());
+        RssPostsData postData = new RssPostsData("title",
+                generate50RssItemDataList());
         SubscribeEntity subscribe = generateSingleSubscribeEntityList().get(0);
 
         // when
-        when(postParser.parseRssDocuments(anyString())).thenReturn(Optional.of(subscribeResource));
+        when(postParser.parseRssDocuments(anyString())).thenReturn(Optional.of(postData));
         postCollectService.processPostCollectionAsync(subscribe).join();
 
         // then
         verify(subscribeEntityJpaRepository).save(subscribe);
         verify(postEntityJpaRepository).findAllBySubscribeOrderByPubDateDesc(subscribe);
-        verify(publisher, times(subscribeResource.itemResources().size())).publish(any());
+        verify(publisher, times(postData.itemData().size())).publish(any());
     }
 }

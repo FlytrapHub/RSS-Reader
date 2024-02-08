@@ -11,7 +11,7 @@ import com.flytrap.rssreader.fixture.FixtureFactory;
 import com.flytrap.rssreader.infrastructure.api.parser.RssSubscribeParser;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
-import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
@@ -47,10 +47,10 @@ public class SubscribeServiceTest {
         @DisplayName("URL이 없으면 DB에 저장한다.")
         void subscribe_save_success() {
             // given
-            Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
+            Optional<RssSubscribeData> rssSubscribeData = FixtureFactory.generateRssSubscribeData();
             SubscribeEntity subscribeEntity = generateSubscribeEntity();
 
-            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssFeedData);
+            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssSubscribeData);
             when(subscribeRepository.existsByUrl(request.blogUrl())).thenReturn(false);
             when(subscribeRepository.save(Mockito.any(SubscribeEntity.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
@@ -69,8 +69,8 @@ public class SubscribeServiceTest {
         @DisplayName("URL이 있으면 DB에서 꺼내온다.")
         void subscribe_select_success() {
             // given
-            Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
-            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssFeedData);
+            Optional<RssSubscribeData> rssSubscribeData = FixtureFactory.generateRssSubscribeData();
+            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssSubscribeData);
             when(subscribeRepository.existsByUrl(request.blogUrl())).thenReturn(true);
             when(subscribeRepository.findByUrl(request.blogUrl())).thenReturn(
                     Optional.of(generateSubscribeEntity()));

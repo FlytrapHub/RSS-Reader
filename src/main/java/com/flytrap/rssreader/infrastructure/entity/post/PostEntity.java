@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.infrastructure.entity.post;
 
 import com.flytrap.rssreader.domain.post.Post;
-import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeResource.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData.RssItemData;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,21 +64,21 @@ public class PostEntity {
         this.subscribe = subscribe;
     }
 
-    public static PostEntity from(RssItemResource rssItemResource, SubscribeEntity subscribe) {
+    public static PostEntity from(RssItemData itemData, SubscribeEntity subscribe) {
         return PostEntity.builder()
-            .guid(rssItemResource.guid())
-            .title(rssItemResource.title())
-            .thumbnailUrl(rssItemResource.thumbnailUrl())
-            .description(rssItemResource.description())
-            .pubDate(rssItemResource.pubDate())
+            .guid(itemData.guid())
+            .title(itemData.title())
+            .thumbnailUrl(itemData.thumbnailUrl())
+            .description(itemData.description())
+            .pubDate(itemData.pubDate())
             .subscribe(subscribe)
             .build();
     }
 
-    public void updateBy(RssItemResource itemResource) {
-        this.title = itemResource.title();
-        this.thumbnailUrl = itemResource.thumbnailUrl();
-        this.description = itemResource.description();
+    public void updateBy(RssItemData itemData) {
+        this.title = itemData.title();
+        this.thumbnailUrl = itemData.thumbnailUrl();
+        this.description = itemData.description();
     }
 
     public Post toDomain() {

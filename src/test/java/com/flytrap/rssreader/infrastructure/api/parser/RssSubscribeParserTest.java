@@ -1,11 +1,9 @@
 package com.flytrap.rssreader.infrastructure.api.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
-import com.flytrap.rssreader.infrastructure.api.parser.RssSubscribeParser;
-import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
@@ -28,11 +26,10 @@ class RssSubscribeParserTest {
         RssSubscribeParser rssSubscribeParser = new RssSubscribeParser();
 
         // when
-        Optional<RssFeedData> result = rssSubscribeParser.parseRssDocuments(createRequest);
+        Optional<RssSubscribeData> result = rssSubscribeParser.parseRssDocuments(createRequest);
         BlogPlatform blogPlatform = BlogPlatform.parseLink(createRequest.blogUrl());
 
         // then
-
         SoftAssertions.assertSoftly(softAssertions -> {
             assertEquals(createRequest.blogUrl(), result.orElseThrow().url());
             Assertions.assertNotNull(result.get().title());
