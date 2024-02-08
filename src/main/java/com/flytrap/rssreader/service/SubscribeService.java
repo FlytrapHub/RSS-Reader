@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.infrastructure.api.parser.RssChecker;
+import com.flytrap.rssreader.infrastructure.api.parser.RssSubscribeParser;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class SubscribeService {
 
     private final SubscribeEntityJpaRepository subscribeRepository;
-    private final RssChecker rssChecker;
+    private final RssSubscribeParser rssSubscribeParser;
 
     @Transactional
     public Subscribe subscribe(CreateRequest request) {
-        RssFeedData rssFeedData = rssChecker.parseRssDocuments(request).orElseThrow();
+        RssFeedData rssFeedData = rssSubscribeParser.parseRssDocuments(request).orElseThrow();
 
         if (!subscribeRepository.existsByUrl(request.blogUrl())) {
             return subscribeRepository.save(SubscribeEntity.from(rssFeedData))

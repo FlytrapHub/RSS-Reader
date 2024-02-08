@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.fixture.FixtureFactory;
-import com.flytrap.rssreader.infrastructure.api.parser.RssChecker;
+import com.flytrap.rssreader.infrastructure.api.parser.RssSubscribeParser;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
@@ -32,7 +32,7 @@ public class SubscribeServiceTest {
     SubscribeEntityJpaRepository subscribeRepository;
 
     @Mock
-    RssChecker rssChecker;
+    RssSubscribeParser rssSubscribeParser;
 
     @InjectMocks
     SubscribeService subscribeService;
@@ -50,7 +50,7 @@ public class SubscribeServiceTest {
             Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
             SubscribeEntity subscribeEntity = generateSubscribeEntity();
 
-            when(rssChecker.parseRssDocuments(request)).thenReturn(rssFeedData);
+            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssFeedData);
             when(subscribeRepository.existsByUrl(request.blogUrl())).thenReturn(false);
             when(subscribeRepository.save(Mockito.any(SubscribeEntity.class)))
                     .thenAnswer(i -> i.getArguments()[0]);
@@ -70,7 +70,7 @@ public class SubscribeServiceTest {
         void subscribe_select_success() {
             // given
             Optional<RssFeedData> rssFeedData = FixtureFactory.generateRssData();
-            when(rssChecker.parseRssDocuments(request)).thenReturn(rssFeedData);
+            when(rssSubscribeParser.parseRssDocuments(request)).thenReturn(rssFeedData);
             when(subscribeRepository.existsByUrl(request.blogUrl())).thenReturn(true);
             when(subscribeRepository.findByUrl(request.blogUrl())).thenReturn(
                     Optional.of(generateSubscribeEntity()));

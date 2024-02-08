@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 
 @Slf4j
 @Component
-public class RssChecker implements RssDocumentParser {
+public class RssSubscribeParser implements RssDocumentParser {
 
     public Optional<RssFeedData> parseRssDocuments(CreateRequest request) {
         BlogPlatform blogPlatform = BlogPlatform.parseLink(request.blogUrl());

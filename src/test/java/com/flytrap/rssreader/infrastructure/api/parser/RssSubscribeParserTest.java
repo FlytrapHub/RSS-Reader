@@ -1,10 +1,10 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
-import com.flytrap.rssreader.infrastructure.api.parser.RssChecker;
+import com.flytrap.rssreader.infrastructure.api.parser.RssSubscribeParser;
 import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("RssChecker테스트 -Subscribe")
-class RssCheckerTest {
+class RssSubscribeParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
@@ -25,10 +25,10 @@ class RssCheckerTest {
     void parseRssDocuments_Success(String rssUrl) {
         // given
         CreateRequest createRequest = new CreateRequest(rssUrl);
-        RssChecker rssChecker = new RssChecker();
+        RssSubscribeParser rssSubscribeParser = new RssSubscribeParser();
 
         // when
-        Optional<RssFeedData> result = rssChecker.parseRssDocuments(createRequest);
+        Optional<RssFeedData> result = rssSubscribeParser.parseRssDocuments(createRequest);
         BlogPlatform blogPlatform = BlogPlatform.parseLink(createRequest.blogUrl());
 
         // then
