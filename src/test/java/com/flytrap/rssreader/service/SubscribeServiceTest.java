@@ -8,10 +8,10 @@ import static org.mockito.Mockito.when;
 
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.fixture.FixtureFactory;
-import com.flytrap.rssreader.infrastructure.api.RssChecker;
+import com.flytrap.rssreader.infrastructure.api.parser.RssChecker;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;

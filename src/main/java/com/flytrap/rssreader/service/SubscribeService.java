@@ -1,10 +1,10 @@
 package com.flytrap.rssreader.service;
 
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.infrastructure.api.RssChecker;
+import com.flytrap.rssreader.infrastructure.api.parser.RssChecker;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.util.Collection;
 import java.util.List;

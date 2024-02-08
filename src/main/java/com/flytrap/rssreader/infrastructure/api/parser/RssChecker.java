@@ -1,8 +1,8 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
-import com.flytrap.rssreader.infrastructure.api.dto.RssTag;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.type.RssTag;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.io.IOException;
 import java.util.Optional;

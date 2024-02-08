@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.infrastructure.api.dto;
+package com.flytrap.rssreader.infrastructure.api.parser.dto;
 
 import java.time.Instant;
 import java.util.List;

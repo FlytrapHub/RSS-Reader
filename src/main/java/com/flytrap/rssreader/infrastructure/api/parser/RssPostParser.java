@@ -1,9 +1,9 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import com.flytrap.rssreader.global.utill.DateConvertor;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
-import com.flytrap.rssreader.infrastructure.api.dto.RssTag;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeResource;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeResource.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.parser.type.RssTag;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

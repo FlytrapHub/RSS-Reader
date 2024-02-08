@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.presentation.dto;
+package com.flytrap.rssreader.infrastructure.api.parser.dto;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 

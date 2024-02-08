@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.infrastructure.api.dto;
+package com.flytrap.rssreader.infrastructure.api.parser.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

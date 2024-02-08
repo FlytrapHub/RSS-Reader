@@ -11,8 +11,8 @@ import static org.mockito.BDDMockito.when;
 
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
-import com.flytrap.rssreader.infrastructure.api.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
+import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeResource;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;

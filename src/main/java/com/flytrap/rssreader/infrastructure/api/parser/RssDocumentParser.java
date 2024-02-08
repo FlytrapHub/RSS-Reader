@@ -1,6 +1,6 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
-import com.flytrap.rssreader.infrastructure.api.dto.RssTag;
+import com.flytrap.rssreader.infrastructure.api.parser.type.RssTag;
 import java.util.function.Predicate;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

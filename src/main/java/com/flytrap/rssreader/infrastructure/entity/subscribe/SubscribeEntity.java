@@ -2,7 +2,7 @@ package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssFeedData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
