@@ -1,8 +1,8 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
-import com.flytrap.rssreader.infrastructure.api.dto.RssTag;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.type.RssTag;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest.CreateRequest;
 import java.io.IOException;
 import java.util.Optional;
@@ -16,9 +16,9 @@ import org.xml.sax.SAXException;
 
 @Slf4j
 @Component
-public class RssChecker implements RssDocumentParser {
+public class RssSubscribeParser implements RssDocumentParser {
 
-    public Optional<RssFeedData> parseRssDocuments(CreateRequest request) {
+    public Optional<RssSubscribeData> parseRssDocuments(CreateRequest request) {
         BlogPlatform blogPlatform = BlogPlatform.parseLink(request.blogUrl());
 
         try {
@@ -27,9 +27,9 @@ public class RssChecker implements RssDocumentParser {
 
             String rootTagName = document.getDocumentElement().getTagName();
             if (IS_RSS_ROOT_TAG.test(rootTagName)) {
-                return Optional.of(createFeedDataFromRss(document, request.blogUrl(), blogPlatform));
+                return Optional.of(createSubscribeDataFromRss(document, request.blogUrl(), blogPlatform));
             } else if (IS_ATOM_ROOT_TAG.test(rootTagName)) {
-                return Optional.of(createFeedDataFromAtom(document, request.blogUrl(), blogPlatform));
+                return Optional.of(createSubscribeDataFromAtom(document, request.blogUrl(), blogPlatform));
             } else {
                 throw new ParserConfigurationException();
             }
@@ -40,13 +40,13 @@ public class RssChecker implements RssDocumentParser {
         }
     }
 
-    private RssFeedData createFeedDataFromRss(Document document, String url,
+    private RssSubscribeData createSubscribeDataFromRss(Document document, String url,
         BlogPlatform blogPlatform) {
         Element tag = (Element) document.getElementsByTagName(
                 RssTag.RssSubscribeTag.CHANNEL.getTagName())
             .item(0);
 
-        return new RssFeedData(
+        return new RssSubscribeData(
             getTagValue(tag, RssTag.RssSubscribeTag.TITLE.getTagName()),
             url,
             blogPlatform,
@@ -54,13 +54,13 @@ public class RssChecker implements RssDocumentParser {
         );
     }
 
-    private RssFeedData createFeedDataFromAtom(Document document, String url,
+    private RssSubscribeData createSubscribeDataFromAtom(Document document, String url,
         BlogPlatform blogPlatform) {
         Element tag = (Element) document.getElementsByTagName(
                 RssTag.AtomSubscribeTag.FEED.getTagName())
             .item(0);
 
-        return new RssFeedData(
+        return new RssSubscribeData(
             getTagValue(tag, RssTag.AtomSubscribeTag.TITLE.getTagName()),
             url,
             blogPlatform,

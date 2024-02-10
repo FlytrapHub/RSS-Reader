@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

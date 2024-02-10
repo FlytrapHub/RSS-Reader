@@ -2,7 +2,7 @@ package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,11 +44,11 @@ public class SubscribeEntity {
         this.platform = platform;
     }
 
-    public static SubscribeEntity from(RssFeedData rssFeedData) {
+    public static SubscribeEntity from(RssSubscribeData rssSubscribeData) {
         return SubscribeEntity.builder()
-                .title(rssFeedData.title())
-                .url(rssFeedData.url())
-                .platform(rssFeedData.platform())
+                .title(rssSubscribeData.title())
+                .url(rssSubscribeData.url())
+                .platform(rssSubscribeData.platform())
                 .build();
     }
 

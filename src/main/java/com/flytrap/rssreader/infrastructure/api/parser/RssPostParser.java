@@ -1,9 +1,9 @@
-package com.flytrap.rssreader.infrastructure.api;
+package com.flytrap.rssreader.infrastructure.api.parser;
 
 import com.flytrap.rssreader.global.utill.DateConvertor;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
-import com.flytrap.rssreader.infrastructure.api.dto.RssTag;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData.RssItemData;
+import com.flytrap.rssreader.infrastructure.api.parser.type.RssTag;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +29,27 @@ public class RssPostParser implements RssDocumentParser {
 
     private final HTMLImageParser htmlImageParser;
 
-    public Optional<RssSubscribeResource> parseRssDocuments(String url) {
+    public Optional<RssPostsData> parseRssDocuments(String url) {
 
         try {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(url);
 
             String subscribeTitle;
-            List<RssItemResource> itemResources;
+            List<RssItemData> itemData;
 
             String rootTagName = document.getDocumentElement().getTagName();
             if (IS_RSS_ROOT_TAG.test(rootTagName)) {
                 subscribeTitle = extractSubscribeTitleFromRss(document);
-                itemResources = extractItemResourcesFromRss(document);
+                itemData = extractItemDataFromRss(document);
             } else if (IS_ATOM_ROOT_TAG.test(rootTagName)) {
                 subscribeTitle = extractSubscribeTitleFromAtom(document);
-                itemResources = extractEntryResourcesFromAtom(document);
+                itemData = extractEntryDataFromAtom(document);
             } else {
                 throw new ParserConfigurationException();
             }
 
-            return Optional.of(new RssSubscribeResource(subscribeTitle, itemResources));
+            return Optional.of(new RssPostsData(subscribeTitle, itemData));
         } catch (SAXException | IOException | ParserConfigurationException e) {
             log.error(RSS_PARSING_ERROR_MESSAGE);
             return Optional.empty();
@@ -72,8 +72,8 @@ public class RssPostParser implements RssDocumentParser {
             .getTextContent();
     }
 
-    private List<RssItemResource> extractItemResourcesFromRss(Document document) {
-        List<RssItemResource> itemResources = new ArrayList<>();
+    private List<RssItemData> extractItemDataFromRss(Document document) {
+        List<RssItemData> itemData = new ArrayList<>();
 
         NodeList itemList = document.getElementsByTagName(RssTag.RssSubscribeTag.ITEM.getTagName());
 
@@ -85,8 +85,8 @@ public class RssPostParser implements RssDocumentParser {
                 description = getTagValue(node, RssTag.RssItemTag.CONTENT.getTagName());
             }
 
-            itemResources.add(
-                new RssItemResource(
+            itemData.add(
+                new RssItemData(
                     getTagValue(node, RssTag.RssItemTag.GUID.getTagName()),
                     getTagValue(node, RssTag.RssItemTag.TITLE.getTagName()),
                     description,
@@ -97,11 +97,11 @@ public class RssPostParser implements RssDocumentParser {
             );
         }
 
-        return itemResources;
+        return itemData;
     }
 
-    private List<RssItemResource> extractEntryResourcesFromAtom(Document document) {
-        List<RssItemResource> itemResources = new ArrayList<>();
+    private List<RssItemData> extractEntryDataFromAtom(Document document) {
+        List<RssItemData> itemData = new ArrayList<>();
 
         NodeList itemList = document.getElementsByTagName(
             RssTag.AtomSubscribeTag.ENTRY.getTagName());
@@ -111,8 +111,8 @@ public class RssPostParser implements RssDocumentParser {
 
             String description = getTagValue(node, RssTag.AtomEntryTag.CONTENT.getTagName());
 
-            itemResources.add(
-                new RssItemResource(
+            itemData.add(
+                new RssItemData(
                     getTagValue(node, RssTag.AtomEntryTag.ID.getTagName()),
                     getTagValue(node, RssTag.AtomEntryTag.TITLE.getTagName()),
                     description,
@@ -123,7 +123,7 @@ public class RssPostParser implements RssDocumentParser {
             );
         }
 
-        return itemResources;
+        return itemData;
     }
 
 }

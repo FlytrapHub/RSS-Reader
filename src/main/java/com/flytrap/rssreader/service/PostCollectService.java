@@ -3,9 +3,9 @@ package com.flytrap.rssreader.service;
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
 import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.infrastructure.api.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData.RssItemData;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
 import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
@@ -63,14 +63,14 @@ public class PostCollectService {
         );
     }
 
-    private void updateSubscribeTitle(RssSubscribeResource subscribeResource,
+    private void updateSubscribeTitle(RssPostsData postData,
             SubscribeEntity subscribe) {
-        subscribe.updateTitle(subscribeResource.subscribeTitle());
+        subscribe.updateTitle(postData.subscribeTitle());
         subscribeEntityJpaRepository.save(subscribe);
     }
 
     //TODO: 글이 새로 추가되면 슬랙에 보낼URL을 기억한다.
-    private Map<String, String> savePostsForBulkInsert(RssSubscribeResource subscribeResource,
+    private Map<String, String> savePostsForBulkInsert(RssPostsData postData,
             SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(
                 subscribe);
@@ -78,14 +78,14 @@ public class PostCollectService {
         Map<String, PostEntity> postMap = convertListToHashSet(posts);
         Map<String, String> postUrlMap = new HashMap<>();
 
-        for (RssItemResource itemResource : subscribeResource.itemResources()) {
+        for (RssItemData itemData : postData.itemData()) {
             PostEntity post;
 
-            if (postMap.containsKey(itemResource.guid())) {
-                post = postMap.get(itemResource.guid());
-                post.updateBy(itemResource);
+            if (postMap.containsKey(itemData.guid())) {
+                post = postMap.get(itemData.guid());
+                post.updateBy(itemData);
             } else {
-                post = PostEntity.from(itemResource, subscribe);
+                post = PostEntity.from(itemData, subscribe);
                 postUrlMap.put(post.getGuid(), post.getTitle());
             }
             publisher.publish(post);
@@ -100,16 +100,16 @@ public class PostCollectService {
      * 최초로 구독한 블로그이기에 기존에 저장된 블로그와 비교하여 게시글 변경 시 업데이트 하는 로직이 존재하지 않습니다.
      * 따라서 기존에 존재하는 블로그의 게시글 저장에는 사용하지 마세요.
      *
-     * @param subscribeResource 최초로 구독한 블로그 RSS에서 파싱된 리소스.
+     * @param postData 최초로 구독한 블로그 RSS에서 파싱된 게시글 데이터 리스트.
      * @param subscribe 최초로 구독한 블로그. PostEntity를 생성할 때 subscribeId를 주입하기 위해 사용됩니다.
      */
-    private void saveAllPostsForNewSubscribe(RssSubscribeResource subscribeResource,
+    private void saveAllPostsForNewSubscribe(RssPostsData postData,
         SubscribeEntity subscribe) {
 
         List<PostEntity> postsToSave = new ArrayList<>();
 
-        for (RssItemResource itemResource : subscribeResource.itemResources()) {
-            postsToSave.add(PostEntity.from(itemResource, subscribe));
+        for (RssItemData itemData : postData.itemData()) {
+            postsToSave.add(PostEntity.from(itemData, subscribe));
         }
 
         postEntityJpaRepository.saveAll(postsToSave);

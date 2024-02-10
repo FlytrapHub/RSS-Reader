@@ -8,12 +8,12 @@ import com.flytrap.rssreader.fixture.FixtureFields.PostEntityFields;
 import com.flytrap.rssreader.fixture.FixtureFields.RssItemResourceFields;
 import com.flytrap.rssreader.fixture.FixtureFields.SubscribeEntityFields;
 import com.flytrap.rssreader.fixture.FixtureFields.UserResourceFields;
-import com.flytrap.rssreader.infrastructure.api.dto.RssSubscribeResource.RssItemResource;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData.RssItemData;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,8 +75,8 @@ public class FixtureFactory {
     }
 
     // Post
-    public static RssItemResource generateRssItemResource() {
-        return new RssItemResource(
+    public static RssItemData generateRssItemData() {
+        return new RssItemData(
                 RssItemResourceFields.guid,
                 RssItemResourceFields.title,
                 RssItemResourceFields.description,
@@ -85,12 +85,12 @@ public class FixtureFactory {
         );
     }
 
-    public static List<RssItemResource> generate50RssItemResourceList() {
-        List<RssItemResource> rssItemResources = new ArrayList<>();
+    public static List<RssItemData> generate50RssItemDataList() {
+        List<RssItemData> rssItemData = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            rssItemResources.add(generateRssItemResource());
+            rssItemData.add(generateRssItemData());
         }
-        return rssItemResources;
+        return rssItemData;
     }
 
     public static PostEntity generatePostEntity(Long id) {
@@ -125,8 +125,8 @@ public class FixtureFactory {
         return List.of(generateSubscribeEntity());
     }
 
-    public static Optional<RssFeedData> generateRssData() {
-        return Optional.of(new RssFeedData(
+    public static Optional<RssSubscribeData> generateRssSubscribeData() {
+        return Optional.of(new RssSubscribeData(
                 RssItemResourceFields.title,
                 //TODO: 깃허브, 티스토리도 추가하려면 테스트 코드를 바꿔야 할 듯 합니다.
                 "https://v2.velog.io/rss/jinny-l",
