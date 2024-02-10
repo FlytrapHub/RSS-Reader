@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AuthenticationException.class, NotBelongToMemberException.class})
+    @ExceptionHandler({AuthenticationException.class})
     public ErrorResponse handleAuthException(RuntimeException e) {
         e.printStackTrace();
         log.error(e.getMessage());
