@@ -8,7 +8,7 @@ import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.PostResponse.PostListResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import com.flytrap.rssreader.service.PostListReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostListReadController implements PostListReadControllerApi {
 
     private final PostListReadService postListReadService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderVerifyService folderVerifyService;
 
     @GetMapping("/subscribes/{subscribeId}/posts")
     public ApplicationResponse<PostListResponse> getPostsBySubscribe(
@@ -50,7 +50,7 @@ public class PostListReadController implements PostListReadControllerApi {
         @PageableDefault(page = 0, size = 15) Pageable pageable,
         @Login SessionMember member) {
 
-        Folder verifyFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifyFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
 
         List<PostResponse> posts = postListReadService.getPostsByFolder(member, verifyFolder, postFilter, pageable)
             .stream()

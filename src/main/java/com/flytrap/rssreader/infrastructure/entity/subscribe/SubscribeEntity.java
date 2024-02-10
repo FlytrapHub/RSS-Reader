@@ -2,7 +2,7 @@ package com.flytrap.rssreader.infrastructure.entity.subscribe;
 
 import com.flytrap.rssreader.domain.subscribe.BlogPlatform;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.presentation.dto.RssFeedData;
+import com.flytrap.rssreader.infrastructure.api.parser.dto.RssSubscribeData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,24 +44,48 @@ public class SubscribeEntity {
         this.platform = platform;
     }
 
-    public static SubscribeEntity from(RssFeedData rssFeedData) {
+    public static SubscribeEntity from(RssSubscribeData rssSubscribeData) {
         return SubscribeEntity.builder()
-                .title(rssFeedData.title())
-                .url(rssFeedData.url())
-                .platform(rssFeedData.platform())
+                .title(rssSubscribeData.title())
+                .url(rssSubscribeData.url())
+                .platform(rssSubscribeData.platform())
                 .build();
     }
 
-    public Subscribe toDomain(RssFeedData rssFeedData) {
-        return Subscribe.of(this.id, rssFeedData.title(), url, rssFeedData.description());
+    public static SubscribeEntity from(Subscribe subscribe) {
+        return SubscribeEntity.builder()
+            .id(subscribe.getId())
+            .title(subscribe.getTitle())
+            .url(subscribe.getUrl())
+            .platform(subscribe.getPlatform())
+            .build();
     }
 
-    public Subscribe toDomain() {
-        return Subscribe.of(this.id, this.title, this.url);
+    /**
+     * 이 SubscribeEntity를 새로 추가된 구독을 나타내는 Subscribe Domain 객체로 변환합니다.
+     * 이 메서드는 구독이 새로 생성되었다는 것을 나타내는 플래그와 함께 Subscribe 도메인 객체를 초기화합니다.
+     * SubscribeEntity가 데이터베이스에 아직 존재하지 않는 새 구독을 나타낼 때 이 메서드를 사용하세요.
+     * (기존에 존재하던 구독일 경우 toExistingSubscribeDomain()으로 변환하세요.)
+     *
+     * @return 새로 추가된 구독 Subscribe Domain 객체
+     */
+    public Subscribe toNewSubscribeDomain() {
+        return Subscribe.of(this.id, this.title, this.url, this.platform, true);
+    }
+
+    /**
+     * 이 SubscribeEntity를 기존에 존재하던 구독을 나타내는 Subscribe Domain 객체로 변환합니다.
+     * 이 메서드는 구독이 기존에 존재한다는 것을 나타내는 플래그와 함께 Subscribe 도메인 객체를 초기화합니다.
+     * SubscribeEntity가 데이터베이스에 이미 존재하는 구독을 나타낼 때 이 메서드를 사용하세요.
+     * (새로 추가된 구독일 경우 toNewSubscribeDomain()으로 변환하세요.)
+     *
+     * @return 기존에 존재하던 구독 Subscribe Domain 객체
+     */
+    public Subscribe toExistingSubscribeDomain() {
+        return Subscribe.of(this.id, this.title, this.url, this.platform, false);
     }
 
     public void updateTitle(String title) {
         this.title = title;
     }
-
 }
