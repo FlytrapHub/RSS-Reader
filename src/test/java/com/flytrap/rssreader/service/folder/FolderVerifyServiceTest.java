@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.folder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -9,7 +9,7 @@ import com.flytrap.rssreader.fixture.FixtureFactory;
 import com.flytrap.rssreader.fixture.FolderFixtureFactory;
 import com.flytrap.rssreader.global.exception.NotBelongToMemberException;
 import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,13 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("Folder 생성 멤버 검증 로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
-class FolderVerifyOwnerServiceTest {
+class FolderVerifyServiceTest {
 
     @Mock
     FolderEntityJpaRepository repository;
 
     @InjectMocks
-    FolderVerifyOwnerService folderVerifyOwnerService;
+    FolderVerifyService folderVerifyService;
 
     Member member;
     Member anotherMember;
@@ -50,7 +50,7 @@ class FolderVerifyOwnerServiceTest {
         @Test
         @DisplayName("생성 멤버가 일치하면 Folder를 반환한다.")
         void is() {
-            Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(1L, member.getId());
+            Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(1L, member.getId());
 
             SoftAssertions.assertSoftly(softAssertions -> {
                 softAssertions.assertThat(verifiedFolder.getId()).isEqualTo(1L);
@@ -63,7 +63,7 @@ class FolderVerifyOwnerServiceTest {
         @DisplayName("생성 멤버가 일치하지 않으면 예외를 던진다.")
         void isNot() {
             assertThrows(NotBelongToMemberException.class, () -> {
-                folderVerifyOwnerService.getVerifiedFolder(1L, anotherMember.getId());
+                folderVerifyService.getVerifiedOwnedFolder(1L, anotherMember.getId());
             });
         }
     }

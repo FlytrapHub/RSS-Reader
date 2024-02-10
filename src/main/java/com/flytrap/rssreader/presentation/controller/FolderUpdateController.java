@@ -16,7 +16,7 @@ import com.flytrap.rssreader.service.PostCollectService;
 import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.folder.FolderSubscribeService;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import com.flytrap.rssreader.service.SubscribeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FolderUpdateController implements FolderUpdateControllerApi {
 
     private final FolderUpdateService folderService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderVerifyService folderVerifyService;
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
     private final PostCollectService postCollectService;
@@ -59,7 +59,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @PathVariable Long folderId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         Folder updatedFolder = folderService.updateFolder(request, verifiedFolder, member.id());
 
         return new ApplicationResponse<>(FolderRequest.Response.from(updatedFolder));
@@ -71,7 +71,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @PathVariable Long folderId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         Folder folder = folderService.deleteFolder(verifiedFolder, member.id());
         folderSubscribeService.unsubscribeAllByFolder(folder);
 
@@ -87,7 +87,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         //TODO: 존재하는 폴더인지 검증하는 로직 , 공유폴더초대받은 인지 검증
         //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
         //지금 부분은 검증된 개인 폴더입니다.
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         Subscribe subscribe = subscribeService.subscribe(request);
         folderSubscribeService.folderSubscribe(subscribe,
             verifiedFolder.getId());
@@ -109,7 +109,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @PathVariable Long subscribeId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         folderSubscribeService.folderUnsubscribe(subscribeId,
             verifiedFolder.getId());
         return new ApplicationResponse<>(null);
@@ -121,7 +121,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @Valid @RequestBody AlertRequest request,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         AlertPlatform.ofCode(request.platformNum());
         Long alertID = alertService.on(verifiedFolder.getId(), member.id(), request.platformNum());
         return new ApplicationResponse<>(alertID);
@@ -132,7 +132,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @PathVariable Long folderId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         alertService.off(verifiedFolder.getId(), member.id());
         return new ApplicationResponse<>(null);
     }

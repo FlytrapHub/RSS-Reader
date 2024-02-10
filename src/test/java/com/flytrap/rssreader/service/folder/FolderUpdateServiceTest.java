@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.folder;
 
 import static org.mockito.Mockito.when;
 
@@ -10,7 +10,7 @@ import com.flytrap.rssreader.infrastructure.entity.folder.FolderEntity;
 import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class FolderUpdateServiceTest {
 
     @Mock
-    FolderVerifyOwnerService folderVerifyOwnerService;
+    FolderVerifyService folderVerifyService;
 
     @Mock
     FolderEntityJpaRepository repository;
