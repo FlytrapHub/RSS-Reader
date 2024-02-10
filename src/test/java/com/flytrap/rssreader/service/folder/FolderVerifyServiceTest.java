@@ -30,25 +30,28 @@ class FolderVerifyServiceTest {
 
     @Mock
     FolderEntityJpaRepository repository;
+    @Mock
+    SharedFolderJpaRepository sharedFolderJpaRepository;
 
     @InjectMocks
     FolderVerifyService folderVerifyService;
 
     Member member;
+    Member invitedMember;
     Member anotherMember;
-
-    @BeforeEach
-    void init() {
-        when(repository.findByIdAndIsDeletedFalse(1L)).thenReturn(
-                Optional.ofNullable(FolderFixtureFactory.generateFolderEntity()));
-
-        member = FixtureFactory.generateMember();
-        anotherMember = FixtureFactory.generateAnotherMember();
-    }
 
     @Nested
     @DisplayName("Folder의 생성 멤버를 검증할 때")
     class getVerifiedFolder {
+
+        @BeforeEach
+        void init() {
+            when(repository.findByIdAndIsDeletedFalse(1L)).thenReturn(
+                    Optional.ofNullable(FolderFixtureFactory.generateFolderEntity()));
+
+            member = FixtureFactory.generateMember();
+            anotherMember = FixtureFactory.generateAnotherMember();
+        }
 
         @Test
         @DisplayName("생성 멤버가 일치하면 Folder를 반환한다.")
@@ -67,6 +70,56 @@ class FolderVerifyServiceTest {
         void isNot() {
             assertThrows(NotBelongToMemberException.class, () -> {
                 folderVerifyService.getVerifiedOwnedFolder(1L, anotherMember.getId());
+            });
+        }
+    }
+
+    @Nested
+    @DisplayName("Folder의 접근 멤버를 검증할 때")
+    class getVerifiedAccessableFolder {
+
+        @BeforeEach
+        void init() {
+            member = FixtureFactory.generateMember();
+            invitedMember = FixtureFactory.generateMember(2L);
+            anotherMember = FixtureFactory.generateAnotherMember();
+
+            when(repository.findByIdAndIsDeletedFalse(1L)).thenReturn(
+                    Optional.ofNullable(FolderFixtureFactory.generateFolderEntity()));
+        }
+
+        @Test
+        @DisplayName("생성 멤버가 일치하면 Folder를 반환한다.")
+        void isOwner() {
+            Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(1L, member.getId());
+
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThat(verifiedFolder.getId()).isEqualTo(1L);
+                softAssertions.assertThat(verifiedFolder.getName()).isEqualTo("folderName");
+                softAssertions.assertThat(verifiedFolder.getMemberId()).isEqualTo(member.getId());
+            });
+        }
+
+        @Test
+        @DisplayName("초대된 멤버라면 Folder를 반환한다.")
+        void isInvitedMember() {
+            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(1L, invitedMember.getId())).thenReturn(true);
+
+            Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(1L, invitedMember.getId());
+
+            SoftAssertions.assertSoftly(softAssertions -> {
+                softAssertions.assertThat(verifiedFolder.getId()).isEqualTo(1L);
+                softAssertions.assertThat(verifiedFolder.getName()).isEqualTo("folderName");
+            });
+        }
+
+        @Test
+        @DisplayName("생성 멤버도 아니고 초대된 멤버도 아니라면 예외를 던진다.")
+        void isNot() {
+            when(sharedFolderJpaRepository.existsByFolderIdAndMemberId(1L, anotherMember.getId())).thenReturn(false);
+
+            assertThrows(ForbiddenAccessFolderException.class, () -> {
+                folderVerifyService.getVerifiedAccessableFolder(1L, anotherMember.getId());
             });
         }
     }
