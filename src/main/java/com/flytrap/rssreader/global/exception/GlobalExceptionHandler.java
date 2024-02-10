@@ -48,6 +48,14 @@ public class GlobalExceptionHandler {
         return ErrorResponse.occur("login", e);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({ForbiddenAccessFolderException.class, NotBelongToMemberException.class})
+    public ErrorResponse handleForbiddenException(RuntimeException e) {
+        e.printStackTrace();
+        log.error(e.getMessage());
+        return ErrorResponse.occur("login", e);
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ApplicationException.class)
     public ErrorResponse handleException(ApplicationException e) {

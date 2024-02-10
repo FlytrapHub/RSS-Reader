@@ -52,6 +52,17 @@ public class FixtureFactory {
                 .build();
     }
 
+    public static Member generateMember(Long id) {
+        return Member.builder()
+                .id(id)
+                .name(MemberFields.name)
+                .email(MemberFields.email)
+                .profile(MemberFields.profile)
+                .oauthPk(MemberFields.oauthPk)
+                .oauthServer(MemberFields.oauthServer)
+                .build();
+    }
+
     public static Member generateAnotherMember() {
         return Member.builder()
                 .id(MemberFields.anotherId)
