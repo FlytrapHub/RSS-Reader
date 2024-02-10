@@ -14,7 +14,7 @@ import com.flytrap.rssreader.presentation.facade.SubscribeInFolderFacade;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.SubscribeService;
 import com.flytrap.rssreader.service.folder.FolderSubscribeService;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ public class FolderReadController implements FolderReadControllerApi {
     private final SubscribeInFolderFacade subscribeInFolderFacade;
     private final OpenCheckFacade openCheckFacade;
     private final InvitedToFolderFacade invitedToFolderFacade;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderVerifyService folderVerifyService;
     private final SubscribeService subscribeService;
     private final FolderSubscribeService folderSubscribeService;
 
@@ -59,7 +59,7 @@ public class FolderReadController implements FolderReadControllerApi {
             @Login SessionMember member) {
 
         //TODO 폴더에 추가된 블로그 리스트 보기 즉 folderId 가 일치하는 구독된 정보를 다가져오기
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         List<Long> list = folderSubscribeService.getFolderSubscribeId(verifiedFolder.getId());
         List<Subscribe> subscribeList = subscribeService.read(list);
         return new ApplicationResponse<>(SubscribeRequest.ResponseList.from(subscribeList));

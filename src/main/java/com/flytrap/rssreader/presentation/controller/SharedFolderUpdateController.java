@@ -10,7 +10,7 @@ import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.SharedFolderReadService;
 import com.flytrap.rssreader.service.folder.FolderUpdateService;
-import com.flytrap.rssreader.service.folder.FolderVerifyOwnerService;
+import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import com.flytrap.rssreader.service.MemberService;
 import com.flytrap.rssreader.service.SharedFolderUpdateService;
 import javax.security.sasl.AuthenticationException;
@@ -32,7 +32,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
     private final SharedFolderReadService sharedFolderReadService;
     private final SharedFolderUpdateService sharedFolderUpdateService;
     private final FolderUpdateService folderUpdateService;
-    private final FolderVerifyOwnerService folderVerifyOwnerService;
+    private final FolderVerifyService folderVerifyService;
     private final MemberService memberService;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,7 +43,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
             @RequestBody InviteMemberRequest request
     ) throws AuthenticationException {
 
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, loginMember.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, loginMember.id());
         Member member = memberService.findById(request.inviteeId());
         sharedFolderUpdateService.invite(verifiedFolder, member.getId());
         folderUpdateService.shareFolder(verifiedFolder);
@@ -57,7 +57,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
             @PathVariable Long folderId,
             @Login SessionMember member
     ) {
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
         
         sharedFolderUpdateService.leave(verifiedFolder, member.id());
 
@@ -75,7 +75,7 @@ public class SharedFolderUpdateController implements SharedFolderUpdateControlle
             @PathVariable Long inviteeId,
             @Login SessionMember member
     ) throws AuthenticationException {
-        Folder verifiedFolder = folderVerifyOwnerService.getVerifiedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
 
         sharedFolderUpdateService.removeFolderMember(verifiedFolder, inviteeId, member.id());
 
