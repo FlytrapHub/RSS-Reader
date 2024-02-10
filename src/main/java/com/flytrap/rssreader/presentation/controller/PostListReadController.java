@@ -50,7 +50,7 @@ public class PostListReadController implements PostListReadControllerApi {
         @PageableDefault(page = 0, size = 15) Pageable pageable,
         @Login SessionMember member) {
 
-        Folder verifyFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
+        Folder verifyFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
 
         List<PostResponse> posts = postListReadService.getPostsByFolder(member, verifyFolder, postFilter, pageable)
             .stream()

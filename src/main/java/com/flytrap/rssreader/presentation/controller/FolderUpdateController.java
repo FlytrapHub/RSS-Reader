@@ -87,7 +87,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         //TODO: 존재하는 폴더인지 검증하는 로직 , 공유폴더초대받은 인지 검증
         //TODO: 내가만든 폴더랑, 초대받은 그룹의 폴더인지 구분해서 구독해야합니다.
         //지금 부분은 검증된 개인 폴더입니다.
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
         Subscribe subscribe = subscribeService.subscribe(request);
         folderSubscribeService.folderSubscribe(subscribe,
             verifiedFolder.getId());
@@ -109,7 +109,7 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         @PathVariable Long subscribeId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
+        Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
         folderSubscribeService.folderUnsubscribe(subscribeId,
             verifiedFolder.getId());
         return new ApplicationResponse<>(null);
