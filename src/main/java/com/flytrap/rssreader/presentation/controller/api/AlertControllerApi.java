@@ -1,0 +1,24 @@
+package com.flytrap.rssreader.presentation.controller.api;
+
+import com.flytrap.rssreader.global.model.ApplicationResponse;
+import com.flytrap.rssreader.presentation.dto.AlertRequest;
+import com.flytrap.rssreader.presentation.dto.SessionMember;
+import com.flytrap.rssreader.presentation.resolver.Login;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+public interface AlertControllerApi {
+
+    // TODO: Swaager 어노테이션 붙여주세요.
+    ApplicationResponse<Long> onAlert(
+        @PathVariable Long folderId,
+        @Valid @RequestBody AlertRequest request,
+        @Login SessionMember member);
+
+    // TODO: Swaager 어노테이션 붙여주세요.
+    ApplicationResponse<Void> offAlert(
+        @PathVariable Long folderId,
+        @Login SessionMember member);
+
+}
