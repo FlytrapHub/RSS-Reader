@@ -79,15 +79,18 @@ CREATE TABLE IF NOT EXISTS `post_react` (
     FOREIGN KEY (`post_id`) REFERENCES `rss_post`(`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `alert` (
+CREATE TABLE IF NOT EXISTS `alert_platform` (
     `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `member_id`	bigint	NOT NULL,
-    `folder_id`	bigint	NOT NULL,
-    `service_id`   bigint	NOT NULL
+    `platform`	varchar(25)	NOT NULL,
+    `signature_url`	varchar(2500)	NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `alert_service` (
-    `id`	    bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `service`	 varchar(30)	NOT NULL
+CREATE TABLE IF NOT EXISTS `alert` (
+    `id`	        bigint	NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `member_id`	    bigint	NOT NULL,
+    `folder_id`	    bigint	NOT NULL,
+    `platform_id`    bigint	NOT NULL,
+    `webhook_url`   varchar(2500)   NOT NULL
 );
+
 

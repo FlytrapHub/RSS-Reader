@@ -7,7 +7,8 @@ INSERT INTO `folder`(name, member_id, is_shared, is_deleted)
 VALUES ('나의 폴더 1', 1, false, false),
        ('나의 폴더 2', 1, false, false),
        ('나의 폴더 3', 1, false, false),
-       ('공유 폴더 1', 2, true,  false);
+       ('공유 폴더 1', 2, true,  false),
+       ('공유 폴더 2', 1, true,  false);
 
 INSERT INTO `folder_member`(member_id, folder_id)
 VALUES (1, 4);
@@ -34,3 +35,10 @@ VALUES ('https://velog.io/@ape/test-l4lqt827', 2, 'test', '<p>test</p>\n', '2023
 
 INSERT INTO `bookmark`(member_id, post_id)
 VALUES (1, 1), (1, 2), (1, 3), (2, 1);
+
+INSERT INTO `alert_platform`(platform, signature_url)
+VALUES ('SLACK', 'https://hooks.slack.com/services/'),
+       ('DISCORD', 'https://discord.com/api/webhooks/');
+
+INSERT INTO `alert`(member_id, folder_id, platform_id, webhook_url)
+VALUES (1, 1, 2, '');

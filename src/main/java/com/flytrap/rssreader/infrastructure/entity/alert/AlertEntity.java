@@ -29,22 +29,29 @@ public class AlertEntity {
     @Column(name = "folder_id", nullable = false)
     private Long folderId;
 
-    @Column(name = "service_id", nullable = false)
-    private Integer serviceId;
+    @Column(name = "platform_id", nullable = false)
+    private Integer platformId;
+
+    @Column(name = "webhook_url", length = 2500, nullable = false)
+    private String webhookUrl;
 
     @Builder
-    protected AlertEntity(Long id, Long memberId, Long folderId, Integer serviceId) {
+    protected AlertEntity(Long id, Long memberId, Long folderId, Integer platformId,
+        String webhookUrl) {
         this.id = id;
         this.memberId = memberId;
         this.folderId = folderId;
-        this.serviceId = serviceId;
+        this.platformId = platformId;
+        this.webhookUrl = webhookUrl;
     }
 
-    public static AlertEntity create(Long memberId, Long folderId, Integer serviceId) {
+    public static AlertEntity create(Long memberId, Long folderId, Integer platformId,
+        String webhookUrl) {
         return AlertEntity.builder()
-                .memberId(memberId)
-                .folderId(folderId)
-                .serviceId(serviceId)
-                .build();
+            .memberId(memberId)
+            .folderId(folderId)
+            .platformId(platformId)
+            .webhookUrl(webhookUrl)
+            .build();
     }
 }
