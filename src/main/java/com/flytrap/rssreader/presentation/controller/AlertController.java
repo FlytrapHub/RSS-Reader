@@ -38,14 +38,16 @@ public class AlertController implements AlertControllerApi {
         return new ApplicationResponse<>(AlertResponse.from(alert));
     }
 
-    @DeleteMapping("/{folderId}/alerts ")
-    public ApplicationResponse<Void> offAlert(
+    @DeleteMapping("/{folderId}/alerts/{alertId}")
+    public ApplicationResponse<String> removeAlert(
         @PathVariable Long folderId,
+        @PathVariable Long alertId,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
-        alertService.off(verifiedFolder.getId(), member.id());
-        return new ApplicationResponse<>(null);
+        folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
+        alertService.removeAlert(alertId);
+
+        return new ApplicationResponse<>("알람이 삭제되었습니다. ID = " + alertId);
     }
 
 }

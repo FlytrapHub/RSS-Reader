@@ -27,9 +27,13 @@ public interface AlertControllerApi {
         @Parameter(description = "등록할 웹 훅 URL") @Valid @RequestBody AlertRequest request,
         @Parameter(description = "현재 로그인한 회원 정보") @Login SessionMember member);
 
-    // TODO: Swaager 어노테이션 붙여주세요.
-    ApplicationResponse<Void> offAlert(
-        @PathVariable Long folderId,
-        @Login SessionMember member);
+    @Operation(summary = "알림 웹 훅 삭제하기", description = "등록된 알림 웹 훅을 삭제한다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "성공",  content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
+    })
+    ApplicationResponse<String> removeAlert(
+        @Parameter(description = "웹 훅을 삭제할 Folder의 Id") @PathVariable Long folderId,
+        @Parameter(description = "삭제할 웹 훅의 Id") @PathVariable Long alertId,
+        @Parameter(description = "현재 로그인한 회원 정보") @Login SessionMember member);
 
 }

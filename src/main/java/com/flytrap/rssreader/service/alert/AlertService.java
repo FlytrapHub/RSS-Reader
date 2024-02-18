@@ -34,9 +34,12 @@ public class AlertService {
             .toDomain();
     }
 
-    public void off(Long folderId, Long memberId) {
-        AlertEntity alert = findByAlert(folderId, memberId);
-        alertRepository.delete(alert);
+    public void removeAlert(Long alertId) {
+        Alert alert = alertRepository.findById(alertId)
+            .orElseThrow(() -> new NoSuchDomainException(Alert.class))
+                .toDomain();
+
+        alertRepository.deleteById(alert.getId());
     }
 
     private AlertPlatform verifyAlertPlatform(String webhookUrl) {
@@ -46,10 +49,6 @@ public class AlertService {
             .filter(platform -> platform.verifyWebhookUrl(webhookUrl))
             .findFirst()
             .orElseThrow(() -> new NoSuchDomainException(AlertPlatform.class));
-    }
-
-    private AlertEntity findByAlert(Long folderId, Long memberId) {
-        return alertRepository.findByFolderIdAndMemberId(folderId, memberId).orElseThrow();
     }
 
     public void notifyPlatform(AlertParam value) {
