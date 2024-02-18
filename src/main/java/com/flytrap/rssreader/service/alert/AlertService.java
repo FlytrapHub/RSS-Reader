@@ -1,7 +1,12 @@
 package com.flytrap.rssreader.service.alert;
 
+import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.alert.AlertEvent;
+import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.global.event.PublishEvent;
+import com.flytrap.rssreader.global.exception.NoSuchDomainException;
+import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatformEntity;
+import com.flytrap.rssreader.infrastructure.repository.AlertPlatformEntityJpaRepository;
 import com.flytrap.rssreader.service.alert.platform.SlackAlarmService;
 import com.flytrap.rssreader.service.dto.AlertParam;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
@@ -18,16 +23,29 @@ import org.springframework.stereotype.Service;
 public class AlertService {
 
     private final AlertEntityJpaRepository alertRepository;
+    private final AlertPlatformEntityJpaRepository alertPlatformRepository;
     private final SlackAlarmService slackAlarmService;
 
-    public Long on(Long folderId, Long memberId, Integer platformNum) {
-        return alertRepository.save(AlertEntity.create(memberId, folderId, platformNum))
-                .getId();
+    public Alert registerAlert(Long folderId, Long memberId, String webhookUrl) {
+        AlertPlatform alertPlatform = verifyAlertPlatform(webhookUrl);
+
+        return alertRepository.save(
+                AlertEntity.create(memberId, folderId, alertPlatform, webhookUrl))
+            .toDomain();
     }
 
     public void off(Long folderId, Long memberId) {
         AlertEntity alert = findByAlert(folderId, memberId);
         alertRepository.delete(alert);
+    }
+
+    private AlertPlatform verifyAlertPlatform(String webhookUrl) {
+        return alertPlatformRepository.findAll()
+            .stream()
+            .map(AlertPlatformEntity::toDomain)
+            .filter(platform -> platform.verifyWebhookUrl(webhookUrl))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchDomainException(AlertPlatform.class));
     }
 
     private AlertEntity findByAlert(Long folderId, Long memberId) {
@@ -40,9 +58,9 @@ public class AlertService {
 
     //TODO: 굳이 사실 지금은 필요없어 보이기는합니다.
     @PublishEvent(eventType = AlertEvent.class,
-            params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#posts,#name)}")
+        params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#posts,#name)}")
     public void notifyAlert(Map<String, String> posts, String name) {
-        log.info("notifyAlert 실행 플랫폼 알람 publish 실행");
+        // log.info("notifyAlert 실행 플랫폼 알람 publish 실행");
     }
 
     public List<AlertEntity> getAlertList(Long serviceId) {

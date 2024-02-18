@@ -1,10 +1,11 @@
 package com.flytrap.rssreader.presentation.controller;
 
+import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.controller.api.AlertControllerApi;
 import com.flytrap.rssreader.presentation.dto.AlertRequest;
+import com.flytrap.rssreader.presentation.dto.AlertResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.alert.AlertService;
@@ -27,15 +28,14 @@ public class AlertController implements AlertControllerApi {
     private final FolderVerifyService folderVerifyService;
 
     @PostMapping("/{folderId}/alerts")
-    public ApplicationResponse<Long> onAlert(
+    public ApplicationResponse<AlertResponse> registerAlert(
         @PathVariable Long folderId,
         @Valid @RequestBody AlertRequest request,
         @Login SessionMember member) {
 
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
-        AlertPlatform.ofCode(request.platformNum());
-        Long alertID = alertService.on(verifiedFolder.getId(), member.id(), request.platformNum());
-        return new ApplicationResponse<>(alertID);
+        Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
+        Alert alert = alertService.registerAlert(verifiedFolder.getId(), member.id(), request.webhookUrl());
+        return new ApplicationResponse<>(AlertResponse.from(alert));
     }
 
     @DeleteMapping("/{folderId}/alerts ")
