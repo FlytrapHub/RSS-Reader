@@ -4,11 +4,11 @@ import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,15 +33,14 @@ public class AlertEntity {
     @Column(name = "folder_id", nullable = false)
     private Long folderId;
 
-    @ManyToOne
-    @JoinColumn(name = "platform_id", nullable = false)
-    private AlertPlatformEntity alertPlatform;
+    @Enumerated(EnumType.STRING)
+    private AlertPlatform alertPlatform;
 
     @Column(name = "webhook_url", length = 2500, nullable = false)
     private String webhookUrl;
 
     @Builder
-    protected AlertEntity(Long id, Long memberId, Long folderId, AlertPlatformEntity alertPlatform,
+    protected AlertEntity(Long id, Long memberId, Long folderId, AlertPlatform alertPlatform,
         String webhookUrl) {
         this.id = id;
         this.memberId = memberId;
@@ -55,7 +54,7 @@ public class AlertEntity {
         return AlertEntity.builder()
             .memberId(memberId)
             .folderId(folderId)
-            .alertPlatform(AlertPlatformEntity.create(alertPlatform))
+            .alertPlatform(alertPlatform)
             .webhookUrl(webhookUrl)
             .build();
     }
@@ -64,7 +63,7 @@ public class AlertEntity {
         return Alert.builder()
             .id(id)
             .memberId(memberId)
-            .alertPlatform(alertPlatform.toDomain())
+            .alertPlatform(alertPlatform)
             .webhookUrl(webhookUrl)
             .build();
     }
