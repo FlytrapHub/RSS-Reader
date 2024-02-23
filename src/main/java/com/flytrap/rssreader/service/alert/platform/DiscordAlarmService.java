@@ -15,14 +15,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SlackAlarmService implements AlarmService {
+public class DiscordAlarmService implements AlarmService {
+
+    private static final int MAX_CONTENT_LENGTH = 2000;
 
     private final WebClient.Builder webClient;
 
     @Override
     public boolean isSupport(AlertPlatform alertPlatform) {
 
-        return alertPlatform == AlertPlatform.SLACK;
+        return alertPlatform == AlertPlatform.DISCORD;
     }
 
     @Override
@@ -32,23 +34,30 @@ public class SlackAlarmService implements AlarmService {
         sb.append("*폴더 이름:* ").append(value.folderName()).append("\n\n");
 
         for (Entry<String, String> entry : value.posts().entrySet()) {
-            sb.append("<").append(entry.getKey()).append("|").append(entry.getValue()).append(">\n\n");
+            String appendStr = "[" + entry.getValue() + "](" + entry.getKey() + ")\n\n";
+
+            if (sb.length() + appendStr.length() > MAX_CONTENT_LENGTH) {
+                break;
+            }
+
+            sb.append(appendStr);
         }
+
         send(value.webhookUrl(), sb.toString());
     }
 
     private void send(String webhookUrl, String message) {
         webClient
-                .baseUrl(webhookUrl)
-                .build()
-                .method(HttpMethod.POST)
-                .uri("")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(Map.of("text", message)))
-                .retrieve()
-                .bodyToMono(String.class)
-                .doOnSuccess(response -> log.info("Slack notification sent successfully. Response: {}", response))
-                .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage(), error))
-                .block();
+            .baseUrl(webhookUrl)
+            .build()
+            .method(HttpMethod.POST)
+            .uri("")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(Map.of("content", message)))
+            .retrieve()
+            .bodyToMono(Void.class)
+            .doOnSuccess(response -> log.info("Discord notification sent successfully. Response: {}", response))
+            .doOnError(error -> log.error("Error sending Discord notification. Error: {}", error.getLocalizedMessage()))
+            .block();
     }
 }

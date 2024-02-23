@@ -3,10 +3,13 @@ package com.flytrap.rssreader.service.dto;
 
 import java.util.Map;
 
-public record AlertParam(Map<String, String> posts, String name) {
+public record AlertParam(
+    String folderName,
+    String webhookUrl,
+    Map<String, String> posts) {
 
-    public static AlertParam create(Map<String, String> posts, String name) {
-        return new AlertParam(posts, name);
+    public static AlertParam create(String folderName, String webhookUrl, Map<String, String> posts) {
+        return new AlertParam(folderName, webhookUrl, posts);
     }
 }
 
