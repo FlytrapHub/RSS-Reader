@@ -41,14 +41,14 @@ public class AlertService {
 
     @PublishEvent(eventType = AlertEvent.class,
         params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#folderName, #webhookUrl, #posts)}")
-    public void notifyAlert(String folderName, String webhookUrl, Map<String, String> posts) {}
+    public void publishAlertEvent(String folderName, String webhookUrl, Map<String, String> posts) {}
 
-    public void notifyPlatform(AlertParam value) {
+    public void sendAlertToPlatform(AlertParam value) {
         AlertPlatform alertPlatform = AlertPlatform.parseWebhookUrl(value.webhookUrl());
 
         for (AlarmService alarmService : alarmServices) {
             if (alarmService.isSupport(alertPlatform)) {
-                alarmService.notifyReturn(value);
+                alarmService.sendAlert(value);
             }
         }
     }

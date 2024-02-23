@@ -28,7 +28,7 @@ public class DiscordAlarmService implements AlarmService {
     }
 
     @Override
-    public void notifyReturn(AlertParam value) {
+    public void sendAlert(AlertParam value) {
         StringBuilder sb = new StringBuilder();
         sb.append("*새로운 글이 갱신되었습니다!*\n\n");
         sb.append("*폴더 이름:* ").append(value.folderName()).append("\n\n");

@@ -6,5 +6,5 @@ import com.flytrap.rssreader.service.dto.AlertParam;
 public interface AlarmService {
 
     boolean isSupport(AlertPlatform alertPlatform);
-    void notifyReturn(AlertParam value);
+    void sendAlert(AlertParam value);
 }
