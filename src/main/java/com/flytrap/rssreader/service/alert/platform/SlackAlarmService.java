@@ -27,28 +27,38 @@ public class SlackAlarmService implements AlarmService {
 
     @Override
     public void sendAlert(AlertParam value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("*새로운 글이 갱신되었습니다!*\n\n");
-        sb.append("*폴더 이름:* ").append(value.folderName()).append("\n\n");
+        String text = generateText(value);
 
-        for (Entry<String, String> entry : value.posts().entrySet()) {
-            sb.append("<").append(entry.getKey()).append("|").append(entry.getValue()).append(">\n\n");
-        }
-        send(value.webhookUrl(), sb.toString());
+        webClient
+            .baseUrl(value.webhookUrl())
+            .build()
+            .method(HttpMethod.POST)
+            .uri("")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(Map.of("text", text)))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnSuccess(response -> log.info("Slack notification sent successfully. Response: {}", response))
+            .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage(), error))
+            .block();
     }
 
-    private void send(String webhookUrl, String message) {
-        webClient
-                .baseUrl(webhookUrl)
-                .build()
-                .method(HttpMethod.POST)
-                .uri("")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(Map.of("text", message)))
-                .retrieve()
-                .bodyToMono(String.class)
-                .doOnSuccess(response -> log.info("Slack notification sent successfully. Response: {}", response))
-                .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage(), error))
-                .block();
+    /**
+     * Slack에 알림 메시지를 보낼 때는 Request Message Body에 Json 포맷으로 text 필드에 메시지를 넣어서 보냅니다.
+     *
+     * * Slack API Docs: https://api.slack.com/messaging/webhooks#posting_with_webhooks
+     *
+     * @return Slack 웹 훅으로 보낼 메시
+     */
+    private String generateText(AlertParam value) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("*새로운 글이 갱신되었습니다!*\n\n");
+        builder.append("*폴더 이름:* ").append(value.folderName()).append("\n\n");
+
+        for (Entry<String, String> entry : value.posts().entrySet()) {
+            builder.append("<").append(entry.getKey()).append("|").append(entry.getValue()).append(">\n\n");
+        }
+
+        return builder.toString();
     }
 }
