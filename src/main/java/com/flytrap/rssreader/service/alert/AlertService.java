@@ -5,7 +5,7 @@ import com.flytrap.rssreader.domain.alert.AlertEvent;
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.global.event.PublishEvent;
 import com.flytrap.rssreader.global.exception.NoSuchDomainException;
-import com.flytrap.rssreader.service.alert.platform.AlarmService;
+import com.flytrap.rssreader.infrastructure.api.alert.AlertSender;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
 import com.flytrap.rssreader.service.dto.AlertParam;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class AlertService {
 
     private final AlertEntityJpaRepository alertRepository;
-    private final List<AlarmService> alarmServices;
+    private final List<AlertSender> alertSenders;
 
     public Alert registerAlert(Long folderId, Long memberId, String webhookUrl) {
         AlertPlatform alertPlatform = AlertPlatform.parseWebhookUrl(webhookUrl);
@@ -46,9 +46,9 @@ public class AlertService {
     public void sendAlertToPlatform(AlertParam value) {
         AlertPlatform alertPlatform = AlertPlatform.parseWebhookUrl(value.webhookUrl());
 
-        for (AlarmService alarmService : alarmServices) {
-            if (alarmService.isSupport(alertPlatform)) {
-                alarmService.sendAlert(value);
+        for (AlertSender alertSender : alertSenders) {
+            if (alertSender.isSupport(alertPlatform)) {
+                alertSender.sendAlert(value);
             }
         }
     }

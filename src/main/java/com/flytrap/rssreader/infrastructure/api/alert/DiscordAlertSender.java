@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service.alert.platform;
+package com.flytrap.rssreader.infrastructure.api.alert;
 
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.service.dto.AlertParam;
@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DiscordAlarmService implements AlarmService {
+public class DiscordAlertSender implements AlertSender {
 
     private static final int MAX_CONTENT_LENGTH = 2000;
 
