@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.alert;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -6,15 +6,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.member.Member;
 import com.flytrap.rssreader.fixture.FixtureFactory;
 import com.flytrap.rssreader.fixture.FolderFixtureFactory;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
 import com.flytrap.rssreader.service.alert.AlertService;
-import com.flytrap.rssreader.service.alert.platform.SlackAlarmService;
 import com.flytrap.rssreader.service.dto.AlertParam;
 import java.util.Map;
 import java.util.Optional;

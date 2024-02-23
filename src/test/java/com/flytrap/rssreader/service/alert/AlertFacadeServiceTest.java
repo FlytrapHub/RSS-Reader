@@ -1,4 +1,4 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.alert;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -12,7 +12,7 @@ import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
-import com.flytrap.rssreader.service.alert.AlertFacadeService;
+import com.flytrap.rssreader.service.alert.AlertScheduleService;
 import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
@@ -39,7 +39,7 @@ class AlertFacadeServiceTest {
     private FolderReadService folderReadService;
 
     @InjectMocks
-    private AlertFacadeService alertFacadeService;
+    private AlertScheduleService alertFacadeService;
 
 
     @Test
