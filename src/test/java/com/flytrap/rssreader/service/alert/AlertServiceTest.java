@@ -1,29 +1,28 @@
 package com.flytrap.rssreader.service.alert;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.fixture.FixtureFactory;
-import com.flytrap.rssreader.fixture.FolderFixtureFactory;
+import com.flytrap.rssreader.infrastructure.api.alert.AlertSender;
+import com.flytrap.rssreader.infrastructure.api.alert.DiscordAlertSender;
+import com.flytrap.rssreader.infrastructure.api.alert.SlackAlertSender;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
-import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.dto.AlertParam;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("Alert 서비스 로직 단위 테스트")
@@ -34,57 +33,66 @@ class AlertServiceTest {
     AlertEntityJpaRepository alertRepository;
 
     @Mock
-    SlackAlarmService slackAlarmService;
+    SlackAlertSender slackAlertSender;
 
-    @InjectMocks
+    @Mock
+    DiscordAlertSender discordAlertSender;
+
     AlertService alertService;
 
-    Member member = FixtureFactory.generateMember();
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this); // Mockito 어노테이션 초기화
+        List<AlertSender> senders = Arrays.asList(slackAlertSender, discordAlertSender);
 
-    Folder folder = FolderFixtureFactory.generateFolder();
-
-    AlertPlatform slack = AlertPlatform.SLACK;
+        /*
+         * 생성자를 통해 Mock 객체를 주입
+         * AlertService에서 AlertService List를 자동 주입 받고 있습니다.
+         * 그러나 Mock으로는 자동 주입이 불가능 해서 AlertService를 직접 생성하고 있습니다.
+         */
+        alertService = new AlertService(alertRepository, senders);
+    }
 
     @Test
-    @DisplayName("특정 플랫폼 알람 받기 ON")
-    void on() {
+    @DisplayName("폴더에 알림 웹 훅 URL 등록할 수 있다.")
+    void registerAlert() {
+        // given
+        AlertEntity alertEntity = AlertEntity.create(
+            1L, 1L, AlertPlatform.SLACK, AlertPlatform.SLACK.getSignatureUrl());
 
         // when
-        when(alertRepository.save(Mockito.any(AlertEntity.class)))
-                .thenAnswer(invocation -> {
-                    AlertEntity savedEntity = invocation.getArgument(
-                            0); // Get the passed AlertEntity
-                    Integer serviceId = savedEntity.getServiceId();
-                    AlertPlatform platform = AlertPlatform.ofCode(serviceId);
-                    assertEquals(platform.getValue(), slack.getValue());
-                    return savedEntity;
-                });
+        when(alertRepository.save(any(AlertEntity.class)))
+            .thenReturn(alertEntity);
 
-        alertService.on(member.getId(), folder.getId(), slack.getValue());
+        alertService.registerAlert(alertEntity.getFolderId(), alertEntity.getMemberId(),
+            alertEntity.getWebhookUrl());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            verify(alertRepository, times(1)).save(any());
+            verify(alertRepository, times(1)).save(any(AlertEntity.class));
         });
     }
 
     @Test
-    @DisplayName("특정 플랫폼 알람 받기 OFF")
-    void off() {
-        AlertEntity entity = AlertEntity.builder()
-                .memberId(member.getId())
-                .folderId(folder.getId())
-                .serviceId(slack.getValue())
-                .build();
+    @DisplayName("폴더에 등록된 알림 웹 훅을 삭제할 수 있다.")
+    void removeAlert() {
+        AlertEntity alertEntity = AlertEntity.builder()
+            .id(1L)
+            .memberId(1L)
+            .folderId(1L)
+            .alertPlatform(AlertPlatform.SLACK)
+            .webhookUrl(AlertPlatform.SLACK.getSignatureUrl())
+            .build();
 
-        when(alertRepository.findByFolderIdAndMemberId(folder.getId(), member.getId()))
-                .thenReturn(Optional.of(entity));
+        when(alertRepository.findById(alertEntity.getId())
+        ).thenReturn(Optional.of(alertEntity));
 
         // when
-        alertService.off(folder.getId(), member.getId());
+        alertService.removeAlert(alertEntity.getId());
+
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            verify(alertRepository, times(1)).delete(any());
+            verify(alertRepository, times(1)).deleteById(alertEntity.getId());
         });
     }
 
@@ -93,16 +101,21 @@ class AlertServiceTest {
     void testNotifyPlatform() {
 
         // then
-        AlertParam alertParam = new AlertParam(Map.of(
-                "test_url1", "test_title 1",
-                "test_url2", "test_title 2",
-                "test_url3", "test_title 3"
-        ), "folderName");
+        AlertParam alertParam = new AlertParam(
+            "folderName",
+            AlertPlatform.SLACK.getSignatureUrl(),
+            Map.of(
+                "newPostUrl1", "newPostTitle1",
+                "newPostUrl2", "newPostTitle2",
+                "newPostUrl3", "newPostTitle3"
+            )
+        );
 
         // when
-        alertService.notifyPlatform(alertParam);
+        when(slackAlertSender.isSupport(AlertPlatform.SLACK)).thenReturn(true);
+        alertService.sendAlertToPlatform(alertParam);
 
         // then
-        verify(slackAlarmService).notifyReturn(alertParam);
+        verify(slackAlertSender, times(1)).sendAlert(alertParam);
     }
 }
