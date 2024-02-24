@@ -39,7 +39,7 @@ public class SlackAlertSender implements AlertSender {
             .retrieve()
             .bodyToMono(String.class)
             .doOnSuccess(response -> log.info("Slack notification sent successfully. Response: {}", response))
-            .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage(), error))
+            .doOnError(error -> log.error("Error sending Slack notification. Error: {}", error.getMessage()))
             .block();
     }
 
