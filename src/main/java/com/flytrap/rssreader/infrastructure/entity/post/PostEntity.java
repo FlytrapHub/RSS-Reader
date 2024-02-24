@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "rss_post")
+@Deprecated
 public class PostEntity {
 
     @Id

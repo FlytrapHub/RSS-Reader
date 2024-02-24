@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Deprecated(since = "이제는 사용하지 않는 도메인입니다.")
 public class PostBulkInsertPublisher {
 
     private final ApplicationEventPublisher publisher;
 
-    public void publish(PostEntity post) {
+    public void publish(PostEntity post) { //TODO : entity -> domain
         log.info("Create new offer post! {}", post.toString());
         publisher.publishEvent(post);
     }

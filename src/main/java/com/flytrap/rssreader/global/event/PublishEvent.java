@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface PublishEvent {
     Class<? extends EventHolder> eventType();
-    String params() default "";
+    String param() default "";
+    String[] params(); // todo : 감자가 이벤트 구현할 때, 파라미터가 여러개 필요한 부분 있었음. 이부분 리팩토링 해보기
 
 }

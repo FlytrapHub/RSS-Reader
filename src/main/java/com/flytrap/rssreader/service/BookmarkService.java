@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Service
 public class BookmarkService {
+    // 최상위에 도메인이 있다고 하셨죠
+    // global 에서는 바꿀 거 없나요?
 
     private final PostListReadRepository postListReadRepository;
     private final BookmarkEntityJpaRepository bookmarkRepository;

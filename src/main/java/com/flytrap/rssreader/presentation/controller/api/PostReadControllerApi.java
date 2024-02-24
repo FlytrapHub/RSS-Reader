@@ -6,6 +6,7 @@ import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import org.springframework.web.bind.annotation.PathVariable;
 
+@Deprecated
 public interface PostReadControllerApi {
 
     // TODO: Swaager 어노테이션 붙여주세요.

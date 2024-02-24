@@ -3,6 +3,7 @@ package com.flytrap.rssreader.infrastructure.repository.output;
 import com.flytrap.rssreader.domain.post.Post;
 import java.time.Instant;
 
+@Deprecated
 public record PostOutput(
     Long id,
     Long subscribeId,

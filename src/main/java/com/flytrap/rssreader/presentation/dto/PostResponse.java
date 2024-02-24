@@ -4,6 +4,7 @@ import com.flytrap.rssreader.domain.post.Post;
 import java.time.Instant;
 import java.util.List;
 
+@Deprecated
 public record PostResponse(
     long id,
     String guid,

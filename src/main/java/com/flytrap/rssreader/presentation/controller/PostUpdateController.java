@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
+@Deprecated
 public class PostUpdateController implements PostUpdateControllerApi {
 
     private final ReactionService reactionService;

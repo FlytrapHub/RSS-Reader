@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @AllArgsConstructor
 @Service
+@Deprecated
 public class PostCollectService {
 
     //  private static final int TEN_MINUTE = 600_000;
@@ -69,7 +70,6 @@ public class PostCollectService {
         subscribeEntityJpaRepository.save(subscribe);
     }
 
-    //TODO: 글이 새로 추가되면 슬랙에 보낼URL을 기억한다.
     private Map<String, String> savePostsForBulkInsert(RssPostsData postData,
             SubscribeEntity subscribe) {
         List<PostEntity> posts = postEntityJpaRepository.findAllBySubscribeOrderByPubDateDesc(

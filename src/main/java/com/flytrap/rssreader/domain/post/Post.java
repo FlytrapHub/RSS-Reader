@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Domain(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Deprecated(since = "이제는 사용하지 않는 도메인입니다.")
 public class Post implements DefaultDomain {
 
     private Long id;

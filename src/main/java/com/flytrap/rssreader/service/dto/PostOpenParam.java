@@ -1,7 +1,9 @@
 package com.flytrap.rssreader.service.dto;
 
-import com.flytrap.rssreader.infrastructure.entity.post.OpenEntity;
 
+import com.flytrap.rssreader.api.post.infrastructure.entity.OpenEntity;
+
+@Deprecated
 public record PostOpenParam(Long memberId,
                             Long postId) {
 

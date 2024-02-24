@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "open")
+@Deprecated
 public class OpenEntity {
 
     @Id

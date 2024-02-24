@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class PostOpenService {
 
     private final PostOpenRepository postOpenRepository;

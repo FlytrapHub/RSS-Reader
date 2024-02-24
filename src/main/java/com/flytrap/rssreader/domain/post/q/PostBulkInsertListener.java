@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Deprecated(since = "이제는 사용하지 않는 도메인입니다.")
 public class PostBulkInsertListener {
 
     private final PostBulkInsertQueue eventQueue;

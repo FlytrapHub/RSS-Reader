@@ -10,6 +10,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class PostOpenEventHandler {
 
     private final PostOpenService postOpenService;

@@ -61,7 +61,7 @@ public class BookmarkController implements BookmarkControllerApi {
         @Login SessionMember member
     ) {
 
-        Post post = postService.findById(postId);
+        Post post = postService.get(postId);
         Bookmark bookmark = bookmarkService.addBookmark(member, post);
 
         return new ApplicationResponse<>(BookmarkRequest.Response.from(bookmark));

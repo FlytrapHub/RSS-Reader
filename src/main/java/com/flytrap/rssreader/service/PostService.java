@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
+@Deprecated
 public class PostService {
 
     private final PostEntityJpaRepository postRepository;

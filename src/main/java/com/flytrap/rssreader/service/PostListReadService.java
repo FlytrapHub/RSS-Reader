@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 @Service
+@Deprecated
 public class PostListReadService {
 
     private final PostListReadRepository postListReadRepository;

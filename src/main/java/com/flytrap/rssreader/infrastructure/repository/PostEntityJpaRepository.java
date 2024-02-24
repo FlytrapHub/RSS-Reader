@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+@Deprecated
 public interface PostEntityJpaRepository extends JpaRepository<PostEntity, Long> {
 
     List<PostEntity> findAllBySubscribeOrderByPubDateDesc(SubscribeEntity subscribe);

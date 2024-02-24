@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.infrastructure.entity.post;
 
+@Deprecated
 public class EmptySubscribePostCount implements SubscribePostCount {
 
     @Override

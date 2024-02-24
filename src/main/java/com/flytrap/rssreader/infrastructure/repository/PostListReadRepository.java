@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 
+@Deprecated
 public interface PostListReadRepository {
 
     Optional<PostOutput> findById(Long postId);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
+@Deprecated
 public class PostReadController implements PostReadControllerApi {
 
     private final PostReadService postReadService;

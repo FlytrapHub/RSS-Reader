@@ -11,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class AuthorizationArgumentResolver implements HandlerMethodArgumentResolver {
+public class AuthorizationArgumentResolver implements HandlerMethodArgumentResolver { // 이것도 presentation에서
 
     private final AuthorizationContext context;
 

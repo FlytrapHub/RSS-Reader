@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.dto;
 
 import org.springframework.util.StringUtils;
 
+@Deprecated
 public record PostFilter(Boolean read,
                          Long start,
                          Long end,

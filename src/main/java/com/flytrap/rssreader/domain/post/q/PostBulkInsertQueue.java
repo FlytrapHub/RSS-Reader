@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Deprecated(since = "이제는 사용하지 않는 서비스입니다.")
 public class PostBulkInsertQueue {
 
     private final Queue<PostEntity> queue;

@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Deprecated
 public class PostListReadDslRepository implements PostListReadRepository {
 
     private final JPAQueryFactory queryFactory;

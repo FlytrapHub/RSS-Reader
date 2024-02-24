@@ -19,7 +19,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @Order(3)
 @RequiredArgsConstructor
-public class AuthenticationFilter extends OncePerRequestFilter { //TODO 통합테스트 해보면 좋겠습니다.
+public class AuthenticationFilter extends OncePerRequestFilter {
+    //TODO 통합테스트 해보면 좋겠습니다. 필터는 presectation은? 어느 범주로 하는게 좋을지... 빼는게 낫겠죠?
+    // 이게 의존성에 따라서 해봐도 될거같아요.
+    //
 
     private final AuthProperties authProperties;
     private final AuthorizationContext context;
