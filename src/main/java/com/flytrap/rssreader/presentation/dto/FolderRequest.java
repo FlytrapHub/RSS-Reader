@@ -2,6 +2,7 @@ package com.flytrap.rssreader.presentation.dto;
 
 import jakarta.validation.constraints.Size;
 
+@Deprecated
 public record FolderRequest() {
 
     public static record CreateRequest(@Size(min = 1, max = 255) String name) {

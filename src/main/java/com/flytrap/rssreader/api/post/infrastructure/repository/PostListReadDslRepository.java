@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.post.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
+import com.flytrap.rssreader.api.post.infrastructure.output.PostSummaryOutput;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -32,7 +32,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    public Optional<PostOutput> findById(Long postId) {
+    public Optional<PostSummaryOutput> findById(Long postId) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -43,7 +43,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 .fetchOne());
     }
 
-    public List<PostOutput> findAllBySubscribe(long memberId, long subscribeId, PostFilter postFilter, Pageable pageable) {
+    public List<PostSummaryOutput> findAllBySubscribe(long memberId, long subscribeId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -59,7 +59,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 .fetch();
     }
 
-    public List<PostOutput> findAllByFolder(long memberId, long folderId, PostFilter postFilter, Pageable pageable) {
+    public List<PostSummaryOutput> findAllByFolder(long memberId, long folderId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -77,7 +77,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 .fetch();
     }
 
-    public List<PostOutput> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable) {
+    public List<PostSummaryOutput> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -99,7 +99,7 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 .fetch();
     }
 
-    public List<PostOutput> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable) {
+    public List<PostSummaryOutput> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
         builder
@@ -115,10 +115,10 @@ public class PostListReadDslRepository implements PostListReadRepository {
                 .fetch();
     }
 
-    private JPAQuery<PostOutput> initFindAllQuery() {
+    private JPAQuery<PostSummaryOutput> initFindAllQuery() {
         return queryFactory
                 .selectDistinct(
-                        Projections.constructor(PostOutput.class,
+                        Projections.constructor(PostSummaryOutput.class,
                                 postEntity.id,
                                 postEntity.subscribe.id,
                                 postEntity.guid,

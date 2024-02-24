@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+@Deprecated
 public interface SharedFolderJpaRepository extends JpaRepository<SharedFolderEntity, Long> {
 
     long countAllByFolderId(long folderId);

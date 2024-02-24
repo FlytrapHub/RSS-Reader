@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Deprecated
 public interface FolderUpdateControllerApi {
 
     // TODO: Swaager 어노테이션 붙여주세요.

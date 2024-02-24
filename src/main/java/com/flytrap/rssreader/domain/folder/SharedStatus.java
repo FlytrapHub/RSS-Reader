@@ -1,5 +1,6 @@
 package com.flytrap.rssreader.domain.folder;
 
+@Deprecated
 public enum SharedStatus {
     SHARED, PRIVATE;
 

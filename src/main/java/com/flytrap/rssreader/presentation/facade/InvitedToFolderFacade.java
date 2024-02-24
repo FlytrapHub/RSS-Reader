@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class InvitedToFolderFacade {
 
     private final SharedFolderReadService sharedFolderReadService;

@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 @Getter
 @Entity
 @Table(name = "folder_subscribe")
+@Deprecated
 public class FolderSubscribeEntity {
 
     @Id

@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Domain(name = "folderSubscribe")
+@Deprecated
 public class FolderSubscribe {
 
     private Long id;

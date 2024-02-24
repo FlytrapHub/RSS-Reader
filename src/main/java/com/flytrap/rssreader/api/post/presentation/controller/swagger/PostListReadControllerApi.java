@@ -1,8 +1,8 @@
 package com.flytrap.rssreader.api.post.presentation.controller.swagger;
 
+import com.flytrap.rssreader.api.post.domain.PostFilter;
+import com.flytrap.rssreader.api.post.presentation.dto.response.PostResponse;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.presentation.dto.PostFilter;
-import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
 import io.swagger.v3.oas.annotations.Operation;

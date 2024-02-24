@@ -17,6 +17,7 @@ import javax.security.sasl.AuthenticationException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Deprecated
 @Tag(name ="공유 폴더")
 public interface SharedFolderUpdateControllerApi {
 

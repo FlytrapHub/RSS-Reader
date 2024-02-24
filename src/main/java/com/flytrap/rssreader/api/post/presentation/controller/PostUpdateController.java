@@ -1,11 +1,11 @@
 package com.flytrap.rssreader.api.post.presentation.controller;
 
+import com.flytrap.rssreader.api.post.business.service.PostOpenService;
 import com.flytrap.rssreader.api.post.presentation.controller.swagger.PostUpdateControllerApi;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.dto.ReactionRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.PostOpenService;
 import com.flytrap.rssreader.service.ReactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
-@Deprecated
 public class PostUpdateController implements PostUpdateControllerApi {
 
     private final ReactionService reactionService;

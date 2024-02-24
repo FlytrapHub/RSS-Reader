@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
+@Deprecated
 public class FolderReadController implements FolderReadControllerApi {
 
     private final MyFolderFacade myFolderFacade;

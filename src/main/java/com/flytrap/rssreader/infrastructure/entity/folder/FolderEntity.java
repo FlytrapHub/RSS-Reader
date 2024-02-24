@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "folder")
+@Deprecated
 public class FolderEntity {
 
     @Id

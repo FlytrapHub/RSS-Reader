@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+@Deprecated
 public interface FolderEntityJpaRepository extends JpaRepository<FolderEntity, Long> {
 
     List<FolderEntity> findAllByIsDeletedFalse();

@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.post.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
+import com.flytrap.rssreader.api.post.infrastructure.output.PostSummaryOutput;
 import com.flytrap.rssreader.presentation.dto.PostFilter;
 import org.springframework.data.domain.Pageable;
 
@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface PostListReadRepository {
 
-    Optional<PostOutput> findById(Long postId);
+    Optional<PostSummaryOutput> findById(Long postId);
 
-    List<PostOutput> findAllBySubscribe(long memberId, long subscribeId, PostFilter postFilter, Pageable pageable);
+    List<PostSummaryOutput> findAllBySubscribe(long memberId, long subscribeId, PostFilter postFilter, Pageable pageable);
 
-    List<PostOutput> findAllByFolder(long memberId, long folderId, PostFilter postFilter, Pageable pageable);
+    List<PostSummaryOutput> findAllByFolder(long memberId, long folderId, PostFilter postFilter, Pageable pageable);
 
-    List<PostOutput> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable);
+    List<PostSummaryOutput> findAllByMember(long memberId, PostFilter postFilter, Pageable pageable);
 
-    List<PostOutput> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable);
+    List<PostSummaryOutput> findAllBookmarks(long memberId, PostFilter postFilter, Pageable pageable);
 }

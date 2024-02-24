@@ -1,13 +1,13 @@
 package com.flytrap.rssreader.api.post.presentation.controller;
 
+import com.flytrap.rssreader.api.post.business.service.PostListReadService;
+import com.flytrap.rssreader.api.post.domain.PostFilter;
 import com.flytrap.rssreader.api.post.presentation.controller.swagger.PostListReadControllerApi;
+import com.flytrap.rssreader.api.post.presentation.dto.response.PostResponse;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.presentation.dto.PostFilter;
-import com.flytrap.rssreader.presentation.dto.PostResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.PostListReadService;
 import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +30,8 @@ public class PostListReadController implements PostListReadControllerApi {
     @GetMapping("/subscribes/{subscribeId}/posts")
     public ApplicationResponse<PostResponse.PostListResponse> getPostsBySubscribe(
             @PathVariable Long subscribeId,
-            PostFilter postFilter,
-            @PageableDefault(page = 0, size = 15) Pageable pageable,
+            PostFilter postFilter, // TODO: filter 가 request 부터 repository까지 계속 전달됨
+            @PageableDefault(page = 0, size = 15) Pageable pageable, // TODO: pageable 도 마찬가지. service 에서 만들면 됨
             @Login SessionMember member) {
 
         List<PostResponse> posts = postListReadService.getPostsBySubscribe(member, subscribeId, postFilter, pageable)
@@ -46,7 +46,7 @@ public class PostListReadController implements PostListReadControllerApi {
     @GetMapping("/folders/{folderId}/posts")
     public ApplicationResponse<PostResponse.PostListResponse> getPostsByFolder(
             @PathVariable Long folderId,
-            PostFilter postFilter,
+            PostFilter postFilter, // TODO: filter 가 request 부터 repository까지 계속 전달됨
             @PageableDefault(page = 0, size = 15) Pageable pageable,
             @Login SessionMember member) {
 
@@ -63,7 +63,7 @@ public class PostListReadController implements PostListReadControllerApi {
 
     @GetMapping("/posts")
     public ApplicationResponse<PostResponse.PostListResponse> getPostsByMember(
-            PostFilter postFilter,
+            PostFilter postFilter, // TODO: filter 가 request 부터 repository까지 계속 전달됨
             @PageableDefault(page = 0, size = 15) Pageable pageable,
             @Login SessionMember member) {
 

@@ -10,11 +10,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Deprecated
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "folder_member")
-public class SharedFolderEntity {
+public class SharedFolderEntity { // TODO: rename folder member entity
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.PathVariable;
 
+@Deprecated
 public interface FolderReadControllerApi {
 
     @Operation(summary = "폴더 목록 불러오기", description = "현재 회원이 생성한 폴더 목록을 반환한다.")

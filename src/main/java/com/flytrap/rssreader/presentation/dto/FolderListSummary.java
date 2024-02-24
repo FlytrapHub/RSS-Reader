@@ -5,6 +5,7 @@ import com.flytrap.rssreader.domain.shared.SharedFolder;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public record FolderListSummary(long id,
                                 String name,
                                 int unreadCount,

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class MyFolderFacade {
 
     private final FolderReadService folderReadService;

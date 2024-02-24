@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
+@Deprecated
 public class SharedFolderUpdateController implements SharedFolderUpdateControllerApi {
 
     private final SharedFolderReadService sharedFolderReadService;

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Domain(name = "folder")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Deprecated
 public class Folder implements DefaultDomain {
 
     private Long id;

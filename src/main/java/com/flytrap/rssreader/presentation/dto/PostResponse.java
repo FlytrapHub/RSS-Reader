@@ -1,6 +1,7 @@
 package com.flytrap.rssreader.presentation.dto;
 
-import com.flytrap.rssreader.domain.post.Post;
+import com.flytrap.rssreader.api.post.domain.Post;
+
 import java.time.Instant;
 import java.util.List;
 

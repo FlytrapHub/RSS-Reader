@@ -6,6 +6,7 @@ import com.flytrap.rssreader.domain.member.Member;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class SharedFolder extends Folder {
 
     private List<Member> invitedMembers = new ArrayList<>();

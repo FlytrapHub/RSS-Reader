@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
+@Deprecated
 public class FolderUpdateController implements FolderUpdateControllerApi {
 
     private final FolderUpdateService folderService;
