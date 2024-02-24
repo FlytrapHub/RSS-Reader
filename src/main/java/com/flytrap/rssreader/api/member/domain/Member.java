@@ -1,17 +1,17 @@
-package com.flytrap.rssreader.domain.member;
+package com.flytrap.rssreader.api.member.domain;
 
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
-import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Getter
 @Domain(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Deprecated
 public class Member implements DefaultDomain {
 
     private Long id;
@@ -34,7 +34,7 @@ public class Member implements DefaultDomain {
     }
 
     public static Member of(Long id, String name, String email, String profile, Long oauthPk,
-            OauthServer oauthServer, Instant createdAt) {
+                            OauthServer oauthServer, Instant createdAt) {
         return Member.builder()
                 .id(id)
                 .name(name)

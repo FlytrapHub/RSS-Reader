@@ -1,11 +1,11 @@
-package com.flytrap.rssreader.infrastructure.repository;
+package com.flytrap.rssreader.api.member.infrastructure.repository;
 
 import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-@Deprecated
+import java.util.List;
+import java.util.Optional;
+
 public interface MemberEntityJpaRepository extends JpaRepository<MemberEntity, Long> {
 
     Optional<MemberEntity> findByOauthPk(long oauthPk);

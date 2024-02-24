@@ -1,18 +1,17 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.api.member.business.service;
 
-import com.flytrap.rssreader.domain.member.Member;
+import com.flytrap.rssreader.api.member.domain.Member;
+import com.flytrap.rssreader.api.member.infrastructure.entity.MemberEntity;
+import com.flytrap.rssreader.api.member.infrastructure.repository.MemberEntityJpaRepository;
 import com.flytrap.rssreader.global.exception.NoSuchDomainException;
 import com.flytrap.rssreader.infrastructure.api.dto.UserResource;
-import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
-import com.flytrap.rssreader.infrastructure.repository.MemberEntityJpaRepository;
 import jakarta.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Deprecated
+import java.util.Collection;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -29,8 +28,8 @@ public class MemberService {
     public Member loginMember(UserResource userResource) {
 
         return memberEntityJpaRepository.findByOauthPk(userResource.getId())
-            .orElseGet(() -> joinMember(userResource.toDomainForCreate()))
-            .toDomain();
+                .orElseGet(() -> joinMember(userResource.toDomainForCreate()))
+                .toDomain();
     }
 
     /**

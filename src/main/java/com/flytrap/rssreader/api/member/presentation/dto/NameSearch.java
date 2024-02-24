@@ -1,8 +1,9 @@
-package com.flytrap.rssreader.presentation.dto;
+package com.flytrap.rssreader.api.member.presentation.dto;
+
+import com.flytrap.rssreader.presentation.dto.MemberSummary;
 
 import java.util.List;
 
-@Deprecated
 public record NameSearch(String name) {
 
     public record Result(List<MemberSummary> memberSummary) {

@@ -1,11 +1,10 @@
-package com.flytrap.rssreader.domain.member;
+package com.flytrap.rssreader.api.member.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Deprecated
 class OauthInfo {
 
     private Long oauthPk;

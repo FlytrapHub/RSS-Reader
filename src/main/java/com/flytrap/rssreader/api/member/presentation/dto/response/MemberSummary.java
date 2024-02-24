@@ -1,9 +1,10 @@
-package com.flytrap.rssreader.presentation.dto;
+package com.flytrap.rssreader.api.member.presentation.dto.response;
 
-import com.flytrap.rssreader.domain.member.Member;
+
+import com.flytrap.rssreader.api.member.domain.Member;
+
 import java.util.List;
 
-@Deprecated
 public record MemberSummary(Long id,
                             String name,
                             String profile) {

@@ -1,22 +1,9 @@
-package com.flytrap.rssreader.infrastructure.entity.member;
+package com.flytrap.rssreader.api.member.infrastructure.entity;
 
-import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.domain.member.OauthServer;
+import com.flytrap.rssreader.api.member.domain.Member;
+import com.flytrap.rssreader.api.member.domain.OauthServer;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,12 +11,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "member")
 @EntityListeners(AuditingEntityListener.class)
-@Deprecated
 public class MemberEntity {
 
     @Id
@@ -60,7 +50,7 @@ public class MemberEntity {
 
     @Builder
     protected MemberEntity(Long id, String name, String email, String profile, Long oauthPk,
-        OauthServer oauthServer) {
+                           OauthServer oauthServer) {
         this.id = id;
         this.name = name;
         this.email = email;
