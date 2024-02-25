@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
@@ -45,8 +46,14 @@ class AlertScheduleServiceTest {
     @DisplayName("새로운 구독 이벤트가 발행되면 알람 이벤트를 발행할 수 있다.")
     void alert_success() {
         // Given
-        List<AlertEntity> alertList = List.of(
-            AlertEntity.create(0L, 1L, AlertPlatform.DISCORD, "WEBHOOK_URL")
+        List<Alert> alertList = List.of(
+            Alert.builder()
+                .id(1L)
+                .memberId(1L)
+                .folderId(1L)
+                .alertPlatform(AlertPlatform.DISCORD)
+                .webhookUrl("WEBHOOK_URL")
+                .build()
         );
 
         SubscribeEvent subscribeEvent = new SubscribeEvent(
@@ -62,7 +69,7 @@ class AlertScheduleServiceTest {
 
         when(queue.isRemaining()).thenReturn(true);
         when(queue.poll()).thenReturn(subscribeEvent);
-        when(alertService.getAlertList(anyLong())).thenReturn(alertList);
+        when(alertService.getAlertListBySubscribe(anyLong())).thenReturn(alertList);
         when(folderReadService.findById(anyLong())).thenReturn(folder);
 
         // When
