@@ -53,8 +53,11 @@ public class AlertService {
         }
     }
 
-    public List<AlertEntity> getAlertList(Long serviceId) {
-        return alertRepository.findAlertsBySubscribeId(serviceId);
+    public List<Alert> getAlertListBySubscribe(Long subscribeId) {
+        return alertRepository.findAlertsBySubscribeId(subscribeId)
+            .stream()
+            .map(AlertEntity::toDomain)
+            .toList();
     }
 
     public List<Alert> getAlertListByFolder(Long folderId) {
