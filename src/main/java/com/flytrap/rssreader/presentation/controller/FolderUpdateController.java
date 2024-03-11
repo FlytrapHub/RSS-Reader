@@ -4,9 +4,7 @@ import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.domain.folder.FolderSubscribe;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.presentation.controller.api.FolderUpdateControllerApi;
-import com.flytrap.rssreader.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;
@@ -115,25 +113,4 @@ public class FolderUpdateController implements FolderUpdateControllerApi {
         return new ApplicationResponse<>(null);
     }
 
-    @PostMapping("/{folderId}/alerts")
-    public ApplicationResponse<Long> onAlert(
-        @PathVariable Long folderId,
-        @Valid @RequestBody AlertRequest request,
-        @Login SessionMember member) {
-
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
-        AlertPlatform.ofCode(request.platformNum());
-        Long alertID = alertService.on(verifiedFolder.getId(), member.id(), request.platformNum());
-        return new ApplicationResponse<>(alertID);
-    }
-
-    @DeleteMapping("/{folderId}/alerts ")
-    public ApplicationResponse<Void> offAlert(
-        @PathVariable Long folderId,
-        @Login SessionMember member) {
-
-        Folder verifiedFolder = folderVerifyService.getVerifiedOwnedFolder(folderId, member.id());
-        alertService.off(verifiedFolder.getId(), member.id());
-        return new ApplicationResponse<>(null);
-    }
 }
