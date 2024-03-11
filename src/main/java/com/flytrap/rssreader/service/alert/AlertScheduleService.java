@@ -1,8 +1,8 @@
 package com.flytrap.rssreader.service.alert;
 
+import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,12 @@ public class AlertScheduleService {
             SubscribeEvent event = queue.poll();
             log.info("alert 스케쥴러 실행 eventQueue poll 의 상태 = {}  ", event.toString()); //새로운 게시글들
 
-            List<AlertEntity> alertList = alertService.getAlertList(event.subscribeId());
-            if (!alertList.isEmpty()) {
-                alertList.forEach(alertEntity ->
+            List<Alert> alerts = alertService.getAlertListBySubscribe(event.subscribeId());
+            if (!alerts.isEmpty()) {
+                alerts.forEach(alert ->
                     alertService.publishAlertEvent(
-                        folderReadService.findById(alertEntity.getFolderId()).getName(),
-                        alertEntity.getWebhookUrl(),
+                        folderReadService.findById(alert.getFolderId()).getName(),
+                        alert.getWebhookUrl(),
                         event.posts()));
             }
         }
