@@ -7,7 +7,8 @@ INSERT INTO `folder`(name, member_id, is_shared, is_deleted)
 VALUES ('나의 폴더 1', 1, false, false),
        ('나의 폴더 2', 1, false, false),
        ('나의 폴더 3', 1, false, false),
-       ('공유 폴더 1', 2, true,  false);
+       ('공유 폴더 1', 2, true,  false),
+       ('공유 폴더 2', 1, true,  false);
 
 INSERT INTO `folder_member`(member_id, folder_id)
 VALUES (1, 4);
