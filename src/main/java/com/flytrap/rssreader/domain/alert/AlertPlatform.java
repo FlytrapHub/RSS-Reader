@@ -1,33 +1,23 @@
 package com.flytrap.rssreader.domain.alert;
 
-import com.flytrap.rssreader.global.model.DefaultDomain;
-import com.flytrap.rssreader.global.model.Domain;
-import lombok.AccessLevel;
-import lombok.Builder;
+import java.util.Arrays;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
-@ToString
-@Domain(name = "alertPlatform")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AlertPlatform implements DefaultDomain {
+@AllArgsConstructor
+public enum AlertPlatform {
 
-    private Long id;
-    private String platform;
-    private String signatureUrl;
+    SLACK("https://hooks.slack.com/services/"),
+    DISCORD("https://discord.com/api/webhooks/");
 
-    @Builder
-    protected AlertPlatform(Long id, String platform, String signatureUrl) {
-        this.id = id;
-        this.platform = platform;
-        this.signatureUrl = signatureUrl;
-    }
+    private final String signatureUrl;
 
-    public boolean verifyWebhookUrl(String webhookUrl) {
-        if (webhookUrl == null || webhookUrl.isEmpty()) return false;
+    public static AlertPlatform parseWebhookUrl(String webhookUrl) {
 
-        return webhookUrl.contains(signatureUrl);
+        return Arrays.stream(AlertPlatform.values())
+            .filter(alertPlatform -> webhookUrl.contains(alertPlatform.getSignatureUrl()))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("잘못된 웹 훅 URL 입니다."));
     }
 }

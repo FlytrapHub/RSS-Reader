@@ -16,13 +16,15 @@ public class Alert  implements DefaultDomain {
 
     private Long id;
     private Long memberId;
+    private Long folderId;
     private AlertPlatform alertPlatform;
     private String webhookUrl;
 
     @Builder
-    protected Alert(Long id, Long memberId, AlertPlatform alertPlatform, String webhookUrl) {
+    protected Alert(Long id, Long memberId, Long folderId, AlertPlatform alertPlatform, String webhookUrl) {
         this.id = id;
         this.memberId = memberId;
+        this.folderId = folderId;
         this.alertPlatform = alertPlatform;
         this.webhookUrl = webhookUrl;
     }

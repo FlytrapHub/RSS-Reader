@@ -11,7 +11,7 @@ public record AlertResponse(
     public static AlertResponse from(Alert alert) {
         return new AlertResponse(
             alert.getId(),
-            alert.getAlertPlatform().getPlatform(),
+            alert.getAlertPlatform().name(),
             alert.getWebhookUrl());
     }
 }
