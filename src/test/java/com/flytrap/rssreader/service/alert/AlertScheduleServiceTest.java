@@ -1,19 +1,19 @@
-package com.flytrap.rssreader.service;
+package com.flytrap.rssreader.service.alert;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flytrap.rssreader.domain.alert.Alert;
+import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.domain.alert.SubscribeEvent;
 import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
-import com.flytrap.rssreader.service.alert.AlertFacadeService;
-import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +25,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@DisplayName("AlertFacadeService  로직 단위 테스트")
+@DisplayName("AlertScheduleService  로직 단위 테스트")
 @ExtendWith(MockitoExtension.class)
-class AlertFacadeServiceTest {
+class AlertScheduleServiceTest {
 
     @Mock
     private SubscribeEventQueue queue;
@@ -39,52 +39,60 @@ class AlertFacadeServiceTest {
     private FolderReadService folderReadService;
 
     @InjectMocks
-    private AlertFacadeService alertFacadeService;
+    private AlertScheduleService alertScheduleService;
 
 
     @Test
-    @DisplayName("이벤트큐에 1L구독에  해당하는 3개의 글이 새로 save됐다")
+    @DisplayName("새로운 구독 이벤트가 발행되면 알람 이벤트를 발행할 수 있다.")
     void alert_success() {
         // Given
-        List<AlertEntity> alertList = List.of(
-                AlertEntity.create(0L, 1L, 1)
+        List<Alert> alertList = List.of(
+            Alert.builder()
+                .id(1L)
+                .memberId(1L)
+                .folderId(1L)
+                .alertPlatform(AlertPlatform.DISCORD)
+                .webhookUrl("WEBHOOK_URL")
+                .build()
         );
 
         SubscribeEvent subscribeEvent = new SubscribeEvent(
-                1L,
-                Map.of(
-                        "test_url1", "test_title 1",
-                        "test_url2", "test_title 2",
-                        "test_url3", "test_title 3"
-                )
+            1L,
+            Map.of(
+                "newPostUrl1", "newPostTitle1",
+                "newPostUrl2", "newPostTitle2",
+                "newPostUrl3", "newPostTitle3"
+            )
         );
 
-        Folder folder = Folder.create("folder1", 0L);
+        Folder folder = Folder.create("folder1", 1L);
 
         when(queue.isRemaining()).thenReturn(true);
         when(queue.poll()).thenReturn(subscribeEvent);
-        when(alertService.getAlertList(anyLong())).thenReturn(alertList);
+        when(alertService.getAlertListBySubscribe(anyLong())).thenReturn(alertList);
         when(folderReadService.findById(anyLong())).thenReturn(folder);
 
         // When
-        alertFacadeService.alert();
+        alertScheduleService.processAlertSchedule();
 
         // Then
         SoftAssertions.assertSoftly(softAssertions -> {
-            verify(alertService, times(alertList.size())).notifyAlert(any(), anyString());
+            verify(alertService, times(alertList.size()))
+                .publishAlertEvent(anyString(), anyString(), anyMap());
         });
     }
 
     @Test
-    @DisplayName("이벤트큐에 아무 구독도 없을경우")
+    @DisplayName("새로운 구독 이벤트가 없으면 알림 이벤트로 발행되지 않는다.")
     void noSubscribeEventInQueue() {
         // Given
         when(queue.isRemaining()).thenReturn(false);
 
         // When
-        alertFacadeService.alert();
+        alertScheduleService.processAlertSchedule();
 
         // Then
-        verify(alertService, never()).notifyAlert(any(), anyString());
+        verify(alertService, never())
+            .publishAlertEvent(anyString(), anyString(), anyMap());
     }
 }

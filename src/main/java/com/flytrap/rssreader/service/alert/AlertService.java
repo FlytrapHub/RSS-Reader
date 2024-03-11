@@ -5,7 +5,7 @@ import com.flytrap.rssreader.domain.alert.AlertEvent;
 import com.flytrap.rssreader.domain.alert.AlertPlatform;
 import com.flytrap.rssreader.global.event.PublishEvent;
 import com.flytrap.rssreader.global.exception.NoSuchDomainException;
-import com.flytrap.rssreader.service.alert.platform.AlarmService;
+import com.flytrap.rssreader.infrastructure.api.alert.AlertSender;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
 import com.flytrap.rssreader.service.dto.AlertParam;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class AlertService {
 
     private final AlertEntityJpaRepository alertRepository;
-    private final List<AlarmService> alarmServices;
+    private final List<AlertSender> alertSenders;
 
     public Alert registerAlert(Long folderId, Long memberId, String webhookUrl) {
         AlertPlatform alertPlatform = AlertPlatform.parseWebhookUrl(webhookUrl);
@@ -41,20 +41,30 @@ public class AlertService {
 
     @PublishEvent(eventType = AlertEvent.class,
         params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#folderName, #webhookUrl, #posts)}")
-    public void notifyAlert(String folderName, String webhookUrl, Map<String, String> posts) {}
+    public void publishAlertEvent(String folderName, String webhookUrl, Map<String, String> posts) {}
 
-    public void notifyPlatform(AlertParam value) {
+    public void sendAlertToPlatform(AlertParam value) {
         AlertPlatform alertPlatform = AlertPlatform.parseWebhookUrl(value.webhookUrl());
 
-        for (AlarmService alarmService : alarmServices) {
-            if (alarmService.isSupport(alertPlatform)) {
-                alarmService.notifyReturn(value);
+        for (AlertSender alertSender : alertSenders) {
+            if (alertSender.isSupport(alertPlatform)) {
+                alertSender.sendAlert(value);
             }
         }
     }
 
-    public List<AlertEntity> getAlertList(Long serviceId) {
-        return alertRepository.findAlertsBySubscribeId(serviceId);
+    public List<Alert> getAlertListBySubscribe(Long subscribeId) {
+        return alertRepository.findAlertsBySubscribeId(subscribeId)
+            .stream()
+            .map(AlertEntity::toDomain)
+            .toList();
+    }
+
+    public List<Alert> getAlertListByFolder(Long folderId) {
+        return alertRepository.findAllByFolderId(folderId)
+            .stream()
+            .map(AlertEntity::toDomain)
+            .toList();
     }
 
 }

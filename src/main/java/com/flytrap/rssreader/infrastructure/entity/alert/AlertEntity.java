@@ -63,6 +63,7 @@ public class AlertEntity {
         return Alert.builder()
             .id(id)
             .memberId(memberId)
+            .folderId(folderId)
             .alertPlatform(alertPlatform)
             .webhookUrl(webhookUrl)
             .build();

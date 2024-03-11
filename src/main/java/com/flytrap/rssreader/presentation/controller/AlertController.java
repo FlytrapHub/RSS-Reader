@@ -4,6 +4,7 @@ import com.flytrap.rssreader.domain.alert.Alert;
 import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.presentation.controller.api.AlertControllerApi;
+import com.flytrap.rssreader.presentation.dto.AlertListResponse;
 import com.flytrap.rssreader.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.AlertResponse;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
@@ -11,8 +12,10 @@ import com.flytrap.rssreader.presentation.resolver.Login;
 import com.flytrap.rssreader.service.alert.AlertService;
 import com.flytrap.rssreader.service.folder.FolderVerifyService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +29,17 @@ public class AlertController implements AlertControllerApi {
 
     private final AlertService alertService;
     private final FolderVerifyService folderVerifyService;
+
+    @GetMapping("/{folderId}/alerts")
+    public ApplicationResponse<AlertListResponse> getAlerts(
+        @PathVariable Long folderId,
+        @Login SessionMember member
+    ) {
+        Folder verifiedFolder = folderVerifyService.getVerifiedAccessableFolder(folderId, member.id());
+        List<Alert> alerts = alertService.getAlertListByFolder(folderId);
+
+        return new ApplicationResponse<>(AlertListResponse.from(alerts));
+    }
 
     @PostMapping("/{folderId}/alerts")
     public ApplicationResponse<AlertResponse> registerAlert(
