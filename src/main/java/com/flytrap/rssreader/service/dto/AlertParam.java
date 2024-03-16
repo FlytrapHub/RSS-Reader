@@ -3,6 +3,7 @@ package com.flytrap.rssreader.service.dto;
 
 import java.util.Map;
 
+@Deprecated
 public record AlertParam(
         String folderName,
         String webhookUrl,
@@ -13,4 +14,3 @@ public record AlertParam(
         return new AlertParam(folderName, webhookUrl, posts);
     }
 }
-

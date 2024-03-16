@@ -1,6 +1,7 @@
-package com.flytrap.rssreader.service.alert;
+package com.flytrap.rssreader.api.alert.business.event.alert;
 
-import com.flytrap.rssreader.domain.alert.AlertEvent;
+import com.flytrap.rssreader.api.alert.business.event.subscribe.AlertEvent;
+import com.flytrap.rssreader.service.alert.AlertService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Deprecated
 public class AlertEventHandler {
 
     private final AlertService alertService;
@@ -18,7 +18,7 @@ public class AlertEventHandler {
     @Async
     @EventListener(AlertEvent.class)
     public void onEvent(AlertEvent event) {
-        alertService.sendAlertToPlatform(event.getValue());
+        alertService.notifyPlatform(event.getValue());
     }
 }
 

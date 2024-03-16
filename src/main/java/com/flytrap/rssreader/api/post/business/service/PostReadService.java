@@ -42,9 +42,9 @@ public class PostReadService {
                 .collect(Collectors.toMap(PostSubscribeCountOutput::getSubscribeId, it -> it));
     }
 
-    public com.flytrap.rssreader.domain.post.Post findById(Long postId) {
+    public Post findById(Long postId) {
         return postEntityJpaRepository.findById(postId)
-                .orElseThrow(() -> new NoSuchDomainException(com.flytrap.rssreader.domain.post.Post.class))
+                .orElseThrow(() -> new NoSuchDomainException(Post.class))
                 .toDomain();
     }
 }

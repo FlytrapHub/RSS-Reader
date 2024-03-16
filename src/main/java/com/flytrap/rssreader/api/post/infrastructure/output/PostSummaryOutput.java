@@ -5,7 +5,7 @@ import com.flytrap.rssreader.api.post.domain.Post;
 
 import java.time.Instant;
 
-public record PostOutput(
+public record PostSummaryOutput(
         Long id,
         Long subscribeId,
         String guid,
@@ -14,8 +14,8 @@ public record PostOutput(
         String description,
         Instant pubDate,
         String subscribeTitle,
-        boolean open, // member에 따라 달라지는 값
-        boolean bookmark // member에 따라 달라지는 값
+        boolean open,
+        boolean bookmark
         // TODO: react 추가하기
 ) {
 

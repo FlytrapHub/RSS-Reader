@@ -1,8 +1,10 @@
 package com.flytrap.rssreader.api.post.business.event.postInsert;
 
 
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
+import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
+@Component
 public class PostBulkInsertQueue {
 
     private final Queue<PostEntity> queue;
@@ -24,9 +27,8 @@ public class PostBulkInsertQueue {
         return new PostBulkInsertQueue(size);
     }
 
-    public boolean offer(PostEntity event) {
+    public void offer(PostEntity event) {
         boolean returnValue = queue.offer(event);
-        return returnValue;
     }
 
     public PostEntity peek() {

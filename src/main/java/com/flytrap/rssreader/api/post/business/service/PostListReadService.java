@@ -1,10 +1,9 @@
 package com.flytrap.rssreader.api.post.business.service;
 
+import com.flytrap.rssreader.api.post.domain.Post;
+import com.flytrap.rssreader.api.post.domain.PostFilter;
+import com.flytrap.rssreader.api.post.infrastructure.repository.PostListReadRepository;
 import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.post.Post;
-import com.flytrap.rssreader.infrastructure.repository.PostListReadRepository;
-import com.flytrap.rssreader.infrastructure.repository.output.PostOutput;
-import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;

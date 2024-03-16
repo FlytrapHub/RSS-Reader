@@ -21,6 +21,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "alert")
+@Deprecated()
 public class AlertEntity {
 
     @Id

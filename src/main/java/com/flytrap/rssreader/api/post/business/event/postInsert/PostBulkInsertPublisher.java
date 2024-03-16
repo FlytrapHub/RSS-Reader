@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.post.business.event.postInsert;
 
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
+import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

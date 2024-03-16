@@ -1,13 +1,13 @@
 package com.flytrap.rssreader.api.post.business.service;
 
-import com.flytrap.rssreader.domain.post.q.PostBulkInsertPublisher;
-import com.flytrap.rssreader.domain.post.q.PostBulkInsertQueue;
+import com.flytrap.rssreader.api.post.business.event.postInsert.PostBulkInsertPublisher;
+import com.flytrap.rssreader.api.post.business.event.postInsert.PostBulkInsertQueue;
+import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
+import com.flytrap.rssreader.api.post.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
 import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
-import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
-import com.flytrap.rssreader.infrastructure.repository.PostEntityJpaRepository;
 import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +89,6 @@ public class PostCollectService {
             }
             publisher.publish(post);
             log.info("bulkInsertQueue.size() = {}", bulkInsertQueue.size());
-            //     postEntityJpaRepository.save(post);
         }
         return postUrlMap;
     }

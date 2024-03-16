@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class AlertService {
 
     private final AlertEntityJpaRepository alertRepository;

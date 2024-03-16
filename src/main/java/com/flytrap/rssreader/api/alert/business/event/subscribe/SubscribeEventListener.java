@@ -1,6 +1,7 @@
-package com.flytrap.rssreader.api.post.business.event.postInsert;
+package com.flytrap.rssreader.api.alert.business.event.subscribe;
 
-import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
+import com.flytrap.rssreader.domain.alert.SubscribeEvent;
+import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -9,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PostBulkInsertListener {
+public class SubscribeEventListener {
 
-    private final PostBulkInsertQueue eventQueue;
+    private final SubscribeEventQueue eventQueue;
 
     @EventListener
-    public void onEvent(PostEntity post) { //TODO : entity -> domain
+    public void onEvent(SubscribeEvent event) {
         if (eventQueue.isFull()) {
             log.info("eventQueue full ");
             return;
         }
-        eventQueue.offer(post);
+        eventQueue.offer(event);
     }
 }

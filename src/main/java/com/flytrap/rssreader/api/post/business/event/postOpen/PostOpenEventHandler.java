@@ -1,7 +1,6 @@
 package com.flytrap.rssreader.api.post.business.event.postOpen;
 
-import com.flytrap.rssreader.domain.post.PostOpenEvent;
-import com.flytrap.rssreader.service.PostOpenService;
+import com.flytrap.rssreader.api.post.business.service.PostOpenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

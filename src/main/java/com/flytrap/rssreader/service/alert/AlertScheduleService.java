@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class AlertScheduleService {
 
     private final SubscribeEventQueue queue;

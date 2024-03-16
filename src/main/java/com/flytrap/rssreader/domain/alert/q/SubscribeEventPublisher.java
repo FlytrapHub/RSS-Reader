@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class SubscribeEventPublisher {
 
     private final ApplicationEventPublisher publisher;
