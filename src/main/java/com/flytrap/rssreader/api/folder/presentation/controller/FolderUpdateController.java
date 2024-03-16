@@ -6,7 +6,7 @@ import com.flytrap.rssreader.domain.subscribe.Subscribe;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.infrastructure.entity.alert.AlertPlatform;
 import com.flytrap.rssreader.presentation.controller.api.FolderUpdateControllerApi;
-import com.flytrap.rssreader.presentation.dto.AlertRequest;
+import com.flytrap.rssreader.api.alert.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.SessionMember;
 import com.flytrap.rssreader.presentation.dto.SubscribeRequest;

@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.domain.alert;
 
 import com.flytrap.rssreader.global.event.EventHolder;
-import com.flytrap.rssreader.service.dto.AlertParam;
+import com.flytrap.rssreader.api.alert.business.service.dto.AlertParam;
 import lombok.Getter;
 
 @Deprecated

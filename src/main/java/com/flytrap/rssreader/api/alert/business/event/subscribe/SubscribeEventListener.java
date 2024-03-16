@@ -1,7 +1,5 @@
 package com.flytrap.rssreader.api.alert.business.event.subscribe;
 
-import com.flytrap.rssreader.domain.alert.SubscribeEvent;
-import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

@@ -1,14 +1,14 @@
 package com.flytrap.rssreader.service.alert;
 
-import com.flytrap.rssreader.domain.alert.Alert;
+import com.flytrap.rssreader.api.alert.domain.Alert;
 import com.flytrap.rssreader.domain.alert.AlertEvent;
-import com.flytrap.rssreader.domain.alert.AlertPlatform;
+import com.flytrap.rssreader.api.alert.domain.AlertPlatform;
 import com.flytrap.rssreader.global.event.PublishEvent;
 import com.flytrap.rssreader.global.exception.NoSuchDomainException;
-import com.flytrap.rssreader.infrastructure.api.alert.AlertSender;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
-import com.flytrap.rssreader.infrastructure.repository.AlertEntityJpaRepository;
-import com.flytrap.rssreader.service.dto.AlertParam;
+import com.flytrap.rssreader.api.alert.infrastructure.external.AlertSender;
+import com.flytrap.rssreader.api.alert.infrastructure.entity.AlertEntity;
+import com.flytrap.rssreader.api.alert.infrastructure.repository.AlertEntityJpaRepository;
+import com.flytrap.rssreader.api.alert.business.service.dto.AlertParam;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class AlertService {
     }
 
     @PublishEvent(eventType = AlertEvent.class,
-        params = "#{T(com.flytrap.rssreader.service.dto.AlertParam).create(#folderName, #webhookUrl, #posts)}")
+        params = "#{T(com.flytrap.rssreader.api.alert.business.service.dto.AlertParam).create(#folderName, #webhookUrl, #posts)}")
     public void publishAlertEvent(String folderName, String webhookUrl, Map<String, String> posts) {}
 
     public void sendAlertToPlatform(AlertParam value) {

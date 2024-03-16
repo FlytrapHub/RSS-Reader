@@ -8,12 +8,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flytrap.rssreader.domain.alert.Alert;
-import com.flytrap.rssreader.domain.alert.AlertPlatform;
+import com.flytrap.rssreader.api.alert.business.service.AlertScheduleService;
+import com.flytrap.rssreader.api.alert.domain.Alert;
+import com.flytrap.rssreader.api.alert.domain.AlertPlatform;
 import com.flytrap.rssreader.domain.alert.SubscribeEvent;
-import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
+import com.flytrap.rssreader.api.alert.business.event.subscribe.SubscribeEventQueue;
 import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.infrastructure.entity.alert.AlertEntity;
 import com.flytrap.rssreader.service.folder.FolderReadService;
 import java.util.List;
 import java.util.Map;

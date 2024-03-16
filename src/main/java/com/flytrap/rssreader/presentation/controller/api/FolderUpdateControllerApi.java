@@ -1,7 +1,6 @@
 package com.flytrap.rssreader.presentation.controller.api;
 
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.presentation.dto.AlertRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest;
 import com.flytrap.rssreader.presentation.dto.FolderRequest.Response;
 import com.flytrap.rssreader.presentation.dto.SessionMember;

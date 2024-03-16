@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.api.alert.business.event.alert;
 
-import com.flytrap.rssreader.api.alert.business.event.subscribe.AlertEvent;
-import com.flytrap.rssreader.service.alert.AlertService;
+import com.flytrap.rssreader.api.alert.business.service.AlertService;
+import com.flytrap.rssreader.domain.alert.AlertEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -18,7 +18,7 @@ public class AlertEventHandler {
     @Async
     @EventListener(AlertEvent.class)
     public void onEvent(AlertEvent event) {
-        alertService.notifyPlatform(event.getValue());
+        alertService.sendAlertToPlatform(event.getValue());
     }
 }
 

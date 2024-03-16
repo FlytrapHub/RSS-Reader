@@ -1,7 +1,5 @@
 package com.flytrap.rssreader.domain.post.q;
 
-import com.flytrap.rssreader.domain.alert.SubscribeEvent;
-import com.flytrap.rssreader.domain.alert.q.SubscribeEventQueue;
 import com.flytrap.rssreader.infrastructure.entity.post.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.api.post.infrastructure.repository;
 
+import com.flytrap.rssreader.api.post.domain.PostFilter;
 import com.flytrap.rssreader.api.post.infrastructure.output.PostSummaryOutput;
-import com.flytrap.rssreader.presentation.dto.PostFilter;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
