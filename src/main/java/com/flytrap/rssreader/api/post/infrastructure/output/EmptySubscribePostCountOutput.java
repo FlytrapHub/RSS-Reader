@@ -1,8 +1,7 @@
 package com.flytrap.rssreader.api.post.infrastructure.output;
 
-import com.flytrap.rssreader.infrastructure.entity.post.SubscribePostCount;
 
-public class EmptySubscribePostCountOutput implements SubscribePostCount {
+public class EmptySubscribePostCountOutput implements PostSubscribeCountOutput {
 
     @Override
     public long getSubscribeId() {

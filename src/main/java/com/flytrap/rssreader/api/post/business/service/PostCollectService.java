@@ -4,11 +4,11 @@ import com.flytrap.rssreader.api.post.business.event.postInsert.PostBulkInsertPu
 import com.flytrap.rssreader.api.post.business.event.postInsert.PostBulkInsertQueue;
 import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
 import com.flytrap.rssreader.api.post.infrastructure.repository.PostEntityJpaRepository;
-import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.infrastructure.api.parser.RssPostParser;
-import com.flytrap.rssreader.infrastructure.api.parser.dto.RssPostsData;
-import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
-import com.flytrap.rssreader.infrastructure.repository.SubscribeEntityJpaRepository;
+import com.flytrap.rssreader.api.subscribe.domain.Subscribe;
+import com.flytrap.rssreader.api.parser.RssPostParser;
+import com.flytrap.rssreader.api.parser.dto.RssPostsData;
+import com.flytrap.rssreader.api.subscribe.infrastructure.entity.SubscribeEntity;
+import com.flytrap.rssreader.api.subscribe.infrastructure.repository.SubscribeEntityJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

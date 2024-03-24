@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.folder.infrastructure.entity;
 
-import com.flytrap.rssreader.domain.folder.Folder;
+import com.flytrap.rssreader.api.folder.domain.Folder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

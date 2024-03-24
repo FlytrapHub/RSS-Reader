@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.api.post.infrastructure.repository;
 
+import com.flytrap.rssreader.api.post.domain.PostFilter;
 import com.flytrap.rssreader.api.post.infrastructure.output.PostSummaryOutput;
-import com.flytrap.rssreader.presentation.dto.PostFilter;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -15,13 +15,13 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.flytrap.rssreader.infrastructure.entity.bookmark.QBookmarkEntity.bookmarkEntity;
-import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderEntity.folderEntity;
-import static com.flytrap.rssreader.infrastructure.entity.folder.QFolderSubscribeEntity.folderSubscribeEntity;
-import static com.flytrap.rssreader.infrastructure.entity.post.QOpenEntity.openEntity;
-import static com.flytrap.rssreader.infrastructure.entity.post.QPostEntity.postEntity;
-import static com.flytrap.rssreader.infrastructure.entity.shared.QSharedFolderEntity.sharedFolderEntity;
-import static com.flytrap.rssreader.infrastructure.entity.subscribe.QSubscribeEntity.subscribeEntity;
+import static com.flytrap.rssreader.api.bookmark.infrastructure.entity.QBookmarkEntity.bookmarkEntity;
+import static com.flytrap.rssreader.api.folder.infrastructure.entity.QFolderEntity.folderEntity;
+import static com.flytrap.rssreader.api.folder.infrastructure.entity.QFolderSubscribeEntity.folderSubscribeEntity;
+import static com.flytrap.rssreader.api.folder.infrastructure.entity.QSharedFolderEntity.sharedFolderEntity;
+import static com.flytrap.rssreader.api.post.infrastructure.entity.QOpenEntity.openEntity;
+import static com.flytrap.rssreader.api.post.infrastructure.entity.QPostEntity.postEntity;
+import static com.flytrap.rssreader.api.subscribe.infrastructure.entity.QSubscribeEntity.subscribeEntity;
 
 @Repository
 public class PostListReadDslRepository implements PostListReadRepository {

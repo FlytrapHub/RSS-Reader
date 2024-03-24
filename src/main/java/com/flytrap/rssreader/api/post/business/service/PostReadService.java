@@ -8,8 +8,8 @@ import com.flytrap.rssreader.api.post.infrastructure.repository.PostEntityJpaRep
 import com.flytrap.rssreader.api.post.infrastructure.repository.PostListReadRepository;
 import com.flytrap.rssreader.api.post.infrastructure.repository.PostOpenRepository;
 import com.flytrap.rssreader.global.event.PublishEvent;
-import com.flytrap.rssreader.global.exception.NoSuchDomainException;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
+import com.flytrap.rssreader.global.exception.domain.NoSuchDomainException;
+import com.flytrap.rssreader.api.auth.presentation.dto.SessionMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

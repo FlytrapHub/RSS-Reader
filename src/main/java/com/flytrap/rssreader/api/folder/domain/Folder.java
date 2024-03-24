@@ -1,9 +1,9 @@
 package com.flytrap.rssreader.api.folder.domain;
 
+import com.flytrap.rssreader.api.post.infrastructure.output.OpenPostCountOutput;
+import com.flytrap.rssreader.api.post.infrastructure.output.PostSubscribeCountOutput;
 import com.flytrap.rssreader.global.model.DefaultDomain;
 import com.flytrap.rssreader.global.model.Domain;
-import com.flytrap.rssreader.infrastructure.entity.post.OpenPostCount;
-import com.flytrap.rssreader.infrastructure.entity.post.SubscribePostCount;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -101,11 +101,11 @@ public class Folder implements DefaultDomain {
                 .toList();
     }
 
-    public void addUnreadCountsBySubscribes(Map<Long, SubscribePostCount> countsPost, Map<Long, OpenPostCount> countsOpen) {
+    public void addUnreadCountsBySubscribes(Map<Long, PostSubscribeCountOutput> countsPost, Map<Long, OpenPostCountOutput> countsOpen) {
         for (FolderSubscribe subscribe : subscribes) {
 
-            SubscribePostCount subscribePostCount = countsPost.get(subscribe.getId());
-            OpenPostCount openPostCount = countsOpen.get(subscribe.getId());
+            PostSubscribeCountOutput subscribePostCount = countsPost.get(subscribe.getId());
+            OpenPostCountOutput openPostCount = countsOpen.get(subscribe.getId());
             int totalCount = 0;
             int openCount = 0;
 

@@ -1,9 +1,9 @@
 package com.flytrap.rssreader.api.folder.business.service;
 
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.subscribe.Subscribe;
-import com.flytrap.rssreader.infrastructure.entity.folder.FolderSubscribeEntity;
-import com.flytrap.rssreader.infrastructure.repository.FolderSubscribeEntityJpaRepository;
+import com.flytrap.rssreader.api.folder.domain.Folder;
+import com.flytrap.rssreader.api.folder.infrastructure.entity.FolderSubscribeEntity;
+import com.flytrap.rssreader.api.folder.infrastructure.repository.FolderSubscribeEntityJpaRepository;
+import com.flytrap.rssreader.api.subscribe.domain.Subscribe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

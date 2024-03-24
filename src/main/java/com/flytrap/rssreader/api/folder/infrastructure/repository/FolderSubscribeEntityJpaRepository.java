@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.folder.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.entity.folder.FolderSubscribeEntity;
+import com.flytrap.rssreader.api.folder.infrastructure.entity.FolderSubscribeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

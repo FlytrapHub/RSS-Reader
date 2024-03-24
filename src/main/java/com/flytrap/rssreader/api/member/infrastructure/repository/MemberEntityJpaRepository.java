@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.member.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.entity.member.MemberEntity;
+import com.flytrap.rssreader.api.member.infrastructure.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.flytrap.rssreader.api.folder.business.service;
 
-import com.flytrap.rssreader.infrastructure.entity.shared.SharedFolderEntity;
-import com.flytrap.rssreader.infrastructure.repository.SharedFolderJpaRepository;
+import com.flytrap.rssreader.api.folder.infrastructure.entity.SharedFolderEntity;
+import com.flytrap.rssreader.api.folder.infrastructure.repository.SharedFolderJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,16 +1,16 @@
 package com.flytrap.rssreader.api.bookmark.presentation.controller;
 
 import com.flytrap.rssreader.api.bookmark.domain.Bookmark;
+import com.flytrap.rssreader.api.post.business.service.PostReadService;
+import com.flytrap.rssreader.api.post.domain.Post;
 import com.flytrap.rssreader.api.post.domain.PostFilter;
 import com.flytrap.rssreader.api.post.presentation.dto.response.PostResponse;
-import com.flytrap.rssreader.domain.post.Post;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.api.bookmark.presentation.dto.BookmarkRequest;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
-import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.api.auth.presentation.dto.SessionMember;
+import com.flytrap.rssreader.global.presentation.resolver.Login;
 import com.flytrap.rssreader.api.bookmark.business.service.BookmarkService;
 import com.flytrap.rssreader.api.bookmark.business.service.BookmarkVerifyOwnerService;
-import com.flytrap.rssreader.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,7 +32,7 @@ public class BookmarkController implements BookmarkControllerApi {
 
     private static final String DELETE_BOOKMARK_MESSAGE = "북마크가 삭제되었습니다. postId = ";
 
-    private final PostService postService;
+    private final PostReadService postService;
     private final BookmarkService bookmarkService;
     private final BookmarkVerifyOwnerService bookmarkVerifyOwnerService;
 
@@ -59,7 +59,7 @@ public class BookmarkController implements BookmarkControllerApi {
         @Login SessionMember member
     ) {
 
-        Post post = postService.get(postId);
+        Post post = postService.getPost(member, postId);
         Bookmark bookmark = bookmarkService.addBookmark(member, post);
 
         return new ApplicationResponse<>(BookmarkRequest.Response.from(bookmark));

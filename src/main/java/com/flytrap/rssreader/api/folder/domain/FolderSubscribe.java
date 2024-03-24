@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.folder.domain;
 
-import com.flytrap.rssreader.domain.subscribe.Subscribe;
+import com.flytrap.rssreader.api.subscribe.domain.Subscribe;
 import com.flytrap.rssreader.global.model.Domain;
 import lombok.Getter;
 

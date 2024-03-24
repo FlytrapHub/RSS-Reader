@@ -1,14 +1,14 @@
 package com.flytrap.rssreader.api.post.presentation.controller;
 
+import com.flytrap.rssreader.api.folder.business.service.FolderVerifyService;
+import com.flytrap.rssreader.api.folder.domain.Folder;
 import com.flytrap.rssreader.api.post.business.service.PostListReadService;
 import com.flytrap.rssreader.api.post.domain.PostFilter;
 import com.flytrap.rssreader.api.post.presentation.controller.swagger.PostListReadControllerApi;
 import com.flytrap.rssreader.api.post.presentation.dto.response.PostResponse;
-import com.flytrap.rssreader.domain.folder.Folder;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
-import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.folder.FolderVerifyService;
+import com.flytrap.rssreader.api.auth.presentation.dto.SessionMember;
+import com.flytrap.rssreader.global.presentation.resolver.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

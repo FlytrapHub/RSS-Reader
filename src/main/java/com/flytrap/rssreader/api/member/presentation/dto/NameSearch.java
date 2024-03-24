@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.member.presentation.dto;
 
-import com.flytrap.rssreader.presentation.dto.MemberSummary;
+import com.flytrap.rssreader.api.member.presentation.dto.response.MemberSummary;
 
 import java.util.List;
 

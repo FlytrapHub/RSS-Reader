@@ -1,11 +1,11 @@
 package com.flytrap.rssreader.api.folder.presentation.controller.swagger;
 
+import com.flytrap.rssreader.api.member.presentation.dto.response.MemberSummary;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
 import com.flytrap.rssreader.global.model.ErrorResponse;
-import com.flytrap.rssreader.presentation.dto.InviteMemberRequest;
-import com.flytrap.rssreader.presentation.dto.MemberSummary;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
-import com.flytrap.rssreader.presentation.resolver.Login;
+import com.flytrap.rssreader.api.auth.presentation.dto.InviteMemberRequest;
+import com.flytrap.rssreader.api.auth.presentation.dto.SessionMember;
+import com.flytrap.rssreader.global.presentation.resolver.Login;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,6 +1,6 @@
 package com.flytrap.rssreader.api.folder.infrastructure.repository;
 
-import com.flytrap.rssreader.infrastructure.entity.shared.SharedFolderEntity;
+import com.flytrap.rssreader.api.folder.infrastructure.entity.SharedFolderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

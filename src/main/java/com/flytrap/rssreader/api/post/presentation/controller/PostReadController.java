@@ -1,11 +1,11 @@
 package com.flytrap.rssreader.api.post.presentation.controller;
 
+import com.flytrap.rssreader.api.post.business.service.PostReadService;
 import com.flytrap.rssreader.api.post.presentation.controller.swagger.PostReadControllerApi;
+import com.flytrap.rssreader.api.post.presentation.dto.response.PostResponse;
 import com.flytrap.rssreader.global.model.ApplicationResponse;
-import com.flytrap.rssreader.presentation.dto.PostResponse;
-import com.flytrap.rssreader.presentation.dto.SessionMember;
-import com.flytrap.rssreader.presentation.resolver.Login;
-import com.flytrap.rssreader.service.PostReadService;
+import com.flytrap.rssreader.api.auth.presentation.dto.SessionMember;
+import com.flytrap.rssreader.global.presentation.resolver.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +26,6 @@ public class PostReadController implements PostReadControllerApi {
             @Login SessionMember member) {
 
         PostResponse post = PostResponse.from(postReadService.getPost(member, postId));
-
-        return new ApplicationResponse<>(post); //TODO 내보내는 데이터를 PostResponse로 변경
+        return new ApplicationResponse<>(post);
     }
 }

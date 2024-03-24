@@ -1,8 +1,8 @@
 package com.flytrap.rssreader.api.post.business.service;
 
+import com.flytrap.rssreader.api.post.business.event.postOpen.PostOpenEventParam;
 import com.flytrap.rssreader.api.post.infrastructure.output.OpenPostCountOutput;
 import com.flytrap.rssreader.api.post.infrastructure.repository.PostOpenRepository;
-import com.flytrap.rssreader.service.dto.PostOpenParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class PostOpenService {
     private final PostOpenRepository postOpenRepository;
 
     @Transactional
-    public void open(PostOpenParam value) {
+    public void open(PostOpenEventParam value) {
 
         if (postOpenRepository.existsByMemberIdAndPostId(value.memberId(), value.postId())) {
             return;

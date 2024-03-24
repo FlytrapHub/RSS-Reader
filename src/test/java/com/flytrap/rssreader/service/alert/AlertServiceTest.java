@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.flytrap.rssreader.api.alert.business.service.AlertService;
 import com.flytrap.rssreader.api.alert.domain.AlertPlatform;
 import com.flytrap.rssreader.api.alert.infrastructure.external.AlertSender;
 import com.flytrap.rssreader.api.alert.infrastructure.external.DiscordAlertSender;

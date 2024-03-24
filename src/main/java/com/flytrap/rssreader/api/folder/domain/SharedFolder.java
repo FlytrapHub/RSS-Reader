@@ -1,8 +1,7 @@
 package com.flytrap.rssreader.api.folder.domain;
 
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.folder.FolderSubscribe;
-import com.flytrap.rssreader.domain.member.Member;
+
+import com.flytrap.rssreader.api.member.domain.Member;
 
 import java.util.ArrayList;
 import java.util.List;

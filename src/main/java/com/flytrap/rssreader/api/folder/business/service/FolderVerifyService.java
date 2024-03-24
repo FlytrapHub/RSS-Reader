@@ -1,11 +1,11 @@
 package com.flytrap.rssreader.api.folder.business.service;
 
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.global.exception.ForbiddenAccessFolderException;
-import com.flytrap.rssreader.global.exception.NoSuchDomainException;
-import com.flytrap.rssreader.global.exception.NotBelongToMemberException;
-import com.flytrap.rssreader.infrastructure.repository.FolderEntityJpaRepository;
-import com.flytrap.rssreader.infrastructure.repository.SharedFolderJpaRepository;
+import com.flytrap.rssreader.api.folder.domain.Folder;
+import com.flytrap.rssreader.api.folder.infrastructure.repository.FolderEntityJpaRepository;
+import com.flytrap.rssreader.api.folder.infrastructure.repository.SharedFolderJpaRepository;
+import com.flytrap.rssreader.global.exception.domain.ForbiddenAccessFolderException;
+import com.flytrap.rssreader.global.exception.domain.NoSuchDomainException;
+import com.flytrap.rssreader.global.exception.domain.NotBelongToMemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

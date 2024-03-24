@@ -1,11 +1,11 @@
 package com.flytrap.rssreader.api.folder.business.facade;
 
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.folder.SharedStatus;
-import com.flytrap.rssreader.domain.member.Member;
-import com.flytrap.rssreader.domain.shared.SharedFolder;
-import com.flytrap.rssreader.service.MemberService;
-import com.flytrap.rssreader.service.SharedFolderReadService;
+import com.flytrap.rssreader.api.folder.business.service.SharedFolderReadService;
+import com.flytrap.rssreader.api.folder.domain.Folder;
+import com.flytrap.rssreader.api.folder.domain.SharedFolder;
+import com.flytrap.rssreader.api.folder.domain.SharedStatus;
+import com.flytrap.rssreader.api.member.business.service.MemberService;
+import com.flytrap.rssreader.api.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

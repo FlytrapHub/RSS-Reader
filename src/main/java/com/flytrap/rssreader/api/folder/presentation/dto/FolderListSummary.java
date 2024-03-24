@@ -1,9 +1,9 @@
 package com.flytrap.rssreader.api.folder.presentation.dto;
 
-import com.flytrap.rssreader.domain.folder.Folder;
-import com.flytrap.rssreader.domain.shared.SharedFolder;
-import com.flytrap.rssreader.presentation.dto.MemberSummary;
-import com.flytrap.rssreader.presentation.dto.SubscribeListSummary;
+import com.flytrap.rssreader.api.folder.domain.Folder;
+import com.flytrap.rssreader.api.folder.domain.SharedFolder;
+import com.flytrap.rssreader.api.member.presentation.dto.response.MemberSummary;
+import com.flytrap.rssreader.api.subscribe.presentation.dto.SubscribeListSummary;
 
 import java.util.List;
 

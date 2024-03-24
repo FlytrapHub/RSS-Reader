@@ -2,7 +2,7 @@ package com.flytrap.rssreader.api.member.infrastructure.entity;
 
 import com.flytrap.rssreader.api.member.domain.Member;
 import com.flytrap.rssreader.api.member.domain.OauthServer;
-import com.flytrap.rssreader.infrastructure.entity.subscribe.SubscribeEntity;
+import com.flytrap.rssreader.api.subscribe.infrastructure.entity.SubscribeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
