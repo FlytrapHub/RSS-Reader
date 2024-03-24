@@ -2,7 +2,6 @@ package com.flytrap.rssreader.api.post.business.event.postInsert;
 
 
 import com.flytrap.rssreader.api.post.infrastructure.entity.PostEntity;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,6 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
-@Component
 public class PostBulkInsertQueue {
 
     private final Queue<PostEntity> queue;
